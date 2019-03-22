@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>leaflet</title>
+
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-binding-2.0.2/leaflet.js"></script>
+<script src="site_libs/leaflet-providers-1.1.17/leaflet-providers.js"></script>
+<script src="site_libs/leaflet-providers-plugin-2.0.2/leaflet-providers-plugin.js"></script>
+<link href="site_libs/leaflet-measure-2.1.7/leaflet-measure.css" rel="stylesheet" />
+<script src="site_libs/leaflet-measure-2.1.7/leaflet-measure.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="stylesheet" href="site_libs_extra/academicons-1.8.0/css/academicons.css"/>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="mapmaking.html">
+    <span class="fa fa-globe-americas fa-1.5x"></span>
+     
+    Mapmaking
+  </a>
+</li>
+<li>
+  <a href="workflow_in_R_snowdata.html">
+    <span class="fa fa-sitemap  fa-1x"></span>
+     
+    Workflow in R
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-map  fa-1x"></span>
+     
+    Mapping Tools
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="spatial_linepoly.html">Shapefiles</a>
+    </li>
+    <li>
+      <a href="spatial_kml.html">Using kml</a>
+    </li>
+    <li>
+      <a href="maps_mapview.html">mapview</a>
+    </li>
+    <li>
+      <a href="maps_leaflet.html">Leaflet</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-tint  fa-1x"></span>
+     
+    Vignettes with Water Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="vig_dataRetrieval_for_waterdata.html">dataRetrieval for Hydro/Water Quality Data</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-info-circle  fa-1x"></span>
+     
+    Resources
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">
+    <span class="fa fa-hand-spock-o"></span>
+     
+    Contact
+  </a>
+</li>
+<li>
+  <a href="https://github.com/ryanpeek/mapping-in-R-workshop">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+
+<div id="making-leaflet-maps" class="section level2">
+<h2>Making <code>leaflet</code> maps</h2>
+<p>You can also create <code>leaflet</code> maps, and they can be shared via html. This is a good way to provide dynamic spatial data, though bear in mind these html files can get large if you are trying to show a lot of data points or polygons.</p>
+<div id="the-basics" class="section level3">
+<h3>The Basics</h3>
+<p>The <a href="https://rstudio.github.io/leaflet/"><code>leaflet</code> website</a> is excellent and should be the go-to for figuring out details. Below is a simple example building on some of the functions/data we worked with earlier in this workshop.</p>
+<p>The main things to identify are:</p>
+<ul>
+<li>What type of spatial data do you want to plot? (i.e., polygons, lines, markers, etc)</li>
+<li>What format is that data? (works with <code>sf</code> or <code>sp</code> objects, or simple X/Y coordinates)</li>
+<li>What base layers would you like to include? (see <a href="http://leaflet-extras.github.io/leaflet-providers/preview/index.html">here for the possibilities</a>)</li>
+<li>How fancy do you want it to look? There are many extra options you can add using <a href="https://rstudio.github.io/leaflet/morefeatures.html">built in plugins</a>, or custom Javascript.</li>
+</ul>
+</div>
+<div id="example-california-snow-course-stations" class="section level3">
+<h3>Example: California Snow Course Stations</h3>
+<p>Let’s look at California snow course stations (check out the <a href="http://cdec.water.ca.gov/snow/current/snow/index.html">CDEC website</a>). There’s a nice package called “<strong><code>sharpshooter</code></strong>” we can use to pull the locations and metadata for all these stations and plot them with a <code>leaflet</code> map.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(sharpshootR)  <span class="co"># CDEC.snow.courses, CDECquery, CDECsnowQuery</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(leaflet)</a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="co"># GET DATA AND PREP </span></a>
+<a class="sourceLine" id="cb1-5" title="5"></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="kw">data</span>(CDEC.snow.courses)</a>
+<a class="sourceLine" id="cb1-7" title="7">snw&lt;-CDEC.snow.courses</a>
+<a class="sourceLine" id="cb1-8" title="8"></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="co"># make a few changes for plotting purposes</span></a>
+<a class="sourceLine" id="cb1-10" title="10">snw<span class="op">$</span>id&lt;-<span class="kw">as.factor</span>(snw<span class="op">$</span>id)</a>
+<a class="sourceLine" id="cb1-11" title="11">snw<span class="op">$</span>latitude&lt;-<span class="kw">as.numeric</span>(snw<span class="op">$</span>latitude)</a>
+<a class="sourceLine" id="cb1-12" title="12">snw<span class="op">$</span>longitude&lt;-<span class="kw">as.numeric</span>(snw<span class="op">$</span>longitude)<span class="op">*-</span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb1-13" title="13">snw<span class="op">$</span>apr1avg_in&lt;-snw<span class="op">$</span>april.<span class="fl">1.</span>Avg.inches</a>
+<a class="sourceLine" id="cb1-14" title="14">snw&lt;-dplyr<span class="op">::</span><span class="kw">select</span>(snw, course_number, id, elev_feet<span class="op">:</span>longitude,apr1avg_in)</a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="kw">str</span>(snw) <span class="co"># check out data</span></a></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    261 obs. of  6 variables:
+##  $ course_number: int  1 2 3 5 417 311 4 298 285 9 ...
+##  $ id           : Factor w/ 261 levels &quot;3LK&quot;,&quot;ABN&quot;,&quot;ABY&quot;,..: 176 133 230 141 41 140 84 76 227 68 ...
+##  $ elev_feet    : int  6700 6200 5850 6600 6450 6200 5900 5700 5500 7200 ...
+##  $ latitude     : num  41.4 41.8 41.4 41.2 41.6 ...
+##  $ longitude    : num  -123 -122 -123 -123 -123 ...
+##  $ apr1avg_in   : num  37.4 19 13.7 32.4 35.9 28.3 29.1 18.6 34 34.2 ...</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># add color palette</span></a>
+<a class="sourceLine" id="cb3-2" title="2">pal &lt;-<span class="st"> </span><span class="kw">colorNumeric</span>(</a>
+<a class="sourceLine" id="cb3-3" title="3">  <span class="dt">palette =</span> <span class="st">&quot;GnBu&quot;</span>,<span class="co"># can change to whatever: &quot;RdBu&quot;, &quot;GnBu&quot;</span></a>
+<a class="sourceLine" id="cb3-4" title="4">  <span class="dt">domain =</span> snw<span class="op">$</span>apr1avg_in</a>
+<a class="sourceLine" id="cb3-5" title="5">)</a>
+<a class="sourceLine" id="cb3-6" title="6"></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co"># Make a leaflet map!</span></a>
+<a class="sourceLine" id="cb3-8" title="8">m &lt;-<span class="st"> </span><span class="kw">leaflet</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">addTiles</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="st">  </span><span class="co">#setView(lng = -120.8, lat = 39, zoom = 8) %&gt;%  if you want to preset the view/zoom default</span></a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="st">  </span><span class="kw">addProviderTiles</span>(<span class="st">&quot;Esri.WorldImagery&quot;</span>, <span class="dt">group =</span> <span class="st">&quot;ESRI Aerial&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="st">  </span><span class="kw">addProviderTiles</span>(<span class="st">&quot;Esri.WorldTopoMap&quot;</span>, <span class="dt">group =</span> <span class="st">&quot;Topo&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="st">  </span></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="st">  </span><span class="co"># add scale bar</span></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="st">  </span><span class="kw">addMeasure</span>(<span class="dt">position =</span> <span class="st">&quot;topright&quot;</span>,</a>
+<a class="sourceLine" id="cb3-15" title="15">             <span class="dt">primaryLengthUnit =</span> <span class="st">&quot;meters&quot;</span>,</a>
+<a class="sourceLine" id="cb3-16" title="16">             <span class="dt">primaryAreaUnit =</span> <span class="st">&quot;sqmeters&quot;</span>,</a>
+<a class="sourceLine" id="cb3-17" title="17">             <span class="dt">activeColor =</span> <span class="st">&quot;#3D535D&quot;</span>,</a>
+<a class="sourceLine" id="cb3-18" title="18">             <span class="dt">completedColor =</span> <span class="st">&quot;#7D4479&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-19" title="19"></a>
+<a class="sourceLine" id="cb3-20" title="20"></a>
+<a class="sourceLine" id="cb3-21" title="21"><span class="co"># CDEC SNOW STATIONS</span></a>
+<a class="sourceLine" id="cb3-22" title="22"><span class="kw">addCircleMarkers</span>(<span class="dt">data=</span>snw, <span class="dt">group=</span><span class="st">&quot;CDEC Snow&quot;</span>,</a>
+<a class="sourceLine" id="cb3-23" title="23">                 <span class="dt">lng=</span> <span class="op">~</span>longitude, <span class="dt">lat=</span> <span class="op">~</span>latitude, <span class="co"># the spatial data, requires &quot;~&quot; here because it&#39;s NOT sp or sf object</span></a>
+<a class="sourceLine" id="cb3-24" title="24">                 <span class="dt">popup=</span><span class="kw">paste0</span>(<span class="st">&quot;&lt;strong&gt;&quot;</span>,<span class="st">&quot;Course ID: &quot;</span>,<span class="st">&quot;&lt;/strong&gt;&quot;</span>, </a>
+<a class="sourceLine" id="cb3-25" title="25">                              snw<span class="op">$</span>course_number, <span class="st">&quot;&lt;br&gt;&lt;strong&gt;&quot;</span>, <span class="st">&quot;Name: &quot;</span>,</a>
+<a class="sourceLine" id="cb3-26" title="26">                              <span class="st">&quot;&lt;/strong&gt;&quot;</span>, snw<span class="op">$</span>id, <span class="st">&quot;&lt;br&gt;&lt;strong&gt;&quot;</span>, <span class="st">&quot;Elev (ft): &quot;</span>,</a>
+<a class="sourceLine" id="cb3-27" title="27">                              <span class="st">&quot;&lt;/strong&gt;&quot;</span>, snw<span class="op">$</span>elev_feet, <span class="st">&quot;&lt;br&gt;&lt;strong&gt;&quot;</span>, </a>
+<a class="sourceLine" id="cb3-28" title="28">                              <span class="st">&quot;Apr-1 Avg: &quot;</span>, <span class="st">&quot;&lt;/strong&gt;&quot;</span>, snw<span class="op">$</span>apr1avg_in),</a>
+<a class="sourceLine" id="cb3-29" title="29">                 <span class="dt">stroke=</span><span class="ot">TRUE</span>, <span class="dt">weight=</span><span class="fl">0.6</span>,<span class="dt">radius=</span><span class="dv">8</span>,</a>
+<a class="sourceLine" id="cb3-30" title="30">                 <span class="dt">fillOpacity =</span> <span class="fl">0.5</span>, <span class="dt">color=</span><span class="st">&quot;black&quot;</span>,</a>
+<a class="sourceLine" id="cb3-31" title="31">                 <span class="dt">fillColor=</span> <span class="op">~</span><span class="kw">pal</span>(apr1avg_in)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># mapping to the color palette </span></a>
+<a class="sourceLine" id="cb3-32" title="32"></a>
+<a class="sourceLine" id="cb3-33" title="33"><span class="st">  </span><span class="co"># add controls for basemaps and data</span></a>
+<a class="sourceLine" id="cb3-34" title="34"><span class="st">  </span><span class="kw">addLayersControl</span>(</a>
+<a class="sourceLine" id="cb3-35" title="35">    <span class="dt">baseGroups =</span> <span class="kw">c</span>(<span class="st">&quot;ESRI Aerial&quot;</span>, <span class="st">&quot;Topo&quot;</span>),</a>
+<a class="sourceLine" id="cb3-36" title="36">    <span class="dt">overlayGroups =</span> <span class="kw">c</span>(<span class="st">&quot;CDEC Snow&quot;</span>),</a>
+<a class="sourceLine" id="cb3-37" title="37">    <span class="dt">options =</span> <span class="kw">layersControlOptions</span>(<span class="dt">collapsed =</span> T))</a>
+<a class="sourceLine" id="cb3-38" title="38"></a>
+<a class="sourceLine" id="cb3-39" title="39">m</a></code></pre></div>
+<div id="htmlwidget-9da783aee09379a25cbf" style="width:672px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9da783aee09379a25cbf">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addProviderTiles","args":["Esri.WorldImagery",null,"ESRI Aerial",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["Esri.WorldTopoMap",null,"Topo",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addMeasure","args":[{"position":"topright","primaryLengthUnit":"meters","primaryAreaUnit":"sqmeters","activeColor":"#3D535D","completedColor":"#7D4479","popupOptions":{"className":"leaflet-measure-resultpopup","autoPanPadding":[10,10]},"captureZIndex":10000,"localization":"en","decPoint":".","thousandsSep":","}]},{"method":"addCircleMarkers","args":[[41.367,41.808,41.382,41.217,41.597,41.225,41.4,41.233,41.397,41.318,41.023,40.967,41.008,41.2,41.093,41.197,41.15,41.077,39.725,41.372,41.305,41.353,41.217,41.045,41.435,41.17,41.4,41.208,41.583,41.15,40.762,41.587,40.71,41.237,40.767,40.533,40.695,40.78,39.842,40.468,40.14,40.243,39.917,39.755,39.786,40.013,40.042,39.682,39.973,39.762,40.418,40.258,39.942,40.375,39.897,40.155,39.955,39.857,40.293,39.9,40.355,40.387,40.187,40.283,39.483,39.353,39.417,39.343,39.436,39.31,39.355,39.617,39.47,39.36,39.623,39.697,39.303,39.633,39.458,39.68,39.725,39.317,39.305,38.695,38.693,38.71,38.805,39.017,38.828,38.82,38.678,38.847,38.818,38.812,39.282,38.807,39.227,39.12,39.275,39.112,39.193,38.922,38.812,38.49,38.63,38.613,38.518,38.517,38.625,38.605,38.618,38.545,38.543,38.503,38.332,38.362,38.205,38.243,38.27,38.505,38.288,38.242,38.28,38.45,38.412,38.398,38.417,38.327,38.375,37.897,37.837,38.178,38.15,37.873,38.158,38.083,38.085,38.102,38.092,38.047,38.177,38.017,38.043,38.033,38.167,37.995,37.827,37.637,37.838,37.765,37.667,37.438,37.24,37.183,37.457,37.272,37.388,37.32,37.178,37.724,37.258,37.295,37.208,37.598,37.265,37.257,37.382,37.408,37.178,37.277,37.41,37.528,37.228,37.497,37.498,37.397,37.1,36.77,36.77,36.958,37.067,36.982,37.113,37.183,36.685,36.993,36.717,37.025,37.13,37.072,36.943,37.122,37.122,37.092,36.752,36.715,36.751,37.023,36.412,36.588,36.382,36.437,36.57,36.122,36.243,36.615,36.45,36.473,36.563,36.572,36.632,36.523,36.44,36.497,35.965,36.352,36.378,36.328,36.038,36.2,36.122,35.873,40.497,40.482,39.353,39.188,39.485,38.86,38.992,39.001,38.85,39.142,39.083,38.917,38.873,38.282,38.077,38.183,38.313,38.275,37.78,37.917,37.957,37.938,37.752,37.123,36.483,37.235,37.162,36.483,37.125,37.45,37.128,37.127,37.228,37.61,36.337,37.473,37.663,37.492,37.62],[-122.55,-122.195,-122.535,-122.807,-123.165,-122.811,-123.001,-122.817,-122.993,-122.503,-122.885,-122.867,-122.8,-122.833,-122.483,-122.523,-122.45,-122.938,-122.85,-122.23,-122.493,-122.247,-122.417,-122.478,-122.1,-121.938,-122.05,-121.775,-120.303,-120.25,-121.195,-121.613,-121.577,-120.793,-121.783,-121.562,-121.48,-121.617,-122.95,-121.507,-120.715,-121.035,-120.645,-120.72,-120.875,-120.293,-120.878,-120.623,-121.213,-120.713,-121.275,-121.047,-121.19,-120.872,-120.265,-120.542,-120.538,-121.263,-121.292,-121.257,-121.422,-121.31,-121.298,-121.25,-120.44,-120.353,-120.508,-120.508,-120.525,-120.338,-120.503,-120.492,-120.572,-120.5,-120.678,-120.78,-120.543,-120.533,-120.6,-121.005,-120.932,-120.642,-120.81,-119.983,-119.998,-120.042,-120.215,-120.215,-120.037,-120.037,-120.118,-120.233,-120.072,-120.243,-120.527,-120.103,-120.402,-120.362,-120.358,-120.283,-120.377,-120.38,-120.375,-119.805,-120.145,-119.931,-119.985,-119.9,-120.218,-120.228,-120.228,-120.305,-120.377,-120.467,-119.653,-119.68,-119.892,-119.758,-119.678,-119.937,-119.832,-119.942,-119.73,-120.033,-120.028,-120.04,-120.1,-119.912,-120.192,-119.257,-119.325,-119.623,-119.617,-119.35,-119.662,-119.633,-119.837,-119.745,-119.758,-119.67,-119.96,-119.717,-119.887,-119.878,-119.942,-119.78,-119.497,-119.55,-119.448,-119.773,-119.625,-118.773,-118.687,-118.762,-118.795,-118.877,-118.903,-118.872,-118.72,-119.143,-118.997,-119.102,-119.073,-119.267,-119.108,-119.225,-119.02,-119.48,-119.205,-118.962,-119.49,-119.275,-119.222,-119.33,-119.408,-119.518,-118.557,-118.415,-118.398,-118.445,-118.77,-118.72,-118.837,-118.937,-118.597,-118.902,-118.737,-118.908,-118.92,-118.965,-118.913,-119.005,-118.895,-118.958,-118.75,-118.842,-118.948,-119.08,-118.583,-118.717,-118.655,-118.587,-118.768,-118.545,-118.678,-118.377,-118.217,-118.267,-118.345,-118.367,-118.392,-118.348,-118.255,-118.333,-118.36,-118.265,-118.347,-118.573,-118.328,-118.268,-118.293,-118.587,-121.153,-121.007,-119.898,-120.248,-120.425,-120.112,-120.142,-120.14,-119.95,-120.225,-119.908,-120.05,-119.983,-119.621,-119.234,-119.35,-119.607,-119.45,-119.17,-119.253,-119.267,-119.248,-119.162,-118.545,-118.217,-118.687,-118.562,-118.177,-118.483,-118.742,-118.475,-118.47,-118.62,-119.033,-118.155,-118.717,-119.017,-118.717,-118.992],8,null,"CDEC Snow",{"interactive":true,"className":"","stroke":true,"color":"black","weight":0.6,"opacity":0.5,"fill":true,"fillColor":["#8CD2BF","#D0EDC9","#DBF1D5","#A2DAB7","#93D4BD","#B2E1B9","#AFE0B8","#D1EDCA","#9BD8BA","#9AD7BA","#6EC3C9","#83CFC2","#50B4D3","#92D4BD","#96D6BC","#C1E7C0","#CAEAC4","#DCF1D7","#D4EECD","#45A7CD","#BCE5BE","#70C5C8","#5AB9D0","#ABDEB6","#91D4BD","#8AD1C0","#CFECC8","#DFF3DA","#D5EFCF","#E2F4DD","#E6F6E1","#A0D9B8","#98D7BB","#DDF2D8","#A0DAB8","#E7F6E2","#F7FCF0","#F6FCEF","#ABDEB6","#084081","#C3E8C1","#BAE4BD","#AADEB6","#74C7C7","#68C0CB","#D3EECD","#A9DDB5","#A9DDB5","#7BCCC4","#A5DCB6","#B1E0B9","#D5EFCF","#84CFC1","#F4FBED","#F5FBEE","#F3FAEC","#E5F5E0","#57B7D1","#D9F0D3","#C4E8C1","#C5E8C2","#D9F0D3","#DAF0D4","#ECF8E6","#77C9C6","#49ADD0","#3D9EC8","#4AAED0","#68C0CB","#86D0C1","#5AB9D0","#ADDFB7","#ACDFB7","#7ACCC4","#74C7C7","#3EA0C9","#B4E2BA","#C2E7C1","#C7E9C3","#A9DDB5","#B0E0B9","#CBEBC5","#808080","#91D4BD","#83CFC2","#A8DDB5","#9CD8BA","#91D4BD","#9CD8BA","#95D5BC","#CCEBC5","#A0DAB8","#B4E2BA","#A4DBB6","#6AC1CB","#B1E1B9","#73C7C7","#7FCDC3","#CFECC8","#C8EAC3","#CCEBC5","#D7EFD1","#EDF8E6","#59B8D0","#6AC1CB","#91D4BD","#46A8CD","#84CFC1","#7CCCC4","#6BC2CA","#BFE6BF","#DBF1D5","#EEF8E7","#F3FBED","#96D6BC","#80CEC3","#47AACE","#81CEC2","#C8EAC3","#4DB1D2","#C1E7C0","#B3E1BA","#CEECC7","#98D7BB","#9FD9B8","#CFECC8","#C9EAC4","#CFECC8","#C8EAC3","#A7DDB5","#A0DAB8","#6BC1CA","#5CBACF","#C6E9C2","#63BDCD","#72C6C8","#88D1C0","#77C9C6","#68C0CC","#7FCDC3","#C3E8C1","#C7E9C3","#D1EDCA","#BAE4BD","#D7EFD1","#C3E8C1","#6CC2CA","#A1DAB8","#9DD8B9","#A3DBB7","#AEDFB8","#A8DDB5","#89D1C0","#95D5BC","#9BD8BA","#B3E1BA","#A9DDB5","#ACDFB7","#C4E8C1","#A4DBB6","#B2E1B9","#84CFC1","#A3DBB7","#91D4BD","#A8DDB5","#93D4BD","#D9F0D3","#8ED3BE","#C2E7C0","#E8F6E3","#8FD3BE","#C6E8C2","#D1EDCA","#C1E7C0","#CAEAC4","#BEE6BF","#97D6BB","#ACDEB7","#B1E0B9","#B6E2BB","#9BD7BA","#80CEC3","#9ED9B9","#8AD1C0","#C1E7C0","#93D4BD","#B8E3BC","#A5DCB6","#AEDFB8","#A9DDB5","#A2DBB7","#B7E3BC","#B9E4BC","#ADDFB7","#D6EFD0","#BFE6BF","#808080","#CBEBC5","#93D4BD","#8FD3BE","#B5E2BA","#CDEBC6","#D9F0D3","#DEF2D8","#DAF0D4","#C2E7C1","#D9F0D3","#CEECC7","#CFECC8","#D0ECC9","#D1EDCA","#CCEBC5","#D4EECE","#D3EECC","#C1E7C0","#DFF3DA","#DCF2D7","#D0EDCA","#DBF1D6","#CEECC8","#E7F6E1","#E1F3DC","#AEDFB7","#D8F0D2","#94D5BC","#5AB9D0","#A5DCB6","#3191C1","#5CBACF","#A8DDB5","#E2F4DD","#77C9C6","#DFF3DA","#D7EFD1","#E9F6E3","#4DB2D3","#CFECC8","#D1EDCA","#BEE6BF","#E3F4DE","#9CD8B9","#B7E3BC","#A6DCB6","#AFE0B8","#ABDEB6","#C9EAC4","#DAF1D4","#D8F0D2","#D0EDC9","#DEF2D8","#C6E9C2","#D9F0D3","#D2EDCB","#D9F0D3","#E2F4DD","#77C9C6","#DCF1D6","#E0F3DB","#AFE0B8","#E9F6E3","#CEECC7"],"fillOpacity":0.5},null,null,["<strong>Course ID: <\/strong>1<br><strong>Name: <\/strong>PRK<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>37.4","<strong>Course ID: <\/strong>2<br><strong>Name: <\/strong>LSH<br><strong>Elev (ft): <\/strong>6200<br><strong>Apr-1 Avg: <\/strong>19","<strong>Course ID: <\/strong>3<br><strong>Name: <\/strong>SWT<br><strong>Elev (ft): <\/strong>5850<br><strong>Apr-1 Avg: <\/strong>13.7","<strong>Course ID: <\/strong>5<br><strong>Name: <\/strong>MBL<br><strong>Elev (ft): <\/strong>6600<br><strong>Apr-1 Avg: <\/strong>32.4","<strong>Course ID: <\/strong>417<br><strong>Name: <\/strong>BXC<br><strong>Elev (ft): <\/strong>6450<br><strong>Apr-1 Avg: <\/strong>35.9","<strong>Course ID: <\/strong>311<br><strong>Name: <\/strong>MB3<br><strong>Elev (ft): <\/strong>6200<br><strong>Apr-1 Avg: <\/strong>28.3","<strong>Course ID: <\/strong>4<br><strong>Name: <\/strong>ETN<br><strong>Elev (ft): <\/strong>5900<br><strong>Apr-1 Avg: <\/strong>29.1","<strong>Course ID: <\/strong>298<br><strong>Name: <\/strong>DYM<br><strong>Elev (ft): <\/strong>5700<br><strong>Apr-1 Avg: <\/strong>18.6","<strong>Course ID: <\/strong>285<br><strong>Name: <\/strong>SWJ<br><strong>Elev (ft): <\/strong>5500<br><strong>Apr-1 Avg: <\/strong>34","<strong>Course ID: <\/strong>9<br><strong>Name: <\/strong>DDF<br><strong>Elev (ft): <\/strong>7200<br><strong>Apr-1 Avg: <\/strong>34.2","<strong>Course ID: <\/strong>10<br><strong>Name: <\/strong>RRM<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>44.1","<strong>Course ID: <\/strong>11<br><strong>Name: <\/strong>BBS<br><strong>Elev (ft): <\/strong>6500<br><strong>Apr-1 Avg: <\/strong>39.1","<strong>Course ID: <\/strong>12<br><strong>Name: <\/strong>SHM<br><strong>Elev (ft): <\/strong>6400<br><strong>Apr-1 Avg: <\/strong>50.3","<strong>Course ID: <\/strong>13<br><strong>Name: <\/strong>WLC<br><strong>Elev (ft): <\/strong>6150<br><strong>Apr-1 Avg: <\/strong>36","<strong>Course ID: <\/strong>16<br><strong>Name: <\/strong>HIG<br><strong>Elev (ft): <\/strong>6030<br><strong>Apr-1 Avg: <\/strong>35.2","<strong>Course ID: <\/strong>15<br><strong>Name: <\/strong>MUM<br><strong>Elev (ft): <\/strong>5650<br><strong>Apr-1 Avg: <\/strong>24.1","<strong>Course ID: <\/strong>14<br><strong>Name: <\/strong>WHN<br><strong>Elev (ft): <\/strong>5400<br><strong>Apr-1 Avg: <\/strong>21.5","<strong>Course ID: <\/strong>17<br><strong>Name: <\/strong>BFT<br><strong>Elev (ft): <\/strong>5100<br><strong>Apr-1 Avg: <\/strong>13.1","<strong>Course ID: <\/strong>63<br><strong>Name: <\/strong>PSM<br><strong>Elev (ft): <\/strong>6000<br><strong>Apr-1 Avg: <\/strong>17.3","<strong>Course ID: <\/strong>18<br><strong>Name: <\/strong>MSH<br><strong>Elev (ft): <\/strong>7900<br><strong>Apr-1 Avg: <\/strong>53.6","<strong>Course ID: <\/strong>20<br><strong>Name: <\/strong>NFS<br><strong>Elev (ft): <\/strong>6900<br><strong>Apr-1 Avg: <\/strong>25.4","<strong>Course ID: <\/strong>19<br><strong>Name: <\/strong>SFT<br><strong>Elev (ft): <\/strong>6800<br><strong>Apr-1 Avg: <\/strong>43.6","<strong>Course ID: <\/strong>21<br><strong>Name: <\/strong>GYR<br><strong>Elev (ft): <\/strong>6200<br><strong>Apr-1 Avg: <\/strong>48.4","<strong>Course ID: <\/strong>22<br><strong>Name: <\/strong>SLT<br><strong>Elev (ft): <\/strong>5700<br><strong>Apr-1 Avg: <\/strong>30.1","<strong>Course ID: <\/strong>23<br><strong>Name: <\/strong>BWR<br><strong>Elev (ft): <\/strong>6250<br><strong>Apr-1 Avg: <\/strong>36.2","<strong>Course ID: <\/strong>25<br><strong>Name: <\/strong>STM<br><strong>Elev (ft): <\/strong>5400<br><strong>Apr-1 Avg: <\/strong>37.8","<strong>Course ID: <\/strong>26<br><strong>Name: <\/strong>ASH<br><strong>Elev (ft): <\/strong>5000<br><strong>Apr-1 Avg: <\/strong>19.7","<strong>Course ID: <\/strong>27<br><strong>Name: <\/strong>DHC<br><strong>Elev (ft): <\/strong>4500<br><strong>Apr-1 Avg: <\/strong>11.6","<strong>Course ID: <\/strong>30<br><strong>Name: <\/strong>CDP<br><strong>Elev (ft): <\/strong>7100<br><strong>Apr-1 Avg: <\/strong>16.7","<strong>Course ID: <\/strong>28<br><strong>Name: <\/strong>BLU<br><strong>Elev (ft): <\/strong>6800<br><strong>Apr-1 Avg: <\/strong>10.4","<strong>Course ID: <\/strong>31<br><strong>Name: <\/strong>BMN<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>8.4","<strong>Course ID: <\/strong>32<br><strong>Name: <\/strong>MDC<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>32.9","<strong>Course ID: <\/strong>33<br><strong>Name: <\/strong>THL<br><strong>Elev (ft): <\/strong>6500<br><strong>Apr-1 Avg: <\/strong>34.6","<strong>Course ID: <\/strong>35<br><strong>Name: <\/strong>ADI<br><strong>Elev (ft): <\/strong>6200<br><strong>Apr-1 Avg: <\/strong>12.5","<strong>Course ID: <\/strong>34<br><strong>Name: <\/strong>SMT<br><strong>Elev (ft): <\/strong>6050<br><strong>Apr-1 Avg: <\/strong>32.8","<strong>Course ID: <\/strong>343<br><strong>Name: <\/strong>NMN<br><strong>Elev (ft): <\/strong>5900<br><strong>Apr-1 Avg: <\/strong>8","<strong>Course ID: <\/strong>37<br><strong>Name: <\/strong>MCP<br><strong>Elev (ft): <\/strong>5300<br><strong>Apr-1 Avg: <\/strong>1.3","<strong>Course ID: <\/strong>41<br><strong>Name: <\/strong>BNS<br><strong>Elev (ft): <\/strong>4700<br><strong>Apr-1 Avg: <\/strong>1.8","<strong>Course ID: <\/strong>62<br><strong>Name: <\/strong>ATP<br><strong>Elev (ft): <\/strong>6200<br><strong>Apr-1 Avg: <\/strong>30.1","<strong>Course ID: <\/strong>47<br><strong>Name: <\/strong>LLP<br><strong>Elev (ft): <\/strong>8250<br><strong>Apr-1 Avg: <\/strong>80.2","<strong>Course ID: <\/strong>361<br><strong>Name: <\/strong>KTL<br><strong>Elev (ft): <\/strong>7300<br><strong>Apr-1 Avg: <\/strong>23.4","<strong>Course ID: <\/strong>48<br><strong>Name: <\/strong>MDY<br><strong>Elev (ft): <\/strong>7100<br><strong>Apr-1 Avg: <\/strong>25.9","<strong>Course ID: <\/strong>359<br><strong>Name: <\/strong>GRZ<br><strong>Elev (ft): <\/strong>6900<br><strong>Apr-1 Avg: <\/strong>30.4","<strong>Course ID: <\/strong>279<br><strong>Name: <\/strong>ERB<br><strong>Elev (ft): <\/strong>6800<br><strong>Apr-1 Avg: <\/strong>42.7","<strong>Course ID: <\/strong>388<br><strong>Name: <\/strong>PLP<br><strong>Elev (ft): <\/strong>6800<br><strong>Apr-1 Avg: <\/strong>45.5","<strong>Course ID: <\/strong>280<br><strong>Name: <\/strong>RWL<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>17.4","<strong>Course ID: <\/strong>360<br><strong>Name: <\/strong>MHG<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>30.7","<strong>Course ID: <\/strong>75<br><strong>Name: <\/strong>CHU<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>30.7","<strong>Course ID: <\/strong>53<br><strong>Name: <\/strong>3LK<br><strong>Elev (ft): <\/strong>6250<br><strong>Apr-1 Avg: <\/strong>40.8","<strong>Course ID: <\/strong>52<br><strong>Name: <\/strong>EUR<br><strong>Elev (ft): <\/strong>6200<br><strong>Apr-1 Avg: <\/strong>31.7","<strong>Course ID: <\/strong>51<br><strong>Name: <\/strong>HRF<br><strong>Elev (ft): <\/strong>6200<br><strong>Apr-1 Avg: <\/strong>28.5","<strong>Course ID: <\/strong>290<br><strong>Name: <\/strong>MD2<br><strong>Elev (ft): <\/strong>6050<br><strong>Apr-1 Avg: <\/strong>16.6","<strong>Course ID: <\/strong>54<br><strong>Name: <\/strong>MLF<br><strong>Elev (ft): <\/strong>5900<br><strong>Apr-1 Avg: <\/strong>39","<strong>Course ID: <\/strong>387<br><strong>Name: <\/strong>FP3<br><strong>Elev (ft): <\/strong>5850<br><strong>Apr-1 Avg: <\/strong>2.7","<strong>Course ID: <\/strong>353<br><strong>Name: <\/strong>FCV<br><strong>Elev (ft): <\/strong>5800<br><strong>Apr-1 Avg: <\/strong>2.1","<strong>Course ID: <\/strong>354<br><strong>Name: <\/strong>ANR<br><strong>Elev (ft): <\/strong>5650<br><strong>Apr-1 Avg: <\/strong>3","<strong>Course ID: <\/strong>355<br><strong>Name: <\/strong>ABY<br><strong>Elev (ft): <\/strong>5650<br><strong>Apr-1 Avg: <\/strong>9","<strong>Course ID: <\/strong>49<br><strong>Name: <\/strong>LTT<br><strong>Elev (ft): <\/strong>5600<br><strong>Apr-1 Avg: <\/strong>49","<strong>Course ID: <\/strong>55<br><strong>Name: <\/strong>MSV<br><strong>Elev (ft): <\/strong>5600<br><strong>Apr-1 Avg: <\/strong>14.7","<strong>Course ID: <\/strong>56<br><strong>Name: <\/strong>BCP<br><strong>Elev (ft): <\/strong>5400<br><strong>Apr-1 Avg: <\/strong>23.3","<strong>Course ID: <\/strong>58<br><strong>Name: <\/strong>FEM<br><strong>Elev (ft): <\/strong>5400<br><strong>Apr-1 Avg: <\/strong>23.1","<strong>Course ID: <\/strong>59<br><strong>Name: <\/strong>WRN<br><strong>Elev (ft): <\/strong>5100<br><strong>Apr-1 Avg: <\/strong>14.7","<strong>Course ID: <\/strong>434<br><strong>Name: <\/strong>HS2<br><strong>Elev (ft): <\/strong>4850<br><strong>Apr-1 Avg: <\/strong>14.3","<strong>Course ID: <\/strong>61<br><strong>Name: <\/strong>CHF<br><strong>Elev (ft): <\/strong>4600<br><strong>Apr-1 Avg: <\/strong>6.1","<strong>Course ID: <\/strong>64<br><strong>Name: <\/strong>WPK<br><strong>Elev (ft): <\/strong>7800<br><strong>Apr-1 Avg: <\/strong>41.9","<strong>Course ID: <\/strong>65<br><strong>Name: <\/strong>CC5<br><strong>Elev (ft): <\/strong>7400<br><strong>Apr-1 Avg: <\/strong>52.1","<strong>Course ID: <\/strong>66<br><strong>Name: <\/strong>MWL<br><strong>Elev (ft): <\/strong>7200<br><strong>Apr-1 Avg: <\/strong>55.8","<strong>Course ID: <\/strong>67<br><strong>Name: <\/strong>RDM<br><strong>Elev (ft): <\/strong>7200<br><strong>Apr-1 Avg: <\/strong>51.9","<strong>Course ID: <\/strong>68<br><strong>Name: <\/strong>ENM<br><strong>Elev (ft): <\/strong>7100<br><strong>Apr-1 Avg: <\/strong>45.4","<strong>Course ID: <\/strong>69<br><strong>Name: <\/strong>DNS<br><strong>Elev (ft): <\/strong>6900<br><strong>Apr-1 Avg: <\/strong>38.6","<strong>Course ID: <\/strong>76<br><strong>Name: <\/strong>FNF<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>48.4","<strong>Course ID: <\/strong>74<br><strong>Name: <\/strong>YBP<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>29.6","<strong>Course ID: <\/strong>78<br><strong>Name: <\/strong>FNP<br><strong>Elev (ft): <\/strong>6500<br><strong>Apr-1 Avg: <\/strong>29.8","<strong>Course ID: <\/strong>77<br><strong>Name: <\/strong>FOD<br><strong>Elev (ft): <\/strong>6500<br><strong>Apr-1 Avg: <\/strong>40.9","<strong>Course ID: <\/strong>389<br><strong>Name: <\/strong>RCW<br><strong>Elev (ft): <\/strong>6480<br><strong>Apr-1 Avg: <\/strong>42.5","<strong>Course ID: <\/strong>390<br><strong>Name: <\/strong>SSM<br><strong>Elev (ft): <\/strong>6300<br><strong>Apr-1 Avg: <\/strong>55.4","<strong>Course ID: <\/strong>80<br><strong>Name: <\/strong>CCO<br><strong>Elev (ft): <\/strong>5900<br><strong>Apr-1 Avg: <\/strong>27.6","<strong>Course ID: <\/strong>372<br><strong>Name: <\/strong>CMC<br><strong>Elev (ft): <\/strong>5850<br><strong>Apr-1 Avg: <\/strong>23.7","<strong>Course ID: <\/strong>83<br><strong>Name: <\/strong>BOM<br><strong>Elev (ft): <\/strong>5650<br><strong>Apr-1 Avg: <\/strong>22.3","<strong>Course ID: <\/strong>391<br><strong>Name: <\/strong>LXN<br><strong>Elev (ft): <\/strong>5600<br><strong>Apr-1 Avg: <\/strong>30.7","<strong>Course ID: <\/strong>277<br><strong>Name: <\/strong>GBN<br><strong>Elev (ft): <\/strong>5400<br><strong>Apr-1 Avg: <\/strong>28.7","<strong>Course ID: <\/strong>85<br><strong>Name: <\/strong>SPD<br><strong>Elev (ft): <\/strong>5200<br><strong>Apr-1 Avg: <\/strong>21.3","<strong>Course ID: <\/strong>429<br><strong>Name: <\/strong>CHK<br><strong>Elev (ft): <\/strong>4850<br><strong>Apr-1 Avg: <\/strong>NA","<strong>Course ID: <\/strong>106<br><strong>Name: <\/strong>UCP<br><strong>Elev (ft): <\/strong>8500<br><strong>Apr-1 Avg: <\/strong>36.2","<strong>Course ID: <\/strong>331<br><strong>Name: <\/strong>LCP<br><strong>Elev (ft): <\/strong>8400<br><strong>Apr-1 Avg: <\/strong>39.2","<strong>Course ID: <\/strong>107<br><strong>Name: <\/strong>CAP<br><strong>Elev (ft): <\/strong>8000<br><strong>Apr-1 Avg: <\/strong>30.8","<strong>Course ID: <\/strong>365<br><strong>Name: <\/strong>APH<br><strong>Elev (ft): <\/strong>7600<br><strong>Apr-1 Avg: <\/strong>33.8","<strong>Course ID: <\/strong>338<br><strong>Name: <\/strong>LCR<br><strong>Elev (ft): <\/strong>7500<br><strong>Apr-1 Avg: <\/strong>36.2","<strong>Course ID: <\/strong>108<br><strong>Name: <\/strong>ECS<br><strong>Elev (ft): <\/strong>7450<br><strong>Apr-1 Avg: <\/strong>33.8","<strong>Course ID: <\/strong>110<br><strong>Name: <\/strong>ABN<br><strong>Elev (ft): <\/strong>7300<br><strong>Apr-1 Avg: <\/strong>35.3","<strong>Course ID: <\/strong>109<br><strong>Name: <\/strong>SIL<br><strong>Elev (ft): <\/strong>7100<br><strong>Apr-1 Avg: <\/strong>21","<strong>Course ID: <\/strong>316<br><strong>Name: <\/strong>WRG<br><strong>Elev (ft): <\/strong>6900<br><strong>Apr-1 Avg: <\/strong>32.8","<strong>Course ID: <\/strong>113<br><strong>Name: <\/strong>PHL<br><strong>Elev (ft): <\/strong>6800<br><strong>Apr-1 Avg: <\/strong>27.6","<strong>Course ID: <\/strong>320<br><strong>Name: <\/strong>LYN<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>31.8","<strong>Course ID: <\/strong>115<br><strong>Name: <\/strong>HYS<br><strong>Elev (ft): <\/strong>6600<br><strong>Apr-1 Avg: <\/strong>45","<strong>Course ID: <\/strong>289<br><strong>Name: <\/strong>TMF<br><strong>Elev (ft): <\/strong>6550<br><strong>Apr-1 Avg: <\/strong>28.4","<strong>Course ID: <\/strong>114<br><strong>Name: <\/strong>WBM<br><strong>Elev (ft): <\/strong>6300<br><strong>Apr-1 Avg: <\/strong>42.8","<strong>Course ID: <\/strong>369<br><strong>Name: <\/strong>MCB<br><strong>Elev (ft): <\/strong>6200<br><strong>Apr-1 Avg: <\/strong>40","<strong>Course ID: <\/strong>120<br><strong>Name: <\/strong>ONN<br><strong>Elev (ft): <\/strong>6100<br><strong>Apr-1 Avg: <\/strong>19.6","<strong>Course ID: <\/strong>371<br><strong>Name: <\/strong>DMN<br><strong>Elev (ft): <\/strong>6050<br><strong>Apr-1 Avg: <\/strong>22","<strong>Course ID: <\/strong>122<br><strong>Name: <\/strong>TBC<br><strong>Elev (ft): <\/strong>5750<br><strong>Apr-1 Avg: <\/strong>20.9","<strong>Course ID: <\/strong>322<br><strong>Name: <\/strong>RBV<br><strong>Elev (ft): <\/strong>5600<br><strong>Apr-1 Avg: <\/strong>15.6","<strong>Course ID: <\/strong>127<br><strong>Name: <\/strong>IHS<br><strong>Elev (ft): <\/strong>5300<br><strong>Apr-1 Avg: <\/strong>5.8","<strong>Course ID: <\/strong>323<br><strong>Name: <\/strong>HHM<br><strong>Elev (ft): <\/strong>8700<br><strong>Apr-1 Avg: <\/strong>48.7","<strong>Course ID: <\/strong>364<br><strong>Name: <\/strong>TRG<br><strong>Elev (ft): <\/strong>8150<br><strong>Apr-1 Avg: <\/strong>45","<strong>Course ID: <\/strong>129<br><strong>Name: <\/strong>BLK<br><strong>Elev (ft): <\/strong>8000<br><strong>Apr-1 Avg: <\/strong>36.2","<strong>Course ID: <\/strong>131<br><strong>Name: <\/strong>WHE<br><strong>Elev (ft): <\/strong>7800<br><strong>Apr-1 Avg: <\/strong>53.3","<strong>Course ID: <\/strong>132<br><strong>Name: <\/strong>PFV<br><strong>Elev (ft): <\/strong>7500<br><strong>Apr-1 Avg: <\/strong>38.9","<strong>Course ID: <\/strong>133<br><strong>Name: <\/strong>CRF<br><strong>Elev (ft): <\/strong>7200<br><strong>Apr-1 Avg: <\/strong>40.5","<strong>Course ID: <\/strong>363<br><strong>Name: <\/strong>PDT<br><strong>Elev (ft): <\/strong>7200<br><strong>Apr-1 Avg: <\/strong>44.8","<strong>Course ID: <\/strong>134<br><strong>Name: <\/strong>BV1<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>24.6","<strong>Course ID: <\/strong>435<br><strong>Name: <\/strong>LB2<br><strong>Elev (ft): <\/strong>6500<br><strong>Apr-1 Avg: <\/strong>13.8","<strong>Course ID: <\/strong>136<br><strong>Name: <\/strong>HMS<br><strong>Elev (ft): <\/strong>5500<br><strong>Apr-1 Avg: <\/strong>5.3","<strong>Course ID: <\/strong>137<br><strong>Name: <\/strong>ATS<br><strong>Elev (ft): <\/strong>4350<br><strong>Apr-1 Avg: <\/strong>2.9","<strong>Course ID: <\/strong>345<br><strong>Name: <\/strong>DDM<br><strong>Elev (ft): <\/strong>9250<br><strong>Apr-1 Avg: <\/strong>35.1","<strong>Course ID: <\/strong>344<br><strong>Name: <\/strong>CFM<br><strong>Elev (ft): <\/strong>8900<br><strong>Apr-1 Avg: <\/strong>39.8","<strong>Course ID: <\/strong>427<br><strong>Name: <\/strong>GNL<br><strong>Elev (ft): <\/strong>8400<br><strong>Apr-1 Avg: <\/strong>52.9","<strong>Course ID: <\/strong>138<br><strong>Name: <\/strong>REL<br><strong>Elev (ft): <\/strong>8100<br><strong>Apr-1 Avg: <\/strong>39.6","<strong>Course ID: <\/strong>139<br><strong>Name: <\/strong>SCF<br><strong>Elev (ft): <\/strong>7800<br><strong>Apr-1 Avg: <\/strong>22","<strong>Course ID: <\/strong>384<br><strong>Name: <\/strong>SLM<br><strong>Elev (ft): <\/strong>7750<br><strong>Apr-1 Avg: <\/strong>51","<strong>Course ID: <\/strong>140<br><strong>Name: <\/strong>EGM<br><strong>Elev (ft): <\/strong>7500<br><strong>Apr-1 Avg: <\/strong>24.2","<strong>Course ID: <\/strong>142<br><strong>Name: <\/strong>HRG<br><strong>Elev (ft): <\/strong>7300<br><strong>Apr-1 Avg: <\/strong>28","<strong>Course ID: <\/strong>143<br><strong>Name: <\/strong>RLD<br><strong>Elev (ft): <\/strong>7250<br><strong>Apr-1 Avg: <\/strong>19.9","<strong>Course ID: <\/strong>416<br><strong>Name: <\/strong>BLD<br><strong>Elev (ft): <\/strong>7200<br><strong>Apr-1 Avg: <\/strong>34.6","<strong>Course ID: <\/strong>432<br><strong>Name: <\/strong>SHW<br><strong>Elev (ft): <\/strong>6950<br><strong>Apr-1 Avg: <\/strong>33","<strong>Course ID: <\/strong>430<br><strong>Name: <\/strong>CRM<br><strong>Elev (ft): <\/strong>6650<br><strong>Apr-1 Avg: <\/strong>19.7","<strong>Course ID: <\/strong>373<br><strong>Name: <\/strong>HLK<br><strong>Elev (ft): <\/strong>6550<br><strong>Apr-1 Avg: <\/strong>21.8","<strong>Course ID: <\/strong>145<br><strong>Name: <\/strong>NGF<br><strong>Elev (ft): <\/strong>6500<br><strong>Apr-1 Avg: <\/strong>19.6","<strong>Course ID: <\/strong>386<br><strong>Name: <\/strong>BLS<br><strong>Elev (ft): <\/strong>6500<br><strong>Apr-1 Avg: <\/strong>22","<strong>Course ID: <\/strong>157<br><strong>Name: <\/strong>DAN<br><strong>Elev (ft): <\/strong>9800<br><strong>Apr-1 Avg: <\/strong>31.1","<strong>Course ID: <\/strong>158<br><strong>Name: <\/strong>RFM<br><strong>Elev (ft): <\/strong>9400<br><strong>Apr-1 Avg: <\/strong>32.8","<strong>Course ID: <\/strong>159<br><strong>Name: <\/strong>BNP<br><strong>Elev (ft): <\/strong>9300<br><strong>Apr-1 Avg: <\/strong>44.9","<strong>Course ID: <\/strong>368<br><strong>Name: <\/strong>NGM<br><strong>Elev (ft): <\/strong>8900<br><strong>Apr-1 Avg: <\/strong>48","<strong>Course ID: <\/strong>161<br><strong>Name: <\/strong>TUM<br><strong>Elev (ft): <\/strong>8600<br><strong>Apr-1 Avg: <\/strong>22.7","<strong>Course ID: <\/strong>162<br><strong>Name: <\/strong>HRS<br><strong>Elev (ft): <\/strong>8400<br><strong>Apr-1 Avg: <\/strong>46.7","<strong>Course ID: <\/strong>163<br><strong>Name: <\/strong>WLW<br><strong>Elev (ft): <\/strong>8000<br><strong>Apr-1 Avg: <\/strong>43.2","<strong>Course ID: <\/strong>165<br><strong>Name: <\/strong>SAS<br><strong>Elev (ft): <\/strong>7900<br><strong>Apr-1 Avg: <\/strong>38.1","<strong>Course ID: <\/strong>166<br><strong>Name: <\/strong>HCL<br><strong>Elev (ft): <\/strong>7800<br><strong>Apr-1 Avg: <\/strong>41.9","<strong>Course ID: <\/strong>164<br><strong>Name: <\/strong>SPF<br><strong>Elev (ft): <\/strong>7800<br><strong>Apr-1 Avg: <\/strong>45.6","<strong>Course ID: <\/strong>167<br><strong>Name: <\/strong>PDS<br><strong>Elev (ft): <\/strong>7650<br><strong>Apr-1 Avg: <\/strong>39.9","<strong>Course ID: <\/strong>348<br><strong>Name: <\/strong>KRC<br><strong>Elev (ft): <\/strong>7000<br><strong>Apr-1 Avg: <\/strong>23.5","<strong>Course ID: <\/strong>169<br><strong>Name: <\/strong>VNN<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>22.4","<strong>Course ID: <\/strong>168<br><strong>Name: <\/strong>UKR<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>18.6","<strong>Course ID: <\/strong>173<br><strong>Name: <\/strong>LKB<br><strong>Elev (ft): <\/strong>6700<br><strong>Apr-1 Avg: <\/strong>26","<strong>Course ID: <\/strong>172<br><strong>Name: <\/strong>BEM<br><strong>Elev (ft): <\/strong>6500<br><strong>Apr-1 Avg: <\/strong>15.5","<strong>Course ID: <\/strong>171<br><strong>Name: <\/strong>BHV<br><strong>Elev (ft): <\/strong>6500<br><strong>Apr-1 Avg: <\/strong>23.5","<strong>Course ID: <\/strong>176<br><strong>Name: <\/strong>SNF<br><strong>Elev (ft): <\/strong>8700<br><strong>Apr-1 Avg: <\/strong>44.5","<strong>Course ID: <\/strong>177<br><strong>Name: <\/strong>STR<br><strong>Elev (ft): <\/strong>8200<br><strong>Apr-1 Avg: <\/strong>32.6","<strong>Course ID: <\/strong>178<br><strong>Name: <\/strong>TNY<br><strong>Elev (ft): <\/strong>8150<br><strong>Apr-1 Avg: <\/strong>33.6","<strong>Course ID: <\/strong>179<br><strong>Name: <\/strong>GFL<br><strong>Elev (ft): <\/strong>7000<br><strong>Apr-1 Avg: <\/strong>32","<strong>Course ID: <\/strong>180<br><strong>Name: <\/strong>PGM<br><strong>Elev (ft): <\/strong>7000<br><strong>Apr-1 Avg: <\/strong>29.3","<strong>Course ID: <\/strong>182<br><strong>Name: <\/strong>MNP<br><strong>Elev (ft): <\/strong>11450<br><strong>Apr-1 Avg: <\/strong>30.8","<strong>Course ID: <\/strong>183<br><strong>Name: <\/strong>PPS<br><strong>Elev (ft): <\/strong>11300<br><strong>Apr-1 Avg: <\/strong>37.9","<strong>Course ID: <\/strong>184<br><strong>Name: <\/strong>EML<br><strong>Elev (ft): <\/strong>10600<br><strong>Apr-1 Avg: <\/strong>35.4","<strong>Course ID: <\/strong>276<br><strong>Name: <\/strong>PNB<br><strong>Elev (ft): <\/strong>10400<br><strong>Apr-1 Avg: <\/strong>34","<strong>Course ID: <\/strong>185<br><strong>Name: <\/strong>HRT<br><strong>Elev (ft): <\/strong>10100<br><strong>Apr-1 Avg: <\/strong>27.9","<strong>Course ID: <\/strong>186<br><strong>Name: <\/strong>VLC<br><strong>Elev (ft): <\/strong>10050<br><strong>Apr-1 Avg: <\/strong>30.7","<strong>Course ID: <\/strong>187<br><strong>Name: <\/strong>RMR<br><strong>Elev (ft): <\/strong>10000<br><strong>Apr-1 Avg: <\/strong>29.7","<strong>Course ID: <\/strong>188<br><strong>Name: <\/strong>CBM<br><strong>Elev (ft): <\/strong>9700<br><strong>Apr-1 Avg: <\/strong>23.2","<strong>Course ID: <\/strong>189<br><strong>Name: <\/strong>AGP<br><strong>Elev (ft): <\/strong>9450<br><strong>Apr-1 Avg: <\/strong>31.8","<strong>Course ID: <\/strong>191<br><strong>Name: <\/strong>DTL<br><strong>Elev (ft): <\/strong>9100<br><strong>Apr-1 Avg: <\/strong>28.1","<strong>Course ID: <\/strong>190<br><strong>Name: <\/strong>KSR<br><strong>Elev (ft): <\/strong>9100<br><strong>Apr-1 Avg: <\/strong>39","<strong>Course ID: <\/strong>192<br><strong>Name: <\/strong>CYT<br><strong>Elev (ft): <\/strong>8850<br><strong>Apr-1 Avg: <\/strong>32.2","<strong>Course ID: <\/strong>193<br><strong>Name: <\/strong>CRA<br><strong>Elev (ft): <\/strong>8400<br><strong>Apr-1 Avg: <\/strong>36.3","<strong>Course ID: <\/strong>346<br><strong>Name: <\/strong>BDF<br><strong>Elev (ft): <\/strong>8300<br><strong>Apr-1 Avg: <\/strong>30.8","<strong>Course ID: <\/strong>194<br><strong>Name: <\/strong>NLL<br><strong>Elev (ft): <\/strong>8000<br><strong>Apr-1 Avg: <\/strong>35.8","<strong>Course ID: <\/strong>324<br><strong>Name: <\/strong>THE<br><strong>Elev (ft): <\/strong>7800<br><strong>Apr-1 Avg: <\/strong>14.7","<strong>Course ID: <\/strong>196<br><strong>Name: <\/strong>CKT<br><strong>Elev (ft): <\/strong>7450<br><strong>Apr-1 Avg: <\/strong>36.8","<strong>Course ID: <\/strong>347<br><strong>Name: <\/strong>TMK<br><strong>Elev (ft): <\/strong>7250<br><strong>Apr-1 Avg: <\/strong>23.8","<strong>Course ID: <\/strong>198<br><strong>Name: <\/strong>FLC<br><strong>Elev (ft): <\/strong>7200<br><strong>Apr-1 Avg: <\/strong>7.6","<strong>Course ID: <\/strong>197<br><strong>Name: <\/strong>CHM<br><strong>Elev (ft): <\/strong>7150<br><strong>Apr-1 Avg: <\/strong>36.6","<strong>Course ID: <\/strong>200<br><strong>Name: <\/strong>CLM<br><strong>Elev (ft): <\/strong>7000<br><strong>Apr-1 Avg: <\/strong>22.8","<strong>Course ID: <\/strong>199<br><strong>Name: <\/strong>HTT<br><strong>Elev (ft): <\/strong>7000<br><strong>Apr-1 Avg: <\/strong>18.6","<strong>Course ID: <\/strong>201<br><strong>Name: <\/strong>JCM<br><strong>Elev (ft): <\/strong>6950<br><strong>Apr-1 Avg: <\/strong>24","<strong>Course ID: <\/strong>202<br><strong>Name: <\/strong>CHQ<br><strong>Elev (ft): <\/strong>6800<br><strong>Apr-1 Avg: <\/strong>21.7","<strong>Course ID: <\/strong>204<br><strong>Name: <\/strong>PMD<br><strong>Elev (ft): <\/strong>6800<br><strong>Apr-1 Avg: <\/strong>24.8","<strong>Course ID: <\/strong>222<br><strong>Name: <\/strong>BSH<br><strong>Elev (ft): <\/strong>11200<br><strong>Apr-1 Avg: <\/strong>35","<strong>Course ID: <\/strong>299<br><strong>Name: <\/strong>CLT<br><strong>Elev (ft): <\/strong>10700<br><strong>Apr-1 Avg: <\/strong>29.9","<strong>Course ID: <\/strong>307<br><strong>Name: <\/strong>BLF<br><strong>Elev (ft): <\/strong>10650<br><strong>Apr-1 Avg: <\/strong>28.5","<strong>Course ID: <\/strong>398<br><strong>Name: <\/strong>BNH<br><strong>Elev (ft): <\/strong>10600<br><strong>Apr-1 Avg: <\/strong>27.1","<strong>Course ID: <\/strong>223<br><strong>Name: <\/strong>BCB<br><strong>Elev (ft): <\/strong>10300<br><strong>Apr-1 Avg: <\/strong>34.1","<strong>Course ID: <\/strong>396<br><strong>Name: <\/strong>RTT<br><strong>Elev (ft): <\/strong>9900<br><strong>Apr-1 Avg: <\/strong>39.8","<strong>Course ID: <\/strong>225<br><strong>Name: <\/strong>BMD<br><strong>Elev (ft): <\/strong>9800<br><strong>Apr-1 Avg: <\/strong>33.3","<strong>Course ID: <\/strong>224<br><strong>Name: <\/strong>UBC<br><strong>Elev (ft): <\/strong>9700<br><strong>Apr-1 Avg: <\/strong>37.8","<strong>Course ID: <\/strong>397<br><strong>Name: <\/strong>SCE<br><strong>Elev (ft): <\/strong>9650<br><strong>Apr-1 Avg: <\/strong>24.1","<strong>Course ID: <\/strong>229<br><strong>Name: <\/strong>RDC<br><strong>Elev (ft): <\/strong>9000<br><strong>Apr-1 Avg: <\/strong>35.8","<strong>Course ID: <\/strong>226<br><strong>Name: <\/strong>RWM<br><strong>Elev (ft): <\/strong>8850<br><strong>Apr-1 Avg: <\/strong>26.5","<strong>Course ID: <\/strong>227<br><strong>Name: <\/strong>WDH<br><strong>Elev (ft): <\/strong>8800<br><strong>Apr-1 Avg: <\/strong>31.5","<strong>Course ID: <\/strong>232<br><strong>Name: <\/strong>LMD<br><strong>Elev (ft): <\/strong>8500<br><strong>Apr-1 Avg: <\/strong>29.3","<strong>Course ID: <\/strong>426<br><strong>Name: <\/strong>CUR<br><strong>Elev (ft): <\/strong>8350<br><strong>Apr-1 Avg: <\/strong>30.7","<strong>Course ID: <\/strong>233<br><strong>Name: <\/strong>SMD<br><strong>Elev (ft): <\/strong>8300<br><strong>Apr-1 Avg: <\/strong>32.3","<strong>Course ID: <\/strong>230<br><strong>Name: <\/strong>HLM<br><strong>Elev (ft): <\/strong>8250<br><strong>Apr-1 Avg: <\/strong>26.7","<strong>Course ID: <\/strong>234<br><strong>Name: <\/strong>PRM<br><strong>Elev (ft): <\/strong>8200<br><strong>Apr-1 Avg: <\/strong>26.3","<strong>Course ID: <\/strong>308<br><strong>Name: <\/strong>DSM<br><strong>Elev (ft): <\/strong>8050<br><strong>Apr-1 Avg: <\/strong>29.6","<strong>Course ID: <\/strong>237<br><strong>Name: <\/strong>HCM<br><strong>Elev (ft): <\/strong>7600<br><strong>Apr-1 Avg: <\/strong>16.3","<strong>Course ID: <\/strong>236<br><strong>Name: <\/strong>BMS<br><strong>Elev (ft): <\/strong>7600<br><strong>Apr-1 Avg: <\/strong>24.6","<strong>Course ID: <\/strong>438<br><strong>Name: <\/strong>RGT<br><strong>Elev (ft): <\/strong>7500<br><strong>Apr-1 Avg: <\/strong>NA","<strong>Course ID: <\/strong>239<br><strong>Name: <\/strong>FDM<br><strong>Elev (ft): <\/strong>6950<br><strong>Apr-1 Avg: <\/strong>21.3","<strong>Course ID: <\/strong>292<br><strong>Name: <\/strong>FRW<br><strong>Elev (ft): <\/strong>9500<br><strong>Apr-1 Avg: <\/strong>35.8","<strong>Course ID: <\/strong>243<br><strong>Name: <\/strong>PTM<br><strong>Elev (ft): <\/strong>8600<br><strong>Apr-1 Avg: <\/strong>36.7","<strong>Course ID: <\/strong>244<br><strong>Name: <\/strong>HKM<br><strong>Elev (ft): <\/strong>8500<br><strong>Apr-1 Avg: <\/strong>27.5","<strong>Course ID: <\/strong>245<br><strong>Name: <\/strong>MNK<br><strong>Elev (ft): <\/strong>8000<br><strong>Apr-1 Avg: <\/strong>20.6","<strong>Course ID: <\/strong>246<br><strong>Name: <\/strong>GFR<br><strong>Elev (ft): <\/strong>6400<br><strong>Apr-1 Avg: <\/strong>14.7","<strong>Course ID: <\/strong>247<br><strong>Name: <\/strong>QKA<br><strong>Elev (ft): <\/strong>7000<br><strong>Apr-1 Avg: <\/strong>12.3","<strong>Course ID: <\/strong>248<br><strong>Name: <\/strong>OEM<br><strong>Elev (ft): <\/strong>6600<br><strong>Apr-1 Avg: <\/strong>14.3","<strong>Course ID: <\/strong>250<br><strong>Name: <\/strong>BGH<br><strong>Elev (ft): <\/strong>11350<br><strong>Apr-1 Avg: <\/strong>23.7","<strong>Course ID: <\/strong>251<br><strong>Name: <\/strong>CWP<br><strong>Elev (ft): <\/strong>11050<br><strong>Apr-1 Avg: <\/strong>14.8","<strong>Course ID: <\/strong>252<br><strong>Name: <\/strong>SIB<br><strong>Elev (ft): <\/strong>10900<br><strong>Apr-1 Avg: <\/strong>20","<strong>Course ID: <\/strong>253<br><strong>Name: <\/strong>CBT<br><strong>Elev (ft): <\/strong>10700<br><strong>Apr-1 Avg: <\/strong>19.6","<strong>Course ID: <\/strong>275<br><strong>Name: <\/strong>SDM<br><strong>Elev (ft): <\/strong>10650<br><strong>Apr-1 Avg: <\/strong>19.2","<strong>Course ID: <\/strong>255<br><strong>Name: <\/strong>TND<br><strong>Elev (ft): <\/strong>10650<br><strong>Apr-1 Avg: <\/strong>18.8","<strong>Course ID: <\/strong>254<br><strong>Name: <\/strong>GYF<br><strong>Elev (ft): <\/strong>10650<br><strong>Apr-1 Avg: <\/strong>20.8","<strong>Course ID: <\/strong>257<br><strong>Name: <\/strong>BWH<br><strong>Elev (ft): <\/strong>9750<br><strong>Apr-1 Avg: <\/strong>17.2","<strong>Course ID: <\/strong>256<br><strong>Name: <\/strong>RCR<br><strong>Elev (ft): <\/strong>9600<br><strong>Apr-1 Avg: <\/strong>17.8","<strong>Course ID: <\/strong>258<br><strong>Name: <\/strong>RMD<br><strong>Elev (ft): <\/strong>9000<br><strong>Apr-1 Avg: <\/strong>24.1","<strong>Course ID: <\/strong>259<br><strong>Name: <\/strong>RMM<br><strong>Elev (ft): <\/strong>8700<br><strong>Apr-1 Avg: <\/strong>11.5","<strong>Course ID: <\/strong>260<br><strong>Name: <\/strong>LWM<br><strong>Elev (ft): <\/strong>8500<br><strong>Apr-1 Avg: <\/strong>12.9","<strong>Course ID: <\/strong>264<br><strong>Name: <\/strong>QRS<br><strong>Elev (ft): <\/strong>8350<br><strong>Apr-1 Avg: <\/strong>18.9","<strong>Course ID: <\/strong>261<br><strong>Name: <\/strong>BNM<br><strong>Elev (ft): <\/strong>8300<br><strong>Apr-1 Avg: <\/strong>13.6","<strong>Course ID: <\/strong>262<br><strong>Name: <\/strong>CSV<br><strong>Elev (ft): <\/strong>8300<br><strong>Apr-1 Avg: <\/strong>19.8","<strong>Course ID: <\/strong>265<br><strong>Name: <\/strong>BHM<br><strong>Elev (ft): <\/strong>7650<br><strong>Apr-1 Avg: <\/strong>8.3","<strong>Course ID: <\/strong>249<br><strong>Name: <\/strong>DHM<br><strong>Elev (ft): <\/strong>7300<br><strong>Apr-1 Avg: <\/strong>10.7","<strong>Course ID: <\/strong>45<br><strong>Name: <\/strong>SVR<br><strong>Elev (ft): <\/strong>6450<br><strong>Apr-1 Avg: <\/strong>29.4","<strong>Course ID: <\/strong>46<br><strong>Name: <\/strong>NRF<br><strong>Elev (ft): <\/strong>5700<br><strong>Apr-1 Avg: <\/strong>15.1","<strong>Course ID: <\/strong>334<br><strong>Name: <\/strong>MRO<br><strong>Elev (ft): <\/strong>9000<br><strong>Apr-1 Avg: <\/strong>35.6","<strong>Course ID: <\/strong>318<br><strong>Name: <\/strong>SQ2<br><strong>Elev (ft): <\/strong>7700<br><strong>Apr-1 Avg: <\/strong>48.4","<strong>Course ID: <\/strong>89<br><strong>Name: <\/strong>WBB<br><strong>Elev (ft): <\/strong>7000<br><strong>Apr-1 Avg: <\/strong>31.7","<strong>Course ID: <\/strong>96<br><strong>Name: <\/strong>LLL<br><strong>Elev (ft): <\/strong>8200<br><strong>Apr-1 Avg: <\/strong>59.1","<strong>Course ID: <\/strong>97<br><strong>Name: <\/strong>RP1<br><strong>Elev (ft): <\/strong>8100<br><strong>Apr-1 Avg: <\/strong>48","<strong>Course ID: <\/strong>99<br><strong>Name: <\/strong>RP2<br><strong>Elev (ft): <\/strong>7500<br><strong>Apr-1 Avg: <\/strong>30.8","<strong>Course ID: <\/strong>100<br><strong>Name: <\/strong>FBN<br><strong>Elev (ft): <\/strong>7300<br><strong>Apr-1 Avg: <\/strong>10.4","<strong>Course ID: <\/strong>101<br><strong>Name: <\/strong>WR2<br><strong>Elev (ft): <\/strong>7000<br><strong>Apr-1 Avg: <\/strong>41.8","<strong>Course ID: <\/strong>333<br><strong>Name: <\/strong>GL2<br><strong>Elev (ft): <\/strong>6900<br><strong>Apr-1 Avg: <\/strong>11.6","<strong>Course ID: <\/strong>103<br><strong>Name: <\/strong>RCH<br><strong>Elev (ft): <\/strong>6500<br><strong>Apr-1 Avg: <\/strong>15.6","<strong>Course ID: <\/strong>104<br><strong>Name: <\/strong>UTR<br><strong>Elev (ft): <\/strong>6400<br><strong>Apr-1 Avg: <\/strong>7.4","<strong>Course ID: <\/strong>421<br><strong>Name: <\/strong>LVT<br><strong>Elev (ft): <\/strong>9600<br><strong>Apr-1 Avg: <\/strong>50.8","<strong>Course ID: <\/strong>377<br><strong>Name: <\/strong>VRG<br><strong>Elev (ft): <\/strong>9300<br><strong>Apr-1 Avg: <\/strong>19.5","<strong>Course ID: <\/strong>422<br><strong>Name: <\/strong>SWL<br><strong>Elev (ft): <\/strong>8750<br><strong>Apr-1 Avg: <\/strong>18.8","<strong>Course ID: <\/strong>152<br><strong>Name: <\/strong>SRP<br><strong>Elev (ft): <\/strong>8750<br><strong>Apr-1 Avg: <\/strong>24.9","<strong>Course ID: <\/strong>154<br><strong>Name: <\/strong>WLF<br><strong>Elev (ft): <\/strong>8250<br><strong>Apr-1 Avg: <\/strong>9.9","<strong>Course ID: <\/strong>281<br><strong>Name: <\/strong>GEM<br><strong>Elev (ft): <\/strong>10750<br><strong>Apr-1 Avg: <\/strong>33.7","<strong>Course ID: <\/strong>181<br><strong>Name: <\/strong>TGP<br><strong>Elev (ft): <\/strong>9800<br><strong>Apr-1 Avg: <\/strong>26.8","<strong>Course ID: <\/strong>287<br><strong>Name: <\/strong>SDL<br><strong>Elev (ft): <\/strong>9750<br><strong>Apr-1 Avg: <\/strong>31.3","<strong>Course ID: <\/strong>286<br><strong>Name: <\/strong>ELL<br><strong>Elev (ft): <\/strong>9600<br><strong>Apr-1 Avg: <\/strong>29","<strong>Course ID: <\/strong>282<br><strong>Name: <\/strong>GML<br><strong>Elev (ft): <\/strong>9150<br><strong>Apr-1 Avg: <\/strong>30","<strong>Course ID: <\/strong>284<br><strong>Name: <\/strong>BSP<br><strong>Elev (ft): <\/strong>11300<br><strong>Apr-1 Avg: <\/strong>21.9","<strong>Course ID: <\/strong>220<br><strong>Name: <\/strong>CW2<br><strong>Elev (ft): <\/strong>11100<br><strong>Apr-1 Avg: <\/strong>14.1","<strong>Course ID: <\/strong>212<br><strong>Name: <\/strong>EPP<br><strong>Elev (ft): <\/strong>10800<br><strong>Apr-1 Avg: <\/strong>15.2","<strong>Course ID: <\/strong>213<br><strong>Name: <\/strong>SWM<br><strong>Elev (ft): <\/strong>10200<br><strong>Apr-1 Avg: <\/strong>19","<strong>Course ID: <\/strong>221<br><strong>Name: <\/strong>CW1<br><strong>Elev (ft): <\/strong>10150<br><strong>Apr-1 Avg: <\/strong>12.3","<strong>Course ID: <\/strong>217<br><strong>Name: <\/strong>BP1<br><strong>Elev (ft): <\/strong>10000<br><strong>Apr-1 Avg: <\/strong>22.6","<strong>Course ID: <\/strong>209<br><strong>Name: <\/strong>RC3<br><strong>Elev (ft): <\/strong>10000<br><strong>Apr-1 Avg: <\/strong>14.7","<strong>Course ID: <\/strong>218<br><strong>Name: <\/strong>BP3<br><strong>Elev (ft): <\/strong>9800<br><strong>Apr-1 Avg: <\/strong>18.3","<strong>Course ID: <\/strong>219<br><strong>Name: <\/strong>BP2<br><strong>Elev (ft): <\/strong>9700<br><strong>Apr-1 Avg: <\/strong>14.8","<strong>Course ID: <\/strong>214<br><strong>Name: <\/strong>NTH<br><strong>Elev (ft): <\/strong>9300<br><strong>Apr-1 Avg: <\/strong>10.2","<strong>Course ID: <\/strong>205<br><strong>Name: <\/strong>MAM<br><strong>Elev (ft): <\/strong>9300<br><strong>Apr-1 Avg: <\/strong>41.9","<strong>Course ID: <\/strong>423<br><strong>Name: <\/strong>TRL<br><strong>Elev (ft): <\/strong>9100<br><strong>Apr-1 Avg: <\/strong>13.2","<strong>Course ID: <\/strong>210<br><strong>Name: <\/strong>RC2<br><strong>Elev (ft): <\/strong>9050<br><strong>Apr-1 Avg: <\/strong>11","<strong>Course ID: <\/strong>206<br><strong>Name: <\/strong>MN2<br><strong>Elev (ft): <\/strong>9000<br><strong>Apr-1 Avg: <\/strong>29.1","<strong>Course ID: <\/strong>211<br><strong>Name: <\/strong>RC1<br><strong>Elev (ft): <\/strong>8700<br><strong>Apr-1 Avg: <\/strong>7.5","<strong>Course ID: <\/strong>208<br><strong>Name: <\/strong>MMT<br><strong>Elev (ft): <\/strong>8300<br><strong>Apr-1 Avg: <\/strong>20.2"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["ESRI Aerial","Topo"],"CDEC Snow",{"collapsed":true,"autoZIndex":true,"position":"topright"}]}],"limits":{"lat":[35.873,41.808],"lng":[-123.165,-118.155]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
