@@ -1,0 +1,128 @@
+---
+pagetitle: "mapview"
+---
+
+<br>
+
+## Using `mapview`
+
+This package is pretty cool, and has a bunch of functionality. There are a number of [vignettes online already](https://r-spatial.github.io/mapview/articles/index.html), in particular check out the basic overview vignette [here](https://r-spatial.github.io/mapview/articles/articles/mapview_01-basics.html). 
+
+This tutorial is currently just snippets of the vignette material linked above, nothing new, just posted here. Full credit to the `mapview` developers! Mainly, I want to highlight a few of the cooler features that exist for mapview that I haven't shown elsewhere in this workshop, this is not meant to be comprehensive. See the vignettes details.
+
+<br>
+
+### Main Functions
+
+ - `mapview` - view potentially multiple spatial objects on a set of background maps
+ - `viewExtent` - view extent / bounding box of spatial objects
+ - `viewRGB` - view RGB true- or false-color images of raster objects
+ - `latticeView` & `sync` - view small multiples of several potentially synchronised maps
+ - `slideView` - view two overlaid raster objects with a horizontal slider to hide/reveal one of them
+ - `cubeView` - 3D view of raster data cubes (e.g. space-time cube) with keyboard control over position of slices
+ - `plainview` - view large rasters on a plain background (i.e. no background map)
+ - `mapshot` - easily save maps (including leaflet maps) as html or png (or other image formats)
+
+### Spatial Data Supported in `mapview`
+
+It is natively set to work with `sf`, which is great. Note it will plot `raster` objects as well!
+
+ - `sf` (XY dimension only)
+ - `raster` (Layer, Stack, Brick and SpatialPixels* / SpatialGridDataFrame)
+ - `sp` (Points, Polygons, Lines and their DataFrame version)
+ - `satellite`
+
+### Leaflet Compatible Functions
+
+In addition, mapview provides some extra leaflet functionality:
+
+ - `addHomeButton` - add zoom-to-layer buttons
+ - `addLogo` - add a logo (or any image really) to a map
+ - `addFeatures` - add features to a map (sf or sp). This is features type agnostic, meaning the same function can be used for points, lines and polygons
+ - `addMouseCoordinates` - add mouse cursor postion information when moving over the map
+ - `addLargeFeatures` - add large data to a map that would otherwise make the leaflet map irresponsive
+ - `popupTable, popupGraph & popupImage` - popups of tables, grpahs and images for use with the leaflet add* functions
+
+## Fancy `mapview` Options
+
+https://r-spatial.github.io/mapview/articles/articles/mapview_05-extras.html
+
+A few of the "*fancier*"" things you can do!
+
+<br>
+
+### `slideView`
+
+This is really cool, and permits using a slider to flip between to different rasters or photos...see this [cool example](https://watershed.ucdavis.edu/experiments/rimfire/). There are nice functions to do this in ArcGIS as well, but this makes it very seamless to include in R.
+
+<br>
+
+Another example here shows the difference between two photos that were taken of the Aral Sea, showing how it's shrinking. The photo on the left is from 2000, the photo on the right from 2013.
+
+```{r slideview2, echo=T, eval=T, warning=FALSE, message=F}
+
+suppressPackageStartupMessages({
+  library(jpeg);
+  library(raster);
+  library(mapview)
+})
+
+web_img2000 <- "http://cdn.newsapi.com.au/image/v1/68565a36c0fccb1bc43c09d96e8fb029"
+
+jpg2000 <- readJPEG(readBin(web_img2000, "raw", 1e6))
+
+# Convert imagedata to raster
+rst_blue2000 <- raster(jpg2000[, , 1])
+rst_green2000 <- raster(jpg2000[, , 2])
+rst_red2000 <- raster(jpg2000[, , 3])
+
+img2000 <- brick(rst_red2000, rst_green2000, rst_blue2000)
+
+web_img2013 <- "http://cdn.newsapi.com.au/image/v1/5707499d769db4b8ec76e8df61933f2a"
+
+jpg2013 <- readJPEG(readBin(web_img2013, "raw", 1e6))
+
+# Convert imagedata to raster
+rst_blue2013 <- raster(jpg2013[, , 1])
+rst_green2013 <- raster(jpg2013[, , 2])
+rst_red2013 <- raster(jpg2013[, , 3])
+
+img2013 <- brick(rst_red2013, rst_green2013, rst_blue2013)
+
+slideView(img2000, img2013, label1 = "before", label2 = "after")
+
+```
+
+<br>
+
+Whoa! That's cool.
+
+<br>
+
+### `sync` views
+
+You can also sync multiple views of a set of data, which may be handy if you want to view different layers side by side.
+
+```{r, echo=T, eval=T}
+
+suppressPackageStartupMessages({
+  library(raster);
+  library(mapview);
+  library(leaflet);
+  library(RColorBrewer)
+})
+
+m1 <- mapview(breweries, zcol = "village", map.types = "Esri.WorldImagery")
+m2 <- mapview(breweries, zcol = "brewery", col.regions = heat.colors)
+m3 <- mapview(breweries, zcol = "founded", legend = TRUE)
+m4 <- leaflet() %>% addTiles() %>% addCircleMarkers(data = breweries)
+
+#sync(m1, m2, m3, m4)
+
+sync(list(m1, m2, m3, m4),
+     sync = list(c(1, 4),
+                 c(2, 3)))
+```
+
+
+
