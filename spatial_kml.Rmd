@@ -18,6 +18,11 @@ suppressPackageStartupMessages({
   })
 
 # https://waterwatch.usgs.gov/?m=stategage
+
+# check layers first:
+st_layers("data/streamgages_06.kml")
+
+# read in
 gages <- st_read("data/streamgages_06.kml") # reads kml but not kmz
 
 
