@@ -1,0 +1,459 @@
+---
+pagetitle: "spatial operations with sf"
+---
+
+<br>
+
+## Spatial Operations in R with `sf`
+
+Many operations commonly done with ArcGIS or QGIS are joins based on some component of the spatial topology. For example, you want to figure out what attributes of certain points on the landscape fall into certain polygons on the landscape...like bus-stops in a county or river gaging stations within a watershed. This could be done with a spatial join based on the intersection between the points and the polygons, may include [specific options](https://r-spatial.github.io/sf/reference/geos_binary_pred.html) like *crosses*, *within*, *touches*, etc. The point being, we can do all this in R!  Robin Lovelace has a great online book available: https://geocompr.robinlovelace.net/spatial-operations.html that covers some of this material. Check it out. 
+
+Let's **load the libraries** we're going to need first.
+
+```{r loadlibs, echo=T, eval=F}
+
+library(here)
+library(dplyr)
+library(raster)
+library(viridis)
+library(ggplot2)
+library(sf)
+library(USAboundaries)
+library(GSODR)
+library(rnaturalearth)
+```
+
+
+```{r libseval, eval=T, echo=F, message=F, show=FALSE}
+
+suppressPackageStartupMessages({
+  library(here);
+  library(dplyr);
+  library(viridis);
+  library(ggplot2);
+  library(sf);
+  library(GSODR);
+  library(mapview);
+  library(rnaturalearth);
+  library(USAboundaries); # STATES/counties data
+  library(spData)
+})
+
+```
+
+### Make a Nice CA County Map with Inset
+
+First let's practice making a nice map with an inset...using California and CA counties pulled from the `USAboundaries` package.
+
+```{r getBoundaryDat, echo=T, eval=T, purl=FALSE}
+
+# get USA states, filter out Puerto Rico, Alaska, and Hawaii for now
+us <- us_boundaries(type="state", resolution = "low") %>% 
+  filter(!state_abbr %in% c("PR", "AK", "HI"))
+
+# get CA boundary with high definition
+ca <- USAboundaries::us_states(resolution = "high", states = "CA")
+
+# make a box around CA (a grid with an n=1) for inset
+ca_box <- st_make_grid(ca, n = 1)
+
+# get CA county boundary
+ca_co <- USAboundaries::us_counties(resolution = "high", states = "CA")
+
+# make sure we have all the pieces with a quick test plot
+# plot(us$geometry)
+# plot(ca$geometry, add=T, col="gray50", border="maroon")
+# plot(ca_co$geometry, add=T, border="pink", col=NA)
+# plot(ca_box, add=T, border="red3", col=NA, lwd=2)
+```
+
+Now we make our primary map, in this case, a map of California with all the counties. Note we use `fill=NA` to make a completely hollow boundary and allow for some more creative use of the `alpha` transparency. 
+
+```{r mainMap, echo=TRUE, eval=FALSE, purl=FALSE}
+
+# Main map of CA
+p1 <- ggplot() + 
+  geom_sf(data = ca, color = "grey50", fill = "mediumpurple4", alpha=0.6) +
+  geom_sf(data = ca_co, color = "mediumpurple4", fill=NA, alpha=0.9) +
+  theme(axis.text.y = element_text(angle = 90, hjust = 0.5)) +
+  theme_bw() + 
+  xlab("Longitude") + 
+  ylab("Latitude")+
+  coord_sf() + 
+  theme(plot.background = element_blank(),
+        panel.border = element_blank(),
+        plot.margin = unit(c(0, 0, 0 ,0), "mm"))
+
+p1
+```
+
+Great, now let's create an inset map of the US, with a small box around the state of CA to indicate this is our "study area".
+
+```{r insetMap, echo=TRUE, eval=FALSE, purl=FALSE}
+
+# Inset map: US
+p2 <- ggplot() + 
+  geom_sf(data = us, colour = "grey10", fill = "tan", alpha=0.4) +
+  coord_sf() +
+  theme_minimal() + 
+  geom_sf(data=ca_box, color="mediumpurple4", fill=NA, lwd=2) +
+  labs(x = NULL, y = NULL) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        plot.background = element_blank(),
+        panel.border = element_blank(),
+        plot.margin = unit(c(0, 0, 0 ,0), "mm"))
+p2
+```
+
+Now we need to use a few additional libraries to pull this together. 
+ - We set up a new blank canvas using `grid.newpage()`
+ - We "*plot* both the mainmap and the inset map with `viewport`"
+ - Finally we `print` both of these so we can save this object out.
+ 
+```{r finalCombineMap, echo=TRUE, eval=FALSE, purl=FALSE}
+
+# add diff libraries
+library(grid)
+library(gridExtra)
+
+png(filename = "img/ca_cnty_us_inset_map.png", width = 8, height = 6, units = "in", res=300)
+grid.newpage()
+mainmap <- viewport(width = 1, height = 1, x = 0.5, y = 0.5) # main map
+insetmap <- viewport(width = 0.32, height = 0.3, x = 0.72, y = 0.8)
+print(p1, vp = mainmap) 
+print(p2, vp = insetmap)
+dev.off()
+```
+
+## Joining Spatial Data
+
+Now we have some polygon data to work with...let's add some climate data and practice joining polygons to points and points to polygons! First let's use the `GSODR` package to get climate station locations for the entire globe. Then we can join to a few specific states/counties, and plot. First the data:
+
+```{r joinsGSODR, echo=TRUE, eval=FALSE, purl=FALSE}
+
+library(GSODR)
+
+# load the station metadata file from GSODR (this loads `isd_history` in your
+# R sesion)
+load(system.file("extdata", "isd_history.rda", package = "GSODR"))
+isd_history <- as.data.frame(isd_history) %>% 
+  st_as_sf(coords=c("LON","LAT"), crs=4326)  
+
+
+# filter to US and CA, many sites out in buoys along coast
+isd_history_ca <- filter(isd_history, CTRY=="US", STATE=="CA")
+
+# view!
+library(rnaturalearth)
+library(rnaturalearthdata)
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+plot(isd_history$geometry, pch=16, cex=0.2, col="gray50")
+plot(world$geometry, add=T)
+```
+
+That's a lot of points! Great, now we have a dataframe in our environment that has both global climate station locations, and only stations associated with California, USA. If we mapped these, you'll notice there are a number of stations that fall outside of the CA border.
+
+```{r tstPlotCAISD, echo=TRUE, eval=FALSE, purl=FALSE}
+
+plot(ca$geometry, border="maroon", lwd=2)
+plot(isd_history_ca$geometry, add=T, pch=21, col="gray40", bg="gray80", cex=0.7)
+
+```
+
+### Join: Get *POLYGONS* containing *POINTS*
+
+Note, this only selects polygons that contain points from our giant point dataset, it does not do anything to the polygon dataframe (i.e., add attributes, update, summarize, etc). So here we are only spatially joining and selecting polygons that contain points. 
+
+```{r, echo=TRUE, eval=FALSE, purl=FALSE}
+
+# Get CA county POLYGONS only that contain ISD points within county boundaries
+# does not bring attributes from points forward
+ca_co_isd_poly <- ca_co[isd_history, ]
+
+plot(ca_co_isd_poly$geometry, add=T, col=alpha("blue",0.3))
+
+```
+
+### Join: *Add POLYGON attributes* to *POINTS* inside *POLYGONS*
+
+Now let's look for points that fall within CA counties, and add ATTRIBUTES from the polygons to the points dataframe! Just a reminder, here's the data columns (or *attributes*) in the polygon dataset:
+
+```{r headCACOUNTY, echo=FALSE, eval=TRUE, purl=FALSE, warning=FALSE}
+head(as.data.frame(ca_co))
+```
+
+So in this case, let's say we want to add the county **`name`** attribute to our POINT dataset, which looks like this (note, there's no `county` field or `name` field):
+
+```{r headISDpt, echo=FALSE, eval=TRUE, purl=FALSE, warning=FALSE}
+head(as.data.frame(isd_history))
+```
+
+So to spatially join the county name data with the appropriate point locations, let's use `st_join`. Note that if we use `left=TRUE` here it will retain *all* the points in the dataset, and not return just the spatial overlaps. So `left=FALSE` is equivalent to an `inner_join` in the `dplyr` lingo.
+
+
+```{r polyJoinAttribs, echo=TRUE, eval=FALSE, purl=FALSE}
+
+# For POINTS that fall within CA_counties, adds ATTRIBUTES, retains ALL pts if left=TRUE, otherwise uses inner_join
+isd_ca_co_pts <- st_join(isd_history, left = FALSE, ca_co["name"]) # join points
+
+# plot
+plot(ca_co$geometry, border="gray20", col=NA)
+plot(isd_ca_co_pts$geometry, add=T, pch=21, cex=0.5, col="purple", bg="gray80")
+
+```
+
+```{r headISDpt, echo=FALSE, eval=TRUE, purl=FALSE, warning=FALSE}
+head(as.data.frame(isd_ca_co_pts))
+
+```
+
+Note, now we have only points that fall *inside* of a CA county, **AND** the new data frame now has a new column/attribute called "`name`". We could easily provide additional columns, or not specify a column at all, and then all columns would be added to the point dataframe.
+
+ > `isd_ca_co_pts <- st_join(isd_history, left = FALSE, ca_co) # join all fields`
+
+## Join Magical Creatures!
+
+Let's take a look at this globally!
+
+```{r}
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+plot(world$geometry)
+
+myths <- readr::read_csv("data/list_of_mythical_creatures.csv")
+
+set.seed(777)
+bb_world = st_bbox(world)
+random_df = tibble::tibble(
+  x = runif(n = 71, min = bb_world[1], max = bb_world[3]),
+  y = runif(n = 71, min = bb_world[2], max = bb_world[4]),
+  id=seq(from = 1, to=71, by = 1)
+)
+
+myths_sf <- bind_cols(myths, random_df) %>% 
+  st_as_sf(coords = c("x", "y"), remove = F) %>% 
+  st_set_crs(4326)
+
+mapview::mapview(myths_sf)
+
+
+```
+
+```{r}
+# get GSODR data
+# https://ropensci.github.io/GSODR/articles/use_case_1.html
+
+# check availability for a date range
+loop_stations <- isd_ca_co_pts[isd_ca_co_pts$BEGIN <= 19600101 &
+                               isd_ca_co_pts$END >= 20151231, ]
+
+# use Fresno Airport: 723890
+p1 + 
+  geom_sf(data = loop_stations, size = 2) +
+  ggtitle("Station locations")
+
+# get data:
+tst <- get_GSOD(station = loop_stations[loop_stations$USAF=="723890", 10], years = 1960:2015)
+
+fresyes <- tst
+# save it!!
+save(fresyes, file = "data/fresno_GSOD_climate_19600101-20151231.rda")
+
+```
+
+```{r loadGSOD, eval=T, echo=T}
+
+load(paste0(here(),"/data/fresno_GSOD_climate_19600101-20151231.rda"))
+
+# YDAY: filter to 1980 plus:
+fresyes_yday <- fresyes %>% filter(YEARMODA > "1980-01-01") %>% 
+  filter(!is.na(PRCP)) %>% 
+  group_by(YDAY) %>% 
+  summarize_at(.vars=c("TEMP","PRCP","RH"), .funs = c(mean))
+
+ggplot() + geom_col(data=fresyes_yday, aes(x=YDAY, y=PRCP), col="darkblue")+
+  coord_polar()
+
+
+# YEAR: filter to 1980 plus:
+fresyes_year <- fresyes %>% filter(YEARMODA > "1980-01-01") %>% 
+  filter(!is.na(PRCP)) %>% 
+  group_by(YEAR) %>% 
+  summarize_at(.vars=c("TEMP","PRCP","RH"), .funs = c(mean))
+
+ggplot() + geom_col(data=fresyes_year, aes(x=YEAR, y=PRCP))+
+  coord_polar()
+
+# MONTH: filter to 1980 plus:
+fresyes_month <- fresyes %>% filter(YEARMODA > "1980-01-01") %>% 
+  filter(!is.na(PRCP)) %>% 
+  group_by(MONTH) %>% 
+  summarize_at(.vars=c("TEMP","PRCP","RH"), .funs = c(mean))
+
+ggplot() + geom_col(data=fresyes_month, aes(x=MONTH, y=PRCP), col="darkblue")+
+  coord_polar()
+
+# WEEK: filter to 1980 plus:
+fresyes_week <- fresyes %>% filter(YEARMODA > "1980-01-01") %>% 
+  filter(!is.na(PRCP)) %>% mutate(WEEK=lubridate::week(YEARMODA)) %>% 
+  group_by(WEEK) %>% 
+  summarize_at(.vars=vars(TEMP,PRCP,RH), .funs = list(min=min, mean=mean, max=max))
+
+ggplot() + 
+  geom_col(data=fresyes_week, aes(x=WEEK, y=TEMP_mean, fill=PRCP_mean))+
+  #geom_linerange(data=fresyes_week, aes(x=WEEK, ymin=TEMP_min, ymax=TEMP_max), color="gray80", alpha=0.5)+
+  scale_fill_viridis_c()+
+  coord_polar()
+
+ggplot() + geom_col(data=fresyes_week, aes(x=WEEK, y=PRCP_mean, fill=TEMP_mean))+
+  coord_polar() + 
+  scale_fill_viridis_c("Mean \nTemp (C)") + theme_minimal() + 
+  labs(y="", x="") +
+  theme(plot.background = element_blank(),
+        legend.position = "left",
+        panel.border = element_blank(),
+        axis.text.y = element_blank(),
+        plot.margin = unit(c(0, 0, 0 ,0), "mm")) +
+  annotate("text", x=27, y = c(0,.5,1,1.5,2),label=c("0","0.5","1","1.5","2"), color="blue")
+
+```
+
+
+
+### Spatial Joins
+
+From Robin Lovelace:
+
+```{r join1}
+# Aim: demonstrate spatial joins ------------------------------------------
+library(sf)
+library(spData)
+library(tmap)
+
+# names(world)
+# names(urban_agglomerations)
+# Question arising from the data:
+# what % of country populations lived in their largest agglomerations?
+# explanation: we're joining the point data onto world
+
+if(!exists("random_joined")) {
+  set.seed(2018)
+  bb_world = st_bbox(world)
+  random_df = tibble::tibble(
+    x = runif(n = 10, min = bb_world[1], max = bb_world[3]),
+    y = runif(n = 10, min = bb_world[2], max = bb_world[4]),
+    id=seq(from = 1,to=10, by = 1)
+  )
+  random_points = st_as_sf(random_df, coords = c("x", "y"), remove = F) %>% 
+    st_set_crs(4326)
+  world_random = world[random_points, ]
+  random_joined = st_join(random_points, world["name_long"])
+}
+
+random_joined$name_long = as.character(random_joined$name_long)
+
+jm0 = tm_shape(world) + tm_borders(lwd = 0.2) + tm_format("World")
+
+jm1 = jm0 +
+  tm_shape(shp = random_points, bbox = bb_world) +
+  tm_symbols(col = "black", shape = 4, border.lwd = 2) +
+  tm_layout(scale = 1, legend.bg.color = "white", legend.bg.alpha = 0.3, legend.position = c("right", "bottom"))
+
+jm2 = jm0 +
+  tm_shape(world_random, bbox = bb_world) +
+  tm_fill(col = "name_long", palette = "Dark2") +
+  tm_layout(legend.show = FALSE)
+  #tm_borders(col = "name_long", lwd = 4) + # issue with tmap: no variable border
+  # tm_layout(scale = 1, legend.bg.color = "white", legend.bg.alpha = 0.3, legend.position = c("right", "bottom"))
+
+jm3 = jm0 +
+  tm_shape(shp = random_joined, bbox = bb_world) +
+  tm_symbols(col = "name_long", shape = 4, border.lwd = 2, palette = "Dark2") +
+  tm_layout(legend.show = FALSE)
+# +
+#   tm_layout(scale = 1, legend.bg.color = "white", legend.bg.alpha = 0.3, legend.position = c("right", "bottom"))
+
+jm4 = jm0 +
+  tm_shape(shp = random_joined, bbox = bb_world) +
+  tm_symbols(col = "name_long", shape = 4, border.lwd = 2, palette = "Dark2") +
+  tm_layout(legend.only = TRUE)
+
+tmap_arrange(jm1, jm2, jm3, jm4, nrow=2)
+
+```
+
+```{r join2}
+
+# take random points and check against polygon
+sel_sgbp = st_intersects(x = random_points, y = world)
+
+class(sel_sgbp)
+sel_sgbp # gives vector of true false, use to subset/filter
+sel_logical <- lengths(sel_sgbp) > 0 # convert true false to numeric 1/o
+
+world_trimmed <- random_points[sel_logical, ] %>% st_as_sf(coords=c("x", "y"), remove=F)
+
+world_random <- world[random_points, ]
+
+plot(world$geom)
+plot(world_random$geom, add=TRUE, col="blue")
+plot(world_trimmed$geometry, add=TRUE, col="red", pch=21)
+```
+
+
+```{r}
+
+canterbury <- nz %>% filter(Name == "Canterbury")
+
+plot(nz$geom, col="white", bgc="dodgerblue",
+     col_graticule="gray",graticule=TRUE, axes=TRUE)
+
+# spatial subset/join
+nz_height <- nz_height # get a set of elevation data to join to our shape file
+class(nz_height)
+
+# now join using brackets
+canterbury_height <- nz_height[canterbury, ] # here only retaining heights that fall within canterbury region
+plot(canterbury_height$geometry, add=T, col="red")
+# subsetting x[y, ] subsets features of a target x using the contents of a source object y
+
+# anti_join
+non_canter <- nz_height[canterbury, , op = st_disjoint]
+# same as:
+non_canter2 <- st_disjoint(canterbury, nz_height, sparse = TRUE)
+
+class(non_canter2)
+plot(non_canter$geometry, bg="forestgreen", pch=21, add=T)
+
+# using filter
+canterbury_height3 <- nz_height %>%
+  filter(st_intersects(x = ., y = canterbury, sparse = FALSE))
+plot(canterbury_height3$geometry, add=T, bg="gray", pch=22)
+
+#st_is_within_distance(poly, point, dist = 0.9)
+
+# anything touches?
+# any(st_touches(cycle_hire, cycle_hire_osm, sparse = FALSE))
+# cycle_hire_P = st_transform(cycle_hire, 27700) # projected CRS
+# cycle_hire_osm_P = st_transform(cycle_hire_osm, 27700)
+# sel = st_is_within_distance(cycle_hire_P, cycle_hire_osm_P, dist = 20) # within 20m of one another
+# summary(lengths(sel) > 0)
+
+# join 
+
+# z = st_join(cycle_hire_P, cycle_hire_osm_P, st_is_within_distance, dist = 20)
+
+regions = aggregate(x = us_states[, "total_pop_15"], by = list(us_states$REGION),
+                    FUN = sum, na.rm = TRUE)
+regions2 = us_states %>% group_by(REGION) %>%
+  summarize(pop = sum(total_pop_15, na.rm = TRUE))
+
+
+```
+
