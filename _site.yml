@@ -19,11 +19,13 @@ navbar:
       href: maps_mapview.html
     - text: Leaflet
       href: maps_leaflet.html
-  - text: Vignettes with Water Data
+  - text: Water & Mapping Vignettes
     icon: fa-tint  fa-1x
     menu:
     - text: dataRetrieval for Hydro/Water Quality Data 
       href: vig_dataRetrieval_for_waterdata.html
+    - text: Making Inset Maps
+      href: vig_making_inset_maps.html
   - text: Resources
     icon: fa-info-circle  fa-1x
     href: resources.html

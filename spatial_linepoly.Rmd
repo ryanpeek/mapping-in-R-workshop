@@ -40,25 +40,23 @@ suppressPackageStartupMessages({
 
 ```
 
-## Polyline Shapefile Data
+## Polyline/Polygons Shapefile Data
 
-For this example, let's use some [Hydroshed](http://www.hydrosheds.org/) Data.
-
-I've downloaded rivers for CA and OR and put them [here](https://github.com/ryanpeek/mapping-in-R-workshop/blob/master/data/rivs_CA_OR_hydroshed.zip) on github. Download the zipped file and unzip it in a `data` folder. We're going to use *`shapefiles`* for the remainder of this example. 
+I've downloaded some HUC watershed boundaries from the Lake Tahoe area in California, they are [here](https://github.com/ryanpeek/mapping-in-R-workshop/blob/master/data/h8_tahoe.zip) on github. Download the zipped file and unzip it in a `data` folder. We're going to use *`shapefiles`* for the remainder of this example. 
 
 ### Load shapefiles with `rgdal`
 
-Let's load a polyline or line shapefile of rivers of California and Oregon. The result is a `SpatialLinesDataFrame` in your R environment.
+Let's load a polyline or line shapefile of rivers of California and Oregon. The result is a `SpatialPolygonsDataFrame` in your R environment.
 
 ```{r shapesRGDAL, echo=T, eval=T}
 
 # we can use ogrInfo to see CRS, attributes, etc.
-ogrInfo(dsn="./data", layer="rivs_CA_OR_hydroshed") # see shapefile info
+ogrInfo(dsn="./data", layer="h8_tahoe") # see shapefile info
 
 # then read in the shapefile
-rivers_sp<- readOGR(dsn = "./data", layer = "rivs_CA_OR_hydroshed") # takes a few seconds!
+hucs_sp<- readOGR(dsn = "./data", layer = "h8_tahoe") # takes a few seconds!
 
-proj4string(rivers_sp) # check projection, should be WGS84
+proj4string(hucs_sp) # check projection, should be WGS84
 
 
 ```
@@ -70,10 +68,10 @@ Here's how to do the same thing using the `sf` package. Notice two important dif
 ```{r shapes_sf, echo=T, eval=T}
 
 # notice the simple structure, but results in dataframe
-rivers_sf <- st_read("data/rivs_CA_OR_hydroshed.shp") # fast!
+hucs_sf <- st_read("data/h8_tahoe.shp") # fast!
 
 # check crs
-st_crs(rivers_sf)
+st_crs(hucs_sf)
 
 ```
 
@@ -112,7 +110,6 @@ co_names <- c("Butte", "Placer", "El Dorado", "Nevada", "Yuba", "Sierra", "Pluma
 
 # get COUNTY data for a given state
 counties_spec <- us_counties(resolution = "low", states=state_names) %>% # use list of state(s) here
-  
   filter(name %in% co_names) %>% # filter to just the counties we want
   # add centroid values for labels using the geometry column
   mutate(lon=map_dbl(geometry, ~st_centroid(.x)[[1]]), 
@@ -125,15 +122,15 @@ counties_spec <- us_counties(resolution = "low", states=state_names) %>% # use l
 
 ### Make a Basic Map
 
-First let's show a few examples comparing how to plot the rivers dataset using `sf`.
+First let's show a few examples comparing how to plot the dataset using `sf`.
 
 ```{r sf_base, echo=T, eval=T}
 
-plot(st_geometry(rivers_sf), col="darkblue", 
-     main="Rivers of CA and OR", axes=TRUE)
+plot(st_geometry(hucs_sf), col="darkblue", 
+     main="Tahoe HUC8", axes=TRUE)
 
 # this is same
-# plot(rivers_sf$geometry), col="darkblue", main="Rivers of CA and OR")
+# plot(hucs_sf$geometry), col="darkblue", main="Tahoe HUC8")
 
 ```
 
@@ -150,8 +147,8 @@ Okay, let's add in the county/state data, and figure out a few tricks to making 
 # note adding some alpha adjustment here and using "cex" to make larger
 plot(counties_spec$geometry, col=adjustcolor("maroon", alpha=0.5), cex=1.5, axes=TRUE, main="Selected CA Counties")
 
-# now add rivers to existing plot, with add=TRUE
-plot(rivers_sf$geometry, col=adjustcolor("blue", alpha=0.7), add=TRUE)
+# now add tahoe HUC8 to existing plot, with add=TRUE
+plot(hucs_sf$geometry, col=adjustcolor("blue", alpha=0.7), add=TRUE)
 
 # now add some labels using the centroid lat/long we added earlier
 text(counties_spec$lon, counties_spec$lat, labels = counties_spec$name)
@@ -166,14 +163,14 @@ Unforunately this map isn't very good. How can we improve it? Seems it would be 
 # get range of lat/longs from counties for mapping
 mapRange1 <- st_bbox(counties_spec) # view bounding box
 
-# plot rivers
-plot(rivers_sf$geometry, col=adjustcolor("blue", alpha=0.7),
-     xlim=mapRange1[c(1,3)], ylim = mapRange1[c(2,4)], axes=TRUE, 
-     main="Selected CA Counties and Rivers")
-
 # add counties
-plot(counties_spec$geometry, col=adjustcolor("maroon", alpha=0.5), cex=1.5, add=TRUE)
+plot(counties_spec$geometry, col=adjustcolor("maroon", alpha=0.5), cex=1.5,
+     xlim=mapRange1[c(1,3)], ylim = mapRange1[c(2,4)], axes=TRUE, 
+     main="Selected CA Counties and Tahoe HUC8")
 
+# add HUC
+plot(hucs_sf$geometry, col=adjustcolor("blue", alpha=0.7), add=TRUE)
+     
 # add labels for counties
 text(counties_spec$lon, counties_spec$lat, labels = counties_spec$name,
      col=adjustcolor("white", alpha=0.8), font = 2)
@@ -181,21 +178,21 @@ text(counties_spec$lon, counties_spec$lat, labels = counties_spec$name,
 
 ```
 
-That's a little better...but still not quite what we want. Lots of extra ink going toward stuff that we don't need (i.e., rivers outside of counties). What about cropping the river layer to our county layer?
+That's a little better...but still not quite what we want. Lots of extra ink going toward stuff that we don't need (i.e., watershed boundary outside of counties). What about cropping the watershed layer to our county layer (just for fun)?
 
 <br>
 
 ### Cropping & Buffering with `sf`
 
-Great thing is that `sf` has some really nice tools for this, just as any GIS program would.  Here let's use `st_intersection` to crop our river layer to only rivers in the counties of interest.
+Great thing is that `sf` has some really nice tools for this, just as any GIS program would.  Here let's use `st_intersection` to crop our watershed layer to only include the part inside the counties of interest.
 
 ```{r crop_sf}
 
-# crop rivers by counties
-rivers_crop <- st_intersection(rivers_sf, counties_spec) # warning is ok
+# crop watershed by counties
+hucs_sf_crop <- st_intersection(hucs_sf, counties_spec) # warning is ok
 
 # plot
-plot(rivers_crop$geometry, col="blue") # a quick plot check to make sure it worked
+plot(hucs_sf_crop$geometry, col="blue") # a quick plot check to make sure it worked
 
 # buffer a single county? Warning is ok as well...has to do with lat/lon
 county_buff <- st_buffer(counties_spec[counties_spec$name=="El Dorado",], dist = .05) # note this is a buffer of decimal degrees
@@ -203,6 +200,7 @@ county_buff <- st_buffer(counties_spec[counties_spec$name=="El Dorado",], dist =
 # now plot
 plot(counties_spec$geometry, axes=TRUE)
 plot(county_buff$geometry, border="maroon", col=adjustcolor("maroon", alpha=0.5), add=TRUE)
+plot(hucs_sf_crop$geometry, col="blue", add=TRUE)
 
 
 ```
@@ -213,13 +211,13 @@ Great, let's try our plot again.
 
 # try again, let's switch layer ordering
 plot(counties_spec$geometry, col=adjustcolor("maroon", alpha=0.2), cex=1.5, axes=TRUE, main="Selected CA Counties")
-plot(rivers_crop$geometry, col=adjustcolor("blue", alpha=0.7),add=TRUE)
+plot(hucs_sf_crop$geometry, col=adjustcolor("blue", alpha=0.7),add=TRUE)
 plot(CA$geometry, add=TRUE, lwd=2)
 text(counties_spec$lon, counties_spec$lat, labels = counties_spec$name,
      col="maroon", font = 2)
 ```
 
-Ok! Not bad. What can we improve?
+Ok! Not bad. What could we improve?
 
 <br>
 
@@ -244,7 +242,6 @@ library(ggrepel)
 # quick test of just CA
 ggplot() + geom_sf(data = CA)
 
-
 # not cropped
 ggplot() + 
   geom_sf(data=CA, color = "gray30", lwd=2, fill=NA) + # California border
@@ -262,11 +259,11 @@ Great, this is a nice example...but what if we want to crop to the area of inter
 ggplot() + 
   geom_sf(data=CA, color = "gray30", lwd=2, fill=NA) +
   geom_sf(data=counties_spec, fill = NA, show.legend = F, color="gray50", lwd=0.4) +
-  geom_sf(data=rivers_crop, col="blue", alpha=0.8, size=0.5)+
+  geom_sf(data=hucs_sf_crop, fill="blue", alpha=0.5, size=0.5)+
   geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=name)) +
   coord_sf(xlim = mapRange1[c(1,3)], ylim = mapRange1[c(2,4)]) +
   theme_bw(base_family = "Helvetica") + # change to "sans" if this font not available
-  labs(title="Selected CA Counties and Riverlines")+
+  labs(title="Selected CA Counties and Tahoe HUC8")+
   theme(panel.grid.major = element_line(color = "gray80", linetype = 1)) + # change grid
   annotate("text", x=c(-120.1,-119.9), y=40.3, label=c("CA","NV"), color="gray40", size=3, fontface=2, angle = 90)
 
@@ -291,20 +288,19 @@ map1 <- get_map(location=location, crop = F,
 ggmap(map1) +
   geom_sf(data=CA, color = "gray30", lwd=2, fill=NA, inherit.aes = F) +
   geom_sf(data=counties_spec, fill = NA, show.legend = F, color="gray50", lwd=0.4, inherit.aes = F) +
-  geom_sf(data=rivers_crop, col="blue", alpha=0.8, size=0.5, inherit.aes = F)+
+  geom_sf(data=hucs_sf_crop, fill="blue", alpha=0.5, size=0.5, inherit.aes = F)+
   geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=name)) +
-  coord_sf(xlim = mapRange1[c(1:2)], ylim = mapRange1[c(3:4)]) +
   theme_bw(base_family = "Roboto Condensed") + 
-  labs(title="Selected CA Counties and Riverlines")
+  labs(title="Selected CA Counties and Tahoe HUC8")
 
 ```
 
 
 ```{r ggmapPlot, eval=T, echo=F, out.height="100%", out.width="100%"}
 
-# ggsave(filename = "img/ggmap_spatial_linepoly_example.png", width = 4.5, height = 5, units = "in", dpi = 200)
+# ggsave(filename = "img/ggmap_spatial_poly_example.png", width = 4.5, height = 5, units = "in", dpi = 200)
 
-include_graphics("img/ggmap_spatial_linepoly_example.png")
+include_graphics("img/ggmap_spatial_poly_example.png")
 
 ```
 
@@ -317,8 +313,8 @@ We can add our `sf` data directly into a [*leaflet*](https://rstudio.github.io/l
 
 library(mapview)
 
-m1 <- mapview(rivers_crop)
-m2 <- mapview(counties_spec, fill=NA)
+m1 <- mapview(counties_spec, fill=NA)
+m2 <- mapview(hucs_sf)
 
 # combine using the ggplot style "+"
 m1 + m2

@@ -14,9 +14,10 @@ Let's **load the libraries** we're going to need first.
 
 library(here)
 library(dplyr)
-library(raster)
+#library(raster)
 library(viridis)
 library(ggplot2)
+library(mapview)
 library(sf)
 library(USAboundaries)
 library(GSODR)
@@ -36,7 +37,7 @@ suppressPackageStartupMessages({
   library(mapview);
   library(rnaturalearth);
   library(USAboundaries); # STATES/counties data
-  library(spData)
+  #library(spData)
 })
 
 ```
@@ -216,34 +217,7 @@ Note, now we have only points that fall *inside* of a CA county, **AND** the new
 
  > `isd_ca_co_pts <- st_join(isd_history, left = FALSE, ca_co) # join all fields`
 
-## Join Magical Creatures!
 
-Let's take a look at this globally!
-
-```{r}
-
-world <- ne_countries(scale = "medium", returnclass = "sf")
-
-plot(world$geometry)
-
-myths <- readr::read_csv("data/list_of_mythical_creatures.csv")
-
-set.seed(777)
-bb_world = st_bbox(world)
-random_df = tibble::tibble(
-  x = runif(n = 71, min = bb_world[1], max = bb_world[3]),
-  y = runif(n = 71, min = bb_world[2], max = bb_world[4]),
-  id=seq(from = 1, to=71, by = 1)
-)
-
-myths_sf <- bind_cols(myths, random_df) %>% 
-  st_as_sf(coords = c("x", "y"), remove = F) %>% 
-  st_set_crs(4326)
-
-mapview::mapview(myths_sf)
-
-
-```
 
 ```{r}
 # get GSODR data

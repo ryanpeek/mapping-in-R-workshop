@@ -221,10 +221,24 @@ Get the county, watershed, rivers, lakes data.
 counties_spec <- us_counties(resolution = "low", states="CA") %>% 
   filter(name=="El Dorado" | name=="Placer") # get counties only named El Dorado and Placer
 
-# add some more layers
-h8_tahoe <- st_read("data/h8_tahoe.shp", quiet=TRUE) # HUC8 watershed for Tahoe
-lakes <- st_read("data/lakes_CA_OR_hydroshed.shp", quiet=TRUE) # Lakes for all of CA/OR from HydroSHEDS
-rivers <- st_read("data/rivs_CA_OR_hydroshed.shp", quiet=TRUE) # Rivers for all of CA/OR from HydroSHEDS
+```
+
+
+### Read in from Geopackage
+
+Haven't mentioned it much yet, but using the `.gpkg` format is a must! It's awesome, it is tidy, and it does away with so much of the pain of dealing with all the millions of different shapefile bits that are always hard to manage. Even better, it's open source and readable by ArcGIS, QGIS, etc., or as a straight SQLite database. Look for a separate lesson on this site just about geopackage. In the meantime, let's read in more data from a geopackage (on the github repo for this site).
+
+```{r geopackage, eval=T, echo=T, purl=FALSE}
+
+# read layers from a geopackage
+st_layers("data/mapping_in_R_data.gpkg")
+
+# HUC8 watershed for Tahoe
+h8_tahoe <- st_read("data/mapping_in_R_data.gpkg", layer="h8_tahoe") 
+# Lakes for all of CA/OR from HydroSHEDS
+lakes <- st_read("data/mapping_in_R_data.gpkg", layer="lakes_CA_OR_hydroshed")
+# Rivers for all of CA/OR from HydroSHEDS
+rivers <- st_read("data/mapping_in_R_data.gpkg", layer="rivs_CA_OR_hydroshed")
 
 ```
 
