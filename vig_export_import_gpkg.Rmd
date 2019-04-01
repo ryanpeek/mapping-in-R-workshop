@@ -8,7 +8,7 @@ pagetitle: "Export & Import with Geopackage"
 
 There are many different ways to save/store spatial data. Some formats changed or been introduced through time, others are simply still used because "that's the way it's always been". One such example is the **shapefile**, which while useful in the context of ArcGIS, using these file types with anything else is a pain...(and it's sort of a pain even with ArcGIS). The main issue is every shapefile is made up of at least 4-7 different files all with different file endings like `.shp`, `.shx`, `.prj`, `.dbj`, etc.). When reading data in, these files all need to be in the same folder, with the same filepath/name. Only problem is when you have lots of these files, file & folder management becomes really exciting. Particularly because most folks probably didn't follow [Jenny Bryan's excellent advice on file naming conventions](https://speakerdeck.com/jennybc/how-to-name-files). Leading to things like this^[This is from one of my own shared projects. It hurts my eyes just to look at it...but babysteps].
 
-![](../img/terrible_gis_shapefiles.png)
+![](img/terrible_gis_shapefiles.png)
 
 After a recent [twitter exchange](https://twitter.com/_mikoontz/status/1110203545658093568) with a friend and colleague of mine who expressed frustrated shapefiles for additional reasons (truncated field names), but was also was very happy with using the "*geopackage (`.gpkg`)*" format, I realized it was probably worth typing this up and getting it out there. 
 
@@ -43,6 +43,7 @@ The packages I'll use for this example are as follows:
 library(here)
 library(tidyverse)
 library(sf)
+library(mapview)
 
 ```
 
@@ -107,9 +108,6 @@ oceantrash <- st_read(paste0(here(),"/data/coastal_cleanup_detailed_summ_CA_2019
 ```
 
 
-
-
-
 ### Check Projection/CRS
 
 Before we do anything else, we need to make sure everything is in the same projection. Typically this is a good idea regardless of what you are doing, so calculations and analyses all use the same coordinate reference system (CRS). This isn't a requirement for a `gpkg` file, but I recommend doing it. For this example, let's shift everything into [California Albers (EPSG 3310)](https://epsg.io/3310).
@@ -162,15 +160,20 @@ Ok, and finally, how do we get it back in? Well we can check what layers exist i
 ```{r geopackage, eval=T, echo=T, purl=FALSE}
 
 # check available layers from a geopackage
-st_layers(dsn = paste0(here(), "/data/gpkg_in_R_example.gpkg"))
+st_layers(paste0(here::here(), "/data/gpkg_in_R_example.gpkg"))
 
-st_layers(dsn = paste0(here(), "/data/mapping_in_R_data.gpkg"))
+# st_layers(dsn = paste0(here(), "/data/mapping_in_R_data.gpkg"))
+
 # read in layers to environment
-usgs <- st_read(dsn = paste0(here(), "/data/gpkg_in_R_example.gpkg"), layer='usgs_gages_clean')
-lighthouses <- st_read(dsn = paste0(here(),"/data/gpkg_in_R_example.gpkg"), layer='lighthouses')
-oceantrash <- st_read(paste0(here(),"/data/gpkg_in_R_example.gpkg"), layer='oceantrash')
-piers <- st_read(dsn=paste0(here(),"/data/gpkg_in_R_example.gpkg"), layer='piers')
-ports <- st_read(dsn=paste0(here(),"/data/gpkg_in_R_example.gpkg"), layer='ports')
+usgs <- st_read(dsn = paste0(here::here(), "/data/gpkg_in_R_example.gpkg"), layer='usgs_gages_clean')
+
+lighthouses <- st_read(dsn = paste0(here::here(),"/data/gpkg_in_R_example.gpkg"), layer='lighthouses')
+
+oceantrash <- st_read(paste0(here::here(),"/data/gpkg_in_R_example.gpkg"), layer='oceantrash')
+
+piers <- st_read(dsn=paste0(here::here(),"/data/gpkg_in_R_example.gpkg"), layer='piers')
+
+ports <- st_read(dsn=paste0(here::here(),"/data/gpkg_in_R_example.gpkg"), layer='ports')
 
 ```
 
@@ -179,7 +182,7 @@ ports <- st_read(dsn=paste0(here(),"/data/gpkg_in_R_example.gpkg"), layer='ports
 
 Seems weird to not have a map of something:
 
-```{r mapview, purl=FALSE}
+```{r mapview, echo=FALSE, eval=T, purl=FALSE}
 
 mapview(lighthouses, col.regions="yellow") + mapview(piers, col.regions="gray10")
 

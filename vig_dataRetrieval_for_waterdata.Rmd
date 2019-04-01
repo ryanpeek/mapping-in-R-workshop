@@ -97,7 +97,6 @@ nrow(niCA)
 # OVER 1.2 million records!
 
 # save(niCA, file = "data/nitrate_00618_CA_NWIS_2018.rda")
-# load(paste0(here(),"/data/nitrate_00618_CA_NWIS_2018.rda"))
 
 ```
 
