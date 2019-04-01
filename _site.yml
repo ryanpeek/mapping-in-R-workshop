@@ -22,10 +22,13 @@ navbar:
   - text: Water & Mapping Vignettes
     icon: fa-tint  fa-1x
     menu:
-    - text: dataRetrieval for Hydro/Water Quality Data 
-      href: vig_dataRetrieval_for_waterdata.html
     - text: Making Inset Maps
       href: vig_making_inset_maps.html
+    - text: Export/Import with Geopackage
+      href: vig_export_import_gpkg.html
+    - text: dataRetrieval for Hydro/Water Quality Data 
+      href: vig_dataRetrieval_for_waterdata.html
+
   - text: Resources
     icon: fa-info-circle  fa-1x
     href: resources.html
