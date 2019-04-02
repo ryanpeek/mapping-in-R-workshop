@@ -1,5 +1,5 @@
 ---
-pagetitle: "spatial operations with sf"
+pagetitle: "spatial joins with sf"
 ---
 
 <br>
@@ -15,13 +15,12 @@ Let's **load the libraries** we're going to need first.
 ```{r loadlibs, echo=T, eval=F}
 
 library(here)
+library(sf)
 library(dplyr)
 library(ggplot2)
-library(mapview)
-library(sf)
 library(USAboundaries)
-library(GSODR)
 library(rnaturalearth)
+library(GSODR)
 ```
 
 
@@ -29,15 +28,12 @@ library(rnaturalearth)
 
 suppressPackageStartupMessages({
   library(here);
-  library(dplyr);
-  #library(viridis);
-  library(ggplot2);
   library(sf);
-  library(GSODR);
-  #library(mapview);
+  library(dplyr);
+  library(ggplot2);
+  library(USAboundaries);
   library(rnaturalearth);
-  library(USAboundaries)
-  #library(spData)
+  library(GSODR)
 })
 
 ```
@@ -81,8 +77,8 @@ library(GSODR)
 
 # load the station metadata file from GSODR (this loads `isd_history` in your
 # R session)
-#load(system.file("extdata", "isd_history.rda", package = "GSODR"))
-load(paste0(here(),"/data/isd_history.rda"))
+load(system.file("extdata", "isd_history.rda", package = "GSODR"))
+#load(paste0(here(),"/data/isd_history.rda"))
 isd_history <- as.data.frame(isd_history) %>% 
   st_as_sf(coords=c("LON","LAT"), crs=4326)  
 
@@ -127,8 +123,7 @@ Great, now we have a dataframe in our environment that has both global climate s
 
 ### Join: Select *POLYGONS* containing *POINTS*
 
-
-This first approach only selects polygons that contain points. For demonstration sake, let's use the larger global point dataset. Note this does not modify polygon dataframe in any form (i.e., add attributes, update, summarize, etc). It is only selecting or *filtering* to the polygons that contain points using a spatial join. 
+This first approach only selects polygons that contain points. For demonstration sake, let's use the larger global point dataset. Note this does not modify the polygon dataframe in any form (i.e., add attributes, update, summarize, etc). It is only selecting or *filtering* to the polygons that contain points using a spatial join. 
 
 ```{r polyptJoin, echo=TRUE, eval=TRUE, purl=FALSE}
 
@@ -140,11 +135,34 @@ plot(ca_co_isd_poly$geometry, col=alpha("blue",0.3))
 
 ```
 
+### Anti-Join: Spatial Join Non-Matching Objects
+
+So most counties have at least one point present. What if we specifically wanted to find the counties that *don't* have a climate GSOD station in them? We can use something called an "`anti_join`", which does precisely that, it identifies the items that don't have a match. There's a few possible ways to do this, but the most flexible I've found is using the following, because it's easy to return whatever spatial object you prefer (e.g., points, polygons, lines).
+
+The key is to use the same subsetting `[ ]` option, but add the `!lengths()` function to return a logical vector of all the *non-matching* objects. We are essentially filtering by this vector, so this doesn't actually add any data from one layer to the other, it simply filters where there aren't any overlapping bits.
+
+```{r polyptAntiJoin, echo=TRUE, eval=TRUE, purl=FALSE}
+
+# Find ISD points DON'T within county boundaries
+ca_co_poly_anti <- isd_history_ca[!lengths(st_intersects(isd_history_ca, ca_co)), ]
+
+# Find Counties that don't contain ISD points
+ca_co_poly_anti2 <- ca_co[!lengths(st_intersects(ca_co, isd_history_ca)), ]
+
+# Plot it!
+plot(ca_co$geometry, col=alpha("pink",0.3))
+plot(ca_co_poly_anti$geometry, pch=15, add=T, col="maroon")
+plot(ca_co_poly_anti2$geometry, add=T, col="darkgreen")
+title("GSOD Climate Stations Not Contained \n in CA Counties (squares),
+      and Counties with no Stations (green)")
+```
+
+
 <br>
 
-### Join: *Add POLYGON attributes* to *POINTS* inside *POLYGONS*
+### Join Attributes: *Add POLYGON attributes* to *POINTS* inside *POLYGONS*
 
-Now let's look for points that fall within CA counties, and add ATTRIBUTES from the county polygons to the climate station points. Just a reminder, here's the data columns (or *attributes*) in the polygon dataset:
+Great, what about joining the data attributes? Let's look for points that fall within CA counties, and add ATTRIBUTES from the county polygons to the climate station points. Just a reminder, here's the data columns (or *attributes*) in the polygon dataset:
 
 ```{r headCACOUNTY, echo=FALSE, eval=TRUE, purl=FALSE, warning=FALSE}
 head(as.data.frame(ca_co))
@@ -180,22 +198,27 @@ Now we have only points that fall *inside* of a CA county, **AND** the new data 
  > `isd_ca_co_pts <- st_join(isd_history, left = FALSE, ca_co) # join all columns`
 
 
-### Plot Some Climate Data
+## Play With Some Climate Data
 
-Hopefully the above was useful...but let's actually use grab some climate data from the `GSODR` package and plot it. For this example, let's select data from Fresno. I've already downloaded it ([here]()) if you'd like to play along. I'm going to plot the weekly average temperature and precipitation for 1972-2018.
+Hopefully the above was useful...but let's actually use grab some climate data from the `GSODR` package and do some visualization. Let's take a look at what stations have data between 1980 and 2018. Check the [`GSODR`](https://ropensci.github.io/GSODR/articles/GSODR.html) vignette for more details, I'm just applying some of the commands they lay describe.
 
-```{r polyJoinAttrib, echo=FALSE, eval=FALSE, purl=FALSE, warning=FALSE}
+For this example, let's select data from Fresno. I've already downloaded it ([here]()) if you'd like to play along. I'm going to plot the weekly average temperature and precipitation for 1972-2018.
+
+```{r checkStations, echo=FALSE, eval=FALSE, purl=FALSE, warning=FALSE}
 
 # check availability for a date range
-loop_stations <- isd_ca_co_pts[isd_ca_co_pts$BEGIN <= 19600101 &
+loop_stations <- isd_ca_co_pts[isd_ca_co_pts$BEGIN <= 19800101 &
                                isd_ca_co_pts$END >= 20181231, ]
 
-# use Fresno Airport: KFAT
+# Plot where these stations are?
 ggplot() +
-  geom_sf(data=ca)+
-  geom_sf(data = loop_stations, size = 2) +
-  ggtitle("Station locations")
+  geom_sf(data=ca, fill="slateblue", alpha=0.4) +
+  geom_sf(data=ca_co, color="gray50", lwd=0.4, alpha=0.4) +
+  geom_sf(data = loop_stations, size = 2, pch=21, color="gray", fill="black") +
+  theme_bw()+
+  ggtitle("GSOD Stations with data 1980-2018")
 
+# use Fresno Airport: KFAT
 stationID <- filter(loop_stations, CALL=="KFAT") %>% 
   select(USAF, WBAN, STNID)
 
