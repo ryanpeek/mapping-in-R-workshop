@@ -4,11 +4,9 @@ title: "Resources"
 
 ## Spatial Analysis in R
 
-* [**Intro to Spatial R**](https://cran.r-project.org/doc/contrib/intro-spatial-rl.pdf)
+* [**Geocomputation with R**](https://geocompr.robinlovelace.net/)
 * [**Spatial.ly blog**](http://spatial.ly/)
 * [**Rspatial.org**](https://www.rspatial.org/)
-* [**Spatial Analysis with R tutorial** by Jeff Hollister](http://jwhollister.com/r_landscape_tutorial/tutorial.html)
-* [**Making GeoJSON from shapefiles**](https://blog.exploratory.io/creating-geojson-out-of-shapefile-in-r-40bc0005857d)
 
 ## Data Visualization
 
@@ -20,10 +18,5 @@ title: "Resources"
 ## General R/Data Science Resources
 
 * [Garrett Grolemund and Hadley Wickham's **R For Data Science**](http://r4ds.had.co.nz/)
-* [Jenny Bryan's **Stat545.com**](http://stat545.com/)
-* [**RStudio Webinars**, many topics](https://www.rstudio.com/resources/webinars/)
-* [Data Carpentry: **R for Data Analysis and Visualization of Ecological Data**](http://www.datacarpentry.org/R-ecology-lesson/)
-* [Chester Ismay and Albert Y. Kim's **Modern DiveR**](https://ismayc.github.io/moderndiver-book/)
-* [Julia Silge and David Robinson **Text Mining with R**](http://tidytextmining.com/)
 * [Hadley Wickham's **Advanced R**](http://adv-r.had.co.nz/)
 

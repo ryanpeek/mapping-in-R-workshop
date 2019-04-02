@@ -1,0 +1,232 @@
+---
+pagetitle: "Export & Import with Geopackage"
+---
+
+<br>
+
+## Using `geopackage`
+
+<br>
+
+There are many different ways to save/store spatial data. Some formats changed or been introduced through time, others are simply still used because "that's the way it's always been". One such example is the **shapefile**, which while useful in the context of ArcGIS, using these file types with anything else is a pain...(and it's sort of a pain even with ArcGIS). The main issue is every shapefile is made up of at least 4 different files all with different file endings like `.shp`, `.shx`, `.prj`, `.dbf`, etc.). When reading data in, these files all need to be in the same folder, with the same filepath/name. Only problem is when you have lots of these files, file & folder management becomes really exciting^[and by exciting I mean you are never sure how long it will take to find the files you want to use]. Particularly because most folks probably didn't follow [Jenny Bryan's excellent advice on file naming conventions](https://speakerdeck.com/jennybc/how-to-name-files). Leading to things like this^[This is from one of my own shared projects. It hurts my eyes just to look at it...but babysteps].
+
+<br>
+
+```{r, echo=F, eval=T, purl=FALSE, out.width = "55%"}
+library(knitr)
+knitr::include_graphics("img/terrible_gis_shapefiles.png")
+```
+
+<br>
+
+After a recent [twitter exchange](https://twitter.com/_mikoontz/status/1110203545658093568) with a friend and colleague of mine who expressed frustrated shapefiles for additional reasons (truncated field names), but was also was very happy with using the **geopackage** (`.gpkg`) format, I realized it was probably worth typing this up and getting it out there. 
+
+<hr>
+
+### `.gpkg`
+
+The point of all this is to demonstrate one great way to store any/all the different spatial data types in one single file **`.gpkg`** or ["*geopackage*"](https://www.geopackage.org/), which can be easily shared across platforms, operating systems, programs, etc. It's open-source, plays well with R, Arc, QGIS, and honestly I haven't found a reason **not** to use it yet. 
+
+Geopackage files are SQLite databases that contain the spatial components. We can store a "shapefile" (made up of multiple files) as a single `gpkg` file, or we can actually store *multiple* files in single `gpkg` file! The wonderful thing about this is we can store both the spatial data, the projection/CRS information, along with any additional/associated tables, and all these data are contained in one single file. There's a nice post about using the `gpkg` format [here](https://jsta.rbind.io/blog/2016-07-14-geopackage-r/) in conjunction with the `sp` package...but I'm going give a quick run down on using these file types with the `sf` package. 
+
+<br>
+
+### Using `sf` to write `.gpkg`
+
+With the advent of the `sf` package, it has become so much easier to read/write in just about [any vector-based spatial data file type into R](https://cran.r-project.org/web/packages/sf/vignettes/sf2.html). A few of the ones listed here are just some of the more common forms I run across frequently, but this is by no means an exhaustive list. These are all vector based, and I'm not going to talk about rasters, but `gpkg` works for imagery/raster type files too.
+
+ - `.kml`
+ - `.kmz` (the zipped `.kml`)
+ - `.shp`
+ - `.geojson`
+ - `.gpx` (from GPS devices)
+
+So, these all can turn into one file type, which can be easily shared or queried using SQL based tools, or the `sf` package! 
+
+<hr>
+
+## A Working `gpkg` Example in R
+
+So let's walk through a quick example where we read in 3 different file types, save them all into the same `gpkg` file/database, and read them back in to make sure they are the same (and nothing broke!).
+
+### Load Packages
+
+The packages I'll use for this example are as follows:
+
+```{r libsecho, eval=F, echo=T, message=F, show=FALSE}
+
+library(here)
+library(tidyverse)
+library(sf)
+library(mapview)
+
+```
+
+If you haven't used the `here` package, check it out...it's very handy in conjunction with RStudio projects, and dealing with pathnames.
+
+```{r libseval, eval=T, echo=F, message=F, show=FALSE}
+
+suppressPackageStartupMessages({
+  library(here);
+  library(tidyverse);
+  library(sf);
+  library(mapview)
+})
+
+```
+
+### Load Data
+
+For this example let's use a few different data sets:
+
+ - **.kml** - A cleaned `kml` of USGS gages of California (source: USGS)
+ - **.shp** - A shapefile of lighthouses of California (source: CDFW)
+ - **.shp** - A shapefile of California Ports (source: CDFW)
+ - **.shp** - A shapefile of California Fishing Piers (source: CDFW)
+ - **.geojson** - A geojson of open data on ocean trash that's been collected by https://www.coastalcleanupdata.org/. It's a cool site and the data has kindly been made available for use. I went to the Reports tab, downloaded a detailed summary csv for California, and converted it to a geojson (see code chunk below).
+
+```{r makeGeoJSON, echo=T, eval=F, purl=TRUE}
+
+ocean <- read_csv(paste0(here(), "/data/coastal_cleanup_detailed_summary-CA-USA_2019March.csv")) %>% 
+  separate(col=GPS, into = c("lat","lon"), sep = ",", remove = T) %>% 
+  mutate(lat=as.numeric(lat), 
+         lon=as.numeric(lon)) %>% 
+  st_as_sf(coords=c("lon", "lat"), crs=4326, remove=FALSE)
+
+st_write(ocean, "data/coastal_cleanup_detailed_summ_CA_2019Mar.geojson")
+
+```
+
+All this data is available as a zipped folder here:
+
+ - [Zipped Example Files](https://github.com/ryanpeek/mapping-in-R-workshop/raw/master/data/example_geopkg_files.zip)
+
+Quick note, if you have a **`kmz`** file, you'll need to unzip it first with your computers zip/unzip program (or check out something like 7Zip for Windows/PC or Keka for MacOSX). Once unzipped you should have a *`kml`* which you can use. Ultimately it doesn't matter much what the data type is/was once it's been read into R using `sf`, because it becomes a spatial data frame which can be exported as whatever suits the user best. 
+
+<br>
+
+### Read Data into R with `sf`
+
+Let's get all these layers into R using `sf` so we can save them into one single `gpkg` database. **`sf`** commands are fairly simple, and to read things in, we only need `sf_read`. All my files live in a **`data`** folder in an RStudio project, so the `here()` essentially refers to *`my_computer/my_R_projects_folder/my_R_project/`*.
+
+```{r sfIn, eval=F, echo=T, purl=FALSE}
+
+# read in shps
+lighthouses <- st_read(paste0(here(),"/data/CUL_CA_Lighthouses.shp"))
+ports <- st_read(paste0(here(),"/data/CUL_CA_Ports.shp"))
+piers <- st_read(paste0(here(), "/data/FishingPiers.shp"))
+
+# read in kml
+gages <- st_read(paste0(here(), "/data/streamgages_clean.kml"))
+
+# read in geojson
+oceantrash <- st_read(paste0(here(),"/data/coastal_cleanup_detailed_summ_CA_2019Mar.geojson"))
+
+```
+
+
+### Check Projection/CRS
+
+Before we do anything else, we need to make sure everything is in the same projection. Typically this is a good idea regardless of what you are doing, so calculations and analyses all use the same coordinate reference system (CRS). This isn't a requirement for a `gpkg` file, but I recommend doing it. For this example, let's shift everything into [California Albers (EPSG 3310)](https://epsg.io/3310).
+
+```{r fixProjection, echo=T, eval=FALSE, purl=FALSE}
+
+# check CRS:
+st_crs(lighthouses)
+
+# change/set new CRS:
+lighthouses <- st_transform(lighthouses, crs = 3310)
+
+# check new CRS is set
+st_crs(lighthouses)
+
+# apply to everything else
+ports <- st_transform(ports, crs=3310)
+piers <- st_transform(piers, crs=3310)
+gages <- st_transform(gages, crs=3310)
+oceantrash <- st_transform(oceantrash, crs=3310)
+
+```
+
+### Make a Quick Map of Data
+
+Let's quickly plot this and make sure it data makes sense...this map shows Commercial Ports, Piers, and Operational Lighthouses for California.  
+
+```{r quickMapData, eval=T, echo=F, warning=FALSE, message=FALSE, purl=FALSE}
+
+usgs <- st_read(dsn = paste0(here::here(), "/data/gpkg_in_R_example.gpkg"), layer='usgs_gages_clean', quiet=TRUE)
+lighthouses <- st_read(dsn = paste0(here::here(),"/data/gpkg_in_R_example.gpkg"), layer='lighthouses', quiet = TRUE)
+oceantrash <- st_read(paste0(here::here(),"/data/gpkg_in_R_example.gpkg"), layer='oceantrash', quiet=TRUE)
+piers <- st_read(dsn=paste0(here::here(),"/data/gpkg_in_R_example.gpkg"), layer='piers', quiet=TRUE)
+ports <- st_read(dsn=paste0(here::here(),"/data/gpkg_in_R_example.gpkg"), layer='ports', quiet=TRUE)
+
+```
+
+```{r quickMap, eval=T, echo=T, warning=FALSE, purl=FALSE}
+
+library(mapview)
+
+# filter to commercial ports and active lighthouses
+mapview(ports[ports$COMMERCIAL==1,], col.regions="darkblue", cex=5, layer.name="Commercial Ports", pch=22) + 
+  mapview(piers, col.regions="maroon", cex=4, layer.name="Piers") + 
+  mapview(lighthouses[lighthouses$OPERATIONA=="Yes",], col.regions="yellow2", layer.name="Operational Lighthouses") 
+
+```
+
+<br>
+
+### Write **TO** geopackage
+
+Now we have all the pieces we need, let's create a single `gpkg` file to hold these. Take a quick note of the file sizes here, the `geojson` is ~13 MB, the `shps` aren't big (< 1 MB), and the `kml is about 1.1 MB. So in raw form, total file size ~14.5 MB. 
+
+Just as we have been using `st_` commands, there's nothing special about writing to a `gpkg` file. The only added bit we need is to specify the same `gpkg` file each time, and change the `layer=` argument.
+
+```{r writeGPKG, echo=T, eval=F, purl=FALSE}
+
+st_write(gages, dsn="data/gpkg_in_R_example.gpkg", layer='usgs_gages_clean')
+st_write(lighthouses, dsn="data/gpkg_in_R_example.gpkg", layer='lighthouses')
+st_write(oceantrash, dsn="data/gpkg_in_R_example.gpkg", layer='oceantrash')
+st_write(piers, dsn="data/gpkg_in_R_example.gpkg", layer='piers')
+
+# If an existing layer already exists, to overwrite the LAYER add: ( layer_options = "OVERWRITE=YES" )
+st_write(ports, dsn="data/gpkg_in_R_example.gpkg", layer='ports', layer_options = "OVERWRITE=YES" )
+
+# Caution/Note, if you want to overwrite the entire gpkg database file, use "delete_dsn = TRUE". This replaces the file and everything that may have been in it!
+
+```
+
+That's it! Even better, the file size for the total `gpkg` which now has all these files in it, is 2.7 MB!. Overall, I find it a much cleaner and nicer option.
+
+<br>
+
+### Read **FROM** geopackage
+
+Ok, and finally, how do we get it back in? Well we can check what layers exist in a given `gpkg` file with the `st_layers` function. Then we read things in a very similar fashion to what we've already used with st_read().
+
+```{r geopackage, eval=T, echo=T, purl=FALSE}
+
+# check available layers from a geopackage
+st_layers(paste0(here::here(), "/data/gpkg_in_R_example.gpkg"))
+
+# read in layers to environment, suppress messages with quiet=TRUE
+usgs <- st_read(dsn = paste0(here::here(), "/data/gpkg_in_R_example.gpkg"), layer='usgs_gages_clean')
+
+lighthouses <- st_read(dsn = paste0(here::here(),"/data/gpkg_in_R_example.gpkg"), layer='lighthouses', quiet = TRUE)
+
+oceantrash <- st_read(paste0(here::here(),"/data/gpkg_in_R_example.gpkg"), layer='oceantrash', quiet=TRUE)
+
+piers <- st_read(dsn=paste0(here::here(),"/data/gpkg_in_R_example.gpkg"), layer='piers', quiet=TRUE)
+
+ports <- st_read(dsn=paste0(here::here(),"/data/gpkg_in_R_example.gpkg"), layer='ports', quiet=TRUE)
+
+```
+
+<hr>
+
+### Summary
+
+So overall, using this format for spatial data will hopefully save time, perhaps some disk space, and generally provides a nice way to store spatial data. Try it out and see what you think.
+
+<iframe src="https://giphy.com/embed/3ornk7TgUdhjhTYgta" width="480" height="215" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/starwars-movie-star-wars-3ornk7TgUdhjhTYgta"></a></p>
+
+

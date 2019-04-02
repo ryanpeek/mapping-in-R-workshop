@@ -494,33 +494,26 @@ div.tocify {
     Mapmaking
   </a>
 </li>
-<li>
-  <a href="workflow_in_R_snowdata.html">
-    <span class="fa fa-sitemap  fa-1x"></span>
-     
-    Workflow in R
-  </a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-map  fa-1x"></span>
      
-    Mapping Tools
+    Spatial/Mapping Tools
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="spatial_linepoly.html">Shapefiles</a>
+      <a href="spatial_shapefiles.html">Working with Shapefiles</a>
     </li>
     <li>
-      <a href="spatial_kml.html">Using kml</a>
+      <a href="spatial_kml.html">Working with kml &amp; ggspatial</a>
     </li>
     <li>
-      <a href="maps_mapview.html">mapview</a>
+      <a href="spatial_export_import_gpkg.html">Data Storage with geopackage</a>
     </li>
     <li>
-      <a href="maps_leaflet.html">Leaflet</a>
+      <a href="maps_mapview_leaflet.html">Mapview &amp; Leaflet</a>
     </li>
   </ul>
 </li>
@@ -528,7 +521,7 @@ div.tocify {
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-tint  fa-1x"></span>
      
-    Water &amp; Mapping Vignettes
+    Mapping Vignettes
      
     <span class="caret"></span>
   </a>
@@ -537,7 +530,11 @@ div.tocify {
       <a href="vig_making_inset_maps.html">Making Inset Maps</a>
     </li>
     <li>
-      <a href="vig_export_import_gpkg.html">Export/Import with Geopackage</a>
+      <a href="vig_workflow_in_R_snowdata.html">
+        <span class="fa fa-sitemap  fa-1x"></span>
+         
+        Workflow in R
+      </a>
     </li>
     <li>
       <a href="vig_dataRetrieval_for_waterdata.html">dataRetrieval for Hydro/Water Quality Data</a>
@@ -590,7 +587,7 @@ div.tocify {
 <p><br></p>
 <div id="working-with-kml-files" class="section level2">
 <h2>Working with <code>kml</code> Files</h2>
-<p><code>kml</code> files are the unzipped versions of <code>kmz</code> files. You can use the <code>sf</code> package to read <code>kml</code>’s. You’ll want to unzip with any sort of zip package you have on your computer (Keka, 7zip, etc.). Data used in this example live in the github repo <a href="https://github.com/ryanpeek/mapping-in-R-workshop/blob/master/data/streamgages_06.kml">here</a>.</p>
+<p>The <code>sf</code> package can read many different file types in, and <code>kml</code> is no exception. The difference is <code>kml</code> files are the unzipped versions of <code>kmz</code> files. You’ll want to unzip with any sort of zip package you have on your computer (Keka, 7zip, etc.). Data used in this example live in the github repo <a href="https://github.com/ryanpeek/mapping-in-R-workshop/blob/master/data/streamgages_06.kml">here</a>. Importantly, <code>kml</code> can contain multiple layers because they use a sort of nested format, so it’s good to check first to see which layer you may want. This example only has a single <em>layer</em> so we don’t need to specify a layer in our <code>st_read</code> function.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">suppressPackageStartupMessages</span>({</a>
 <a class="sourceLine" id="cb1-2" title="2">  <span class="kw">library</span>(ggplot2)</a>
 <a class="sourceLine" id="cb1-3" title="3">  <span class="kw">library</span>(dplyr)</a>
@@ -643,8 +640,8 @@ div.tocify {
 <a class="sourceLine" id="cb6-6" title="6"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
 <p><img src="img/usgs_gages_in_ca.png" width="80%" /></p>
 </div>
-<div id="add-a-map-detailsbackground" class="section level3">
-<h3>Add a Map Details/Background</h3>
+<div id="use-ggspatial-for-map-backgrounddetails" class="section level3">
+<h3>Use <code>ggspatial</code> for Map Background/Details</h3>
 <p>Now we can add a few additional details here. Let’s use the <code>USAboundaries</code> package go get a county layer, and the <code>ggspatial</code> package to add a scale bar, north arrow, and open source map background. Note, we could also just throw this <code>sf</code> layer into <code>mapview</code> (see the mapview page) and have an interactive map.</p>
 <p>First let’s get the county layer: <!--
 Not including this for now as we don't need to label this example:

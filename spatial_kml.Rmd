@@ -6,7 +6,7 @@ pagetitle: "spatialkml"
 
 ## Working with `kml` Files
 
-`kml` files are the unzipped versions of `kmz` files. You can use the `sf` package to read `kml`'s. You'll want to unzip with any sort of zip package you have on your computer (Keka, 7zip, etc.). Data used in this example live in the github repo [here](https://github.com/ryanpeek/mapping-in-R-workshop/blob/master/data/streamgages_06.kml).
+The `sf` package can read many different file types in, and `kml` is no exception. The difference is `kml` files are the unzipped versions of `kmz` files. You'll want to unzip with any sort of zip package you have on your computer (Keka, 7zip, etc.). Data used in this example live in the github repo [here](https://github.com/ryanpeek/mapping-in-R-workshop/blob/master/data/streamgages_06.kml). Importantly, `kml` can contain multiple layers because they use a sort of nested format, so it's good to check first to see which layer you may want. This example only has a single *layer* so we don't need to specify a layer in our `st_read` function.
 
 ```{r loadlibraries, eval=T, echo=T}
 
@@ -85,7 +85,7 @@ library(knitr)
 include_graphics(path = "img/usgs_gages_in_ca.png") 
 ```
 
-### Add a Map Details/Background
+### Use `ggspatial` for Map Background/Details
 
 Now we can add a few additional details here. Let's use the `USAboundaries` package go get a county layer, and the `ggspatial` package to add a scale bar, north arrow, and open source map background. Note, we could also just throw this `sf` layer into `mapview` (see the mapview page) and have an interactive map.
 
