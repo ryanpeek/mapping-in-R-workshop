@@ -17,6 +17,7 @@ Let's **load the libraries** we're going to need first.
 library(here)
 library(sf)
 library(dplyr)
+library(viridis)
 library(ggplot2)
 library(USAboundaries)
 library(rnaturalearth)
@@ -30,6 +31,7 @@ suppressPackageStartupMessages({
   library(here);
   library(sf);
   library(dplyr);
+  library(viridis);
   library(ggplot2);
   library(USAboundaries);
   library(rnaturalearth);
@@ -153,8 +155,10 @@ ca_co_poly_anti2 <- ca_co[!lengths(st_intersects(ca_co, isd_history_ca)), ]
 plot(ca_co$geometry, col=alpha("pink",0.3))
 plot(ca_co_poly_anti$geometry, pch=15, add=T, col="maroon")
 plot(ca_co_poly_anti2$geometry, add=T, col="darkgreen")
-title("GSOD Climate Stations Not Contained \n in CA Counties (squares),
-      and Counties with no Stations (green)")
+title("Anti-joins with CA GSOD Climate Stations:
+Points outside of county boundaries (squares),
+      Counties with no stations (green)")
+
 ```
 
 
@@ -198,92 +202,201 @@ Now we have only points that fall *inside* of a CA county, **AND** the new data 
  > `isd_ca_co_pts <- st_join(isd_history, left = FALSE, ca_co) # join all columns`
 
 
-## Play With Some Climate Data
+## Practice with Climate Data Example!
 
-Hopefully the above was useful...but let's actually use grab some climate data from the `GSODR` package and do some visualization. Let's take a look at what stations have data between 1980 and 2018. Check the [`GSODR`](https://ropensci.github.io/GSODR/articles/GSODR.html) vignette for more details, I'm just applying some of the commands they lay describe.
+Hopefully the above was useful...but let's actually practice how we may use this by actually using some spatial joins to select and download some climate data from the `GSODR` package, and then make some visualizations. To start, let's take a look at what stations have data between 1980 and 2018. Check the [`GSODR`](https://ropensci.github.io/GSODR/articles/GSODR.html) vignette for more details, I'm just applying some of the commands they lay describe.
 
-For this example, let's select data from Fresno. I've already downloaded it ([here]()) if you'd like to play along. I'm going to plot the weekly average temperature and precipitation for 1972-2018.
+### Check Stations for Data Availability
+
+Here we check what stations contain data between a given date range. Some of these stations go back to the 1930's, but we'll focus on 1980--2018.
 
 ```{r checkStations, echo=FALSE, eval=FALSE, purl=FALSE, warning=FALSE}
 
 # check availability for a date range
-loop_stations <- isd_ca_co_pts[isd_ca_co_pts$BEGIN <= 19800101 &
+stations <- isd_ca_co_pts[isd_ca_co_pts$BEGIN <= 19800101 &
                                isd_ca_co_pts$END >= 20181231, ]
 
 # Plot where these stations are?
 ggplot() +
-  geom_sf(data=ca, fill="slateblue", alpha=0.4) +
+  geom_sf(data=ca, fill="steelblue", alpha=0.4) +
   geom_sf(data=ca_co, color="gray50", lwd=0.4, alpha=0.4) +
-  geom_sf(data = loop_stations, size = 2, pch=21, color="gray", fill="black") +
+  geom_sf(data = stations, size = 2, pch=21, color="thistle1", fill="black") +
   theme_bw()+
   ggtitle("GSOD Stations with data 1980-2018")
 
-# use Fresno Airport: KFAT
-stationID <- filter(loop_stations, CALL=="KFAT") %>% 
-  select(USAF, WBAN, STNID)
+```
 
-# get data:
-fresyes <- get_GSOD(station = stationID$STNID, years = c(1970:2018))
+### Calculate Stations Per County
 
-# save it!!
-save(fresyes, file = "data/fresno_GSOD_climate_19720101-20181231.rda")
+Looks like there are 53 stations, and some counties have more than one. Let's apply our spatial join powers to filter this list down a bit. Let's:
 
+ - Summarize our station data using the spatial_joined county `name` attribute so we can calculate how many stations we have per county. 
+ - Create a dataset that includes only stations from counties with a single station
+ - Create a dataset that contains stations that are within a set distance from the centroid of the county
+ 
+ We'll mainly use some basic `dplyr` here, which is possible because as `sf` objects, these are still simple data frames.
 
+```{r Calcpercounty, echo=FALSE, eval=TRUE, purl=FALSE, warning=FALSE}
 
-# YDAY: filter to 1980 plus:
-# fresyes_yday <- fresyes %>% filter(YEARMODA > "1980-01-01") %>% 
-#   filter(!is.na(PRCP)) %>% 
-#   group_by(YDAY) %>% 
-#   summarize_at(.vars=c("TEMP","PRCP","RH"), .funs = c(mean))
-# ggplot() + geom_col(data=fresyes_yday, aes(x=YDAY, y=PRCP), col="darkblue")+
-#   coord_polar()
+class(stations) # sf object
 
-# YEAR: filter to 1980 plus:
-# fresyes_year <- fresyes %>% filter(YEARMODA > "1980-01-01") %>% 
-#   filter(!is.na(PRCP)) %>% 
-#   group_by(YEAR) %>% 
-#   summarize_at(.vars=c("TEMP","PRCP","RH"), .funs = list(mean=mean, max=max, min=min))
+# calc number per county
+stations_n <- stations %>% 
+  rename(cnty_name=name) %>% # make column amore clear
+  group_by(cnty_name) %>% 
+  mutate(n=n()) %>% 
+  ungroup()
 
-# annual precip (could compare across sites?)
-# ggplot() + geom_col(data=fresyes_year, aes(x=YEAR, y=PRCP_mean)) +
-#   coord_polar()
+class(stations_n) # sf object
 
+# join back to county layer with a spatial join, using left=FALSE (same as "inner_join")
+ca_co_stations <- st_join(ca_co, stations_n, left = FALSE)
+class(ca_co_stations)
+
+# plot!
+ggplot() +
+  geom_sf(data=ca) +
+  geom_sf(data=ca_co_stations, aes(fill=as.factor(n)), lwd=0.4, alpha=0.4) +
+  theme_bw()+
+  scale_fill_viridis_d("No. of Stations")+
+  ggtitle("Number of GSOD Stations with data 1980-2018 per County")
 
 ```
 
-<br>
+### Pick Station Nearest the Centroid of County
+
+Well great, what do we do for counties with multiple stations? How about picking the station nearest the centroid of the county. Steps:
+ 
+ 1. We need to work with just counties with more than one station.
+ 2. We need to add the centroid of each of the counties in question.
+ 3. We need to select the station nearest the centroid. 
+ 
+For Step 2, we're going to use the `purrr` package to `map` or `apply` the `st_centroid` function over each county in our dataframe. This is the equivalent of a **for-loop** it just looks very different.  
+
+```{r filterpercounty, echo=FALSE, eval=TRUE, purl=FALSE, warning=FALSE}
+
+# STEP 1: filter to stations with n>1
+
+stations_n2 <- stations_n %>% filter(n > 1)
+
+# STEP 2: Use "purrr" package with sf to get Centroid points for our counties with n>1
+
+library(purrr)
+
+ca_co_centroid_pts <- ca_co_stations %>% 
+  filter(n > 1) %>% 
+  # add centroid values using the geometry column
+  mutate(cent_lon=map_dbl(geometry, ~st_centroid(.x)[[1]]), 
+         cent_lat=map_dbl(geometry, ~st_centroid(.x)[[2]])) %>% 
+  as.data.frame() # convert to simple dataframe
+
+# make back into an sf object, but only using the centroid X/Ys we just made
+ca_co_centroid_pts <- st_as_sf(ca_co_centroid_pts, coords = c("cent_lon","cent_lat"), crs=4326, remove = FALSE)
+
+
+# plot!
+ggplot() +
+  geom_sf(data=ca_co) +
+  geom_sf(data=ca_co_centroid_pts, aes(fill=as.factor(n)), pch=21, size=4) +
+  theme_bw()+
+  scale_fill_viridis_d("No. of Stations") +
+  labs(subtitle = "Centroids for Counties with >1 GSOD Station")
+
+```
+
+
+> **Step 3**: This is the trickiest part...
+
+There are probably a few different ways to do this, but let's try to use the one that seems simplest and uses the fewest lines of code. A handy package (`st_nn`) will allows us to nearest neighbors between points/lines/polygons, and can provide  distances as well. So let's get the station nearest our county centroid for all the counties with stations > 1.
+
+```{r nearestCent, echo=FALSE, eval=TRUE, purl=FALSE, warning=FALSE}
+
+library(nngeo)
+
+# find the first nearest neighbor GSOD station for each centroid, returns a list
+nearest_stations <- st_nn(ca_co_centroid_pts, stations_n2, returnDist = T, k = 1)
+
+# add distances and centroid ID and make into a dataframe, get only distinct IDs
+nearest_stations_df <- tibble(dist=nearest_stations$dist, centrID=do.call(rbind, nearest_stations$nn)) %>% distinct(.keep_all = T)
+  
+# make a df of stations in counties where n=1
+stations_n1 <- stations_n %>% filter(n==1)
+
+# now select the "nearest to centroid" stations and bind to the n1 dataset
+stations_final <- stations_n2[nearest_stations_df$centrID,] %>% 
+  rbind(stations_n1)
+
+# Plot it to be sure
+ggplot() +
+  geom_sf(data=ca_co) +
+  geom_sf(data=ca_co_centroid_pts, pch=21, size=2) +
+  geom_sf(data=stations_n2, col="orange", alpha=0.9, pch=17, size=1.8) +
+  geom_sf(data=stations_final, col="blue3", alpha=0.9) +
+  theme_bw() +
+  labs(caption = "County Centroids (open circle), 
+Final Stations Selected (blue circle),
+       Stations n>1 (orange)")
+
+```
+
+That was a lot! But Looks like all works, and now we have a final set of stations we can use to download data.
+
+### Download Climate Data
+
+Now we can use our station list to download daily data for each of these stations for any period of record we want. Note, this code works but took about ~10 min to download the data. To speed things up I've saved the file [here](https://github.com/ryanpeek/mapping-in-R-workshop/raw/master/data/CA_stations_GSOD_19800101-20181231.rda), or just grab the summarized data shown in the next section.
+
+```{r echo=TRUE, eval=FALSE, purl=FALSE, warning=FALSE}
+
+# Get Station IDs and drop all other info
+(stationIDs <- stations_final %>% select(STNID, -geometry) %>% as.data.frame() %>%
+   select(-geometry))
+
+# get data:
+climdata <- get_GSOD(station = stationIDs$STNID, years = c(1980:2018))
+
+# save it!!
+save(climdata, file = "data/CA_stations_GSOD_19800101-20181231.rda")
+
+```
+
+<hr>
+
+### Summarize and Visualize!
+
+Finally, we have data, let's summarize and visualize these data. I'll aggregate these data to monthly means so we can see different timing patterns in precipitation and temperature across the state.
 
 ```{r loadGSOD, eval=T, echo=F, purl=FALSE}
 
 load(paste0(here(),"/data/fresno_GSOD_climate_19720101-20181231.rda"))
 
-# MONTH: filter to 1980 plus:
-fresyes_month <- fresyes %>% filter(YEARMODA > "1980-01-01") %>% 
+# MONTH: filter missing data out:
+clim_month <- climdata %>% 
   filter(!is.na(PRCP)) %>% 
-  group_by(MONTH) %>% 
-  summarize_at(.vars=c("TEMP","PRCP","RH"), .funs = list(min=min, mean=mean, max=max))
+  group_by(STNID, MONTH) %>% 
+  summarize_at(.vars=c("TEMP","PRCP"), .funs = list(min=min, mean=mean, max=max))
 
 # monthly prcp
-ggplot() + geom_col(data=fresyes_month, aes(x=MONTH, y=PRCP_mean, fill=TEMP_mean))+
+ggplot() + geom_col(data=clim_month, aes(x=MONTH, y=PRCP_mean, fill=TEMP_mean))+
   theme_minimal() + labs(y="", x="")+
   theme(plot.background = element_blank(),
         legend.position = "left",
         panel.border = element_blank(),
         axis.text.y = element_blank(),
         plot.margin = unit(c(0, 0, 0 ,0), "mm")) +
-  annotate("text", x=6.5, y = c(0,.5,1,1.5,2),label=c("0","0.5","1","1.5","2"), color="black", size=3) +
+  #annotate("text", x=6.5, y = c(0,2,4,6,8),label=c("0","2","4","6","8"), color="black", size=3) +
   scale_fill_viridis_c("Mean \nTemp (C)")+
-  coord_polar()
+  #coord_polar() + 
+  facet_grid(STNID~.)
 
 # WEEK: filter to 1980 plus:
-fresyes_week <- fresyes %>% filter(YEARMODA > "1980-01-01") %>% 
+clim_week <- climdata %>% 
   filter(!is.na(PRCP)) %>% mutate(WEEK=lubridate::week(YEARMODA)) %>% 
   group_by(WEEK) %>% 
   summarize_at(.vars=vars(TEMP,PRCP,RH), .funs = list(min=min, mean=mean, max=max))
 
 # Weekly mean tempcolor by PRECIP
 ggplot() +
-  geom_col(data=fresyes_week, aes(x=WEEK, y=TEMP_mean, fill=PRCP_mean))+
+  geom_col(data=clim_week, aes(x=WEEK, y=TEMP_mean, fill=PRCP_mean))+
   theme_minimal() + labs(y="", x="")+
   theme(plot.background = element_blank(),
         legend.position = "left",
@@ -295,7 +408,7 @@ ggplot() +
   coord_polar()
 
 # Weekly PRECIP color by temp
-ggplot() + geom_col(data=fresyes_week, aes(x=WEEK, y=PRCP_mean, fill=TEMP_mean))+
+ggplot() + geom_col(data=clim_week, aes(x=WEEK, y=PRCP_mean, fill=TEMP_mean))+
   coord_polar() + 
   scale_fill_viridis_c("Mean \nTemp (C)") + theme_minimal() + 
   labs(y="", x="") +
@@ -305,6 +418,7 @@ ggplot() + geom_col(data=fresyes_week, aes(x=WEEK, y=PRCP_mean, fill=TEMP_mean))
         axis.text.y = element_blank(),
         plot.margin = unit(c(0, 0, 0 ,0), "mm")) +
   annotate("text", x=27, y = c(0,.5,1,1.5,2),label=c("0","0.5","1","1.5","2"), color="blue")
+
 
 ```
 
