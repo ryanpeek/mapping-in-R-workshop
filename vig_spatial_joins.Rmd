@@ -78,23 +78,27 @@ plot(ca_box, add=T, border="red3", col=NA, lwd=2)
 
 Now we have some polygon data to work with...let's add some climate data and practice joining polygons to points and points to polygons! First let's use the [`GSODR` (Global Surface Summary of the Day) package](https://ropensci.github.io/GSODR/) to get global climate station locations. Then we can join to a few specific states/counties, and plot. First the GSOD data:
 
-```{r getGSODR, echo=TRUE, eval=TRUE, purl=FALSE}
-
-library(GSODR)
+```{r getGSODR, echo=TRUE, eval=FALSE}
 
 # load the station metadata file from GSODR (this loads `isd_history` in your
 # R session)
 load(system.file("extdata", "isd_history.rda", package = "GSODR"))
-#load(paste0(here(),"/data/isd_history.rda"))
+
+# make spatial
 isd_history <- as.data.frame(isd_history) %>% 
-  st_as_sf(coords=c("LON","LAT"), crs=4326)  
+  st_as_sf(coords=c("LON","LAT"), crs=4326, remove=FALSE)  
 
 # filter to US and CA, many sites out in buoys along coast
-isd_history_ca <- filter(isd_history, CTRY=="US", STATE=="CA")
+isd_history_ca <- dplyr::filter(isd_history, CTRY=="US", STATE=="CA")
 
 ```
 
-Note, this is a fairly large set of point data, with `r nrow(isd_history)` observations globally. Let's map this so we can see how dense this dataset actually is. Let's use a nice set of global maps from the `rnaturalearth` package. Because the points are so dense, let's plot those first, then we'll add a layer of world country outlines.
+Note, this is a fairly large set of point data, with `28,104` observations globally. Let's map this so we can see how dense this dataset actually is. Let's use a nice set of global maps from the `rnaturalearth` package. Because the points are so dense, let's plot those first, then we'll add a layer of world country outlines.
+
+
+```{r, echo=F, eval=T}
+load(paste0(here::here(),"/data/isd_files.rda"))
+```
 
 
 ```{r plotGSODR, echo=TRUE, eval=TRUE, purl=FALSE}

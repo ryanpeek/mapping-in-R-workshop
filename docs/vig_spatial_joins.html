@@ -630,18 +630,17 @@ div.tocify {
 <div id="point-data" class="section level3">
 <h3>Point Data</h3>
 <p>Now we have some polygon data to work with…let’s add some climate data and practice joining polygons to points and points to polygons! First let’s use the <a href="https://ropensci.github.io/GSODR/"><code>GSODR</code> (Global Surface Summary of the Day) package</a> to get global climate station locations. Then we can join to a few specific states/counties, and plot. First the GSOD data:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">library</span>(GSODR)</a>
-<a class="sourceLine" id="cb3-2" title="2"></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co"># load the station metadata file from GSODR (this loads `isd_history` in your</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co"># R session)</span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="kw">load</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;isd_history.rda&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;GSODR&quot;</span>))</a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="co">#load(paste0(here(),&quot;/data/isd_history.rda&quot;))</span></a>
-<a class="sourceLine" id="cb3-7" title="7">isd_history &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(isd_history) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords=</span><span class="kw">c</span>(<span class="st">&quot;LON&quot;</span>,<span class="st">&quot;LAT&quot;</span>), <span class="dt">crs=</span><span class="dv">4326</span>)  </a>
-<a class="sourceLine" id="cb3-9" title="9"></a>
-<a class="sourceLine" id="cb3-10" title="10"><span class="co"># filter to US and CA, many sites out in buoys along coast</span></a>
-<a class="sourceLine" id="cb3-11" title="11">isd_history_ca &lt;-<span class="st"> </span><span class="kw">filter</span>(isd_history, CTRY<span class="op">==</span><span class="st">&quot;US&quot;</span>, STATE<span class="op">==</span><span class="st">&quot;CA&quot;</span>)</a></code></pre></div>
-<p>Note, this is a fairly large set of point data, with 28104 observations globally. Let’s map this so we can see how dense this dataset actually is. Let’s use a nice set of global maps from the <code>rnaturalearth</code> package. Because the points are so dense, let’s plot those first, then we’ll add a layer of world country outlines.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># load the station metadata file from GSODR (this loads `isd_history` in your</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="co"># R session)</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw">load</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;isd_history.rda&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;GSODR&quot;</span>))</a>
+<a class="sourceLine" id="cb3-4" title="4"></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co"># make spatial</span></a>
+<a class="sourceLine" id="cb3-6" title="6">isd_history &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(isd_history) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords=</span><span class="kw">c</span>(<span class="st">&quot;LON&quot;</span>,<span class="st">&quot;LAT&quot;</span>), <span class="dt">crs=</span><span class="dv">4326</span>, <span class="dt">remove=</span><span class="ot">FALSE</span>)  </a>
+<a class="sourceLine" id="cb3-8" title="8"></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="co"># filter to US and CA, many sites out in buoys along coast</span></a>
+<a class="sourceLine" id="cb3-10" title="10">isd_history_ca &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(isd_history, CTRY<span class="op">==</span><span class="st">&quot;US&quot;</span>, STATE<span class="op">==</span><span class="st">&quot;CA&quot;</span>)</a></code></pre></div>
+<p>Note, this is a fairly large set of point data, with <code>28,104</code> observations globally. Let’s map this so we can see how dense this dataset actually is. Let’s use a nice set of global maps from the <code>rnaturalearth</code> package. Because the points are so dense, let’s plot those first, then we’ll add a layer of world country outlines.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># view!</span></a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="kw">library</span>(rnaturalearth)</a>
 <a class="sourceLine" id="cb4-3" title="3"><span class="kw">library</span>(rnaturalearthdata)</a>
@@ -720,20 +719,20 @@ div.tocify {
 ## 50 MULTIPOLYGON (((-124.4086 4...</code></pre>
 <p><br></p>
 <p>So in this case, let’s say we want to add the county <strong><code>name</code></strong> attribute to our POINT dataset, which looks like this (notice there’s no <code>county</code> field or <code>name</code> field):</p>
-<pre><code>##     USAF  WBAN            STN_NAME CTRY STATE CALL ELEV_M    BEGIN
-## 1 008268 99999           WXPOD8278   AF  &lt;NA&gt; &lt;NA&gt; 1156.7 20100519
-## 2 010010 99999 JAN MAYEN(NOR-NAVY)   NO  &lt;NA&gt; ENJA    9.0 19310101
-## 3 010014 99999          SORSTOKKEN   NO  &lt;NA&gt; ENSO   48.8 19861120
-## 4 010015 99999          BRINGELAND   NO  &lt;NA&gt; &lt;NA&gt;  327.0 19870117
-## 5 010016 99999         RORVIK/RYUM   NO  &lt;NA&gt; &lt;NA&gt;   14.0 19870116
-## 6 010017 99999               FRIGG   NO  &lt;NA&gt; ENFR   48.0 19880320
-##        END        STNID ELEV_M_SRTM_90m              geometry
-## 1 20120323 008268-99999            1160  POINT (65.567 32.95)
-## 2 20190115 010010-99999              NA POINT (-8.667 70.933)
-## 3 20190115 010014-99999              48  POINT (5.341 59.792)
-## 4 20081231 010015-99999              NA  POINT (5.867 61.383)
-## 5 19910806 010016-99999              NA  POINT (11.233 64.85)
-## 6 20050228 010017-99999              48    POINT (2.25 59.98)</code></pre>
+<pre><code>##     USAF  WBAN            STN_NAME CTRY STATE CALL    LAT    LON ELEV_M
+## 1 008268 99999           WXPOD8278   AF  &lt;NA&gt; &lt;NA&gt; 32.950 65.567 1156.7
+## 2 010010 99999 JAN MAYEN(NOR-NAVY)   NO  &lt;NA&gt; ENJA 70.933 -8.667    9.0
+## 3 010014 99999          SORSTOKKEN   NO  &lt;NA&gt; ENSO 59.792  5.341   48.8
+## 4 010015 99999          BRINGELAND   NO  &lt;NA&gt; &lt;NA&gt; 61.383  5.867  327.0
+## 5 010016 99999         RORVIK/RYUM   NO  &lt;NA&gt; &lt;NA&gt; 64.850 11.233   14.0
+## 6 010017 99999               FRIGG   NO  &lt;NA&gt; ENFR 59.980  2.250   48.0
+##      BEGIN      END        STNID ELEV_M_SRTM_90m              geometry
+## 1 20100519 20120323 008268-99999            1160  POINT (65.567 32.95)
+## 2 19310101 20190115 010010-99999              NA POINT (-8.667 70.933)
+## 3 19861120 20190115 010014-99999              48  POINT (5.341 59.792)
+## 4 19870117 20081231 010015-99999              NA  POINT (5.867 61.383)
+## 5 19870116 19910806 010016-99999              NA  POINT (11.233 64.85)
+## 6 19880320 20050228 010017-99999              48    POINT (2.25 59.98)</code></pre>
 <p><br></p>
 <p>So to spatially join the county <code>name</code> attribute with the appropriate point locations, let’s use <code>st_join</code>. If we use <code>left=TRUE</code> here, our result will retain <em>all</em> the points in the dataset rather than just the the spatial overlaps (where points fall inside polygons). So <code>left=TRUE</code> is essentially a <code>dplyr::left_join</code>, and <code>left=FALSE</code> is equivalent to a <code>dplyr::inner_join</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="co"># For POINTS that fall within CA_counties, adds ATTRIBUTES, retains ALL pts if left=TRUE, otherwise uses inner_join</span></a>
@@ -743,27 +742,27 @@ div.tocify {
 <a class="sourceLine" id="cb16-5" title="5"><span class="kw">plot</span>(isd_ca_co_pts<span class="op">$</span>geometry, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">cex=</span><span class="fl">0.7</span>, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">bg=</span><span class="st">&quot;gray80&quot;</span>)</a>
 <a class="sourceLine" id="cb16-6" title="6"><span class="kw">plot</span>(ca_co<span class="op">$</span>geometry, <span class="dt">border=</span><span class="st">&quot;gray20&quot;</span>, <span class="dt">col=</span><span class="ot">NA</span>, <span class="dt">add=</span>T)</a></code></pre></div>
 <p><img src="vig_spatial_joins_files/figure-html/polyJoinAttribs-1.png" width="672" /></p>
-<pre><code>##         USAF  WBAN                     STN_NAME CTRY STATE CALL ELEV_M
-## 13545 690020 93218 JOLON HUNTER LIGGETT MIL RES   US    CA KHGT  317.0
-## 13546 690020 99999 JOLON HUNTER LIGGETT MIL RES   US    CA KHGT  317.0
-## 13547 690070 93217                FRITZSCHE AAF   US    CA KOAR   43.0
-## 13552 690140 93101                 EL TORO MCAS   US    CA KNZJ  116.7
-## 13553 690150 93121            TWENTY NINE PALMS   US    CA KNXP  625.1
-## 13554 690150 99999             TWENTYNINE PALMS   US    CA KNXP  626.0
-##          BEGIN      END        STNID ELEV_M_SRTM_90m           name
-## 13545 19640715 19970401 690020-93218             325       Monterey
-## 13546 20030702 20030801 690020-99999             325       Monterey
-## 13547 19600404 19930831 690070-93217              32       Monterey
-## 13552 19890101 19990630 690140-93101              95         Orange
-## 13553 19900102 20190116 690150-93121             617 San Bernardino
-## 13554 19891115 19891229 690150-99999             617 San Bernardino
-##                      geometry
-## 13545     POINT (-121.233 36)
-## 13546     POINT (-121.233 36)
-## 13547 POINT (-121.767 36.683)
-## 13552 POINT (-117.733 33.667)
-## 13553   POINT (-116.167 34.3)
-## 13554   POINT (-116.167 34.3)</code></pre>
+<pre><code>##         USAF  WBAN                     STN_NAME CTRY STATE CALL    LAT
+## 13545 690020 93218 JOLON HUNTER LIGGETT MIL RES   US    CA KHGT 36.000
+## 13546 690020 99999 JOLON HUNTER LIGGETT MIL RES   US    CA KHGT 36.000
+## 13547 690070 93217                FRITZSCHE AAF   US    CA KOAR 36.683
+## 13552 690140 93101                 EL TORO MCAS   US    CA KNZJ 33.667
+## 13553 690150 93121            TWENTY NINE PALMS   US    CA KNXP 34.300
+## 13554 690150 99999             TWENTYNINE PALMS   US    CA KNXP 34.300
+##            LON ELEV_M    BEGIN      END        STNID ELEV_M_SRTM_90m
+## 13545 -121.233  317.0 19640715 19970401 690020-93218             325
+## 13546 -121.233  317.0 20030702 20030801 690020-99999             325
+## 13547 -121.767   43.0 19600404 19930831 690070-93217              32
+## 13552 -117.733  116.7 19890101 19990630 690140-93101              95
+## 13553 -116.167  625.1 19900102 20190116 690150-93121             617
+## 13554 -116.167  626.0 19891115 19891229 690150-99999             617
+##                 name                geometry
+## 13545       Monterey     POINT (-121.233 36)
+## 13546       Monterey     POINT (-121.233 36)
+## 13547       Monterey POINT (-121.767 36.683)
+## 13552         Orange POINT (-117.733 33.667)
+## 13553 San Bernardino   POINT (-116.167 34.3)
+## 13554 San Bernardino   POINT (-116.167 34.3)</code></pre>
 <p><br></p>
 <p>Now we have only points that fall <em>inside</em> of a CA county, <strong>AND</strong> the new data frame now has a new column/attribute called “<code>name</code>” (all our climate station points have a named CA county associated with them). We could easily specify additional columns inside our <code>st_join</code> function, or if we don’t specify any columns, then all columns from the polygon dataframe that spatially joined/matched the points data would be added to the points dataframe.</p>
 <blockquote>
