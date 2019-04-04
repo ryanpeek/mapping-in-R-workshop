@@ -904,7 +904,7 @@ div.tocify {
 <div id="summarize-and-visualize" class="section level3">
 <h3>Summarize and Visualize!</h3>
 <p>Finally, we have data, let’s summarize and visualize these data. I’ll aggregate these data to monthly means so we can see different timing patterns in precipitation and temperature across the state.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">load</span>(<span class="kw">paste0</span>(<span class="kw">here</span>(),<span class="st">&quot;/data/CA_stations_GSOD_19800101-20181231.rda&quot;</span>))</a>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">load</span>(<span class="kw">paste0</span>(here<span class="op">::</span><span class="kw">here</span>(),<span class="st">&quot;/data/CA_stations_GSOD_19800101-20181231.rda&quot;</span>))</a>
 <a class="sourceLine" id="cb22-2" title="2"></a>
 <a class="sourceLine" id="cb22-3" title="3">climdata_stations &lt;-<span class="st"> </span><span class="kw">distinct</span>(climdata, CALL, <span class="dt">.keep_all =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb22-4" title="4"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords=</span><span class="kw">c</span>(<span class="st">&quot;LON&quot;</span>,<span class="st">&quot;LAT&quot;</span>), <span class="dt">crs=</span><span class="dv">4326</span>, <span class="dt">remove =</span> F)</a></code></pre></div>

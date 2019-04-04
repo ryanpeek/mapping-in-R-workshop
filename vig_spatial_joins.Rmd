@@ -371,7 +371,7 @@ That was a lot! But Looks like all works, and now we have a final set of station
 
 Now we can use our station list to download daily data for each station for any period of record we want. Note, this code works but took 3-4 minutes to run. To speed things up I've saved the file [here](https://github.com/ryanpeek/mapping-in-R-workshop/raw/master/data/CA_stations_GSOD_19800101-20181231.rda), or just grab the summarized data shown in the next section.
 
-```{r echo=TRUE, eval=FALSE, purl=FALSE, warning=FALSE}
+```{r getClimDat, echo=TRUE, eval=FALSE, purl=FALSE, warning=FALSE}
 
 # Get highest and lowest elevation Station IDs and the northernmost (highest) latitude:
 (stationIDs <- stations_final %>% 
@@ -395,7 +395,7 @@ Finally, we have data, let's summarize and visualize these data. I'll aggregate 
 
 ```{r loadGSOD, eval=T, echo=T, purl=FALSE}
 
-load(paste0(here(),"/data/CA_stations_GSOD_19800101-20181231.rda"))
+load(paste0(here::here(),"/data/CA_stations_GSOD_19800101-20181231.rda"))
 
 climdata_stations <- distinct(climdata, CALL, .keep_all = TRUE) %>% 
   st_as_sf(coords=c("LON","LAT"), crs=4326, remove = F)
