@@ -14,6 +14,8 @@ navbar:
       href: spatial_kml.html
     - text: Data Storage with geopackage
       href: spatial_export_import_gpkg.html
+    - text: Spatial Joins
+      href: vig_spatial_joins.html
     - text: Mapview & Leaflet
       href: maps_mapview_leaflet.html
   - text: Mapping Vignettes
