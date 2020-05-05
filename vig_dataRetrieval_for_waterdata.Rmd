@@ -25,6 +25,8 @@ suppressPackageStartupMessages({
   library(USAboundaries) # STATES/counties data
 })
 
+load("data/vig_dataRetrieval_for_waterdata.rda")
+
 ```
 
 ```{r libsshow, eval=F, echo=T}
@@ -50,12 +52,16 @@ library(plotly)
 
 This package has lots of functionality for many different data types. Let's first load the library, and then look up the [USGS parameter codes](https://nwis.waterdata.usgs.gov/usa/nwis/pmcodes) that measure *nitrate*. We're using a `grep()` function here, which is a common way to look up text for any particular string, or part of a string.
 
-```{r dataGet, eval=T, echo=T}
+```{r dataGet, eval=F, echo=T}
 
 # here we create an object of all the parameters that relate to nitrate
 nitrCds <- parameterCdFile[grep("nitrate",
                                 parameterCdFile$parameter_nm,
                                 ignore.case=TRUE),]
+
+```
+
+```{r dataAssess, eval=TRUE, echo=TRUE}
 
 # how many rows
 nrow(nitrCds)
@@ -63,10 +69,17 @@ nrow(nitrCds)
 # how many different measurement units are there?
 unique(nitrCds$parameter_units)
 
+```
+
+```{r flowGet, eval=FALSE, echo=TRUE}
+
 # try looking up flow
 flowCds <- parameterCdFile[grepl("flow", 
                                 parameterCdFile$srsname, 
                                 ignore.case = TRUE),] # look in rows 
+```
+
+```{r flowrows, eval=TRUE, echo=TRUE}
 
 nrow(flowCds)
 
@@ -140,12 +153,17 @@ mapview(niCA.Tahoe.sf, layer.name="USGS Stations <br> collecting nitrate data")
 
 We can try the same command but with `seriesCatalogOutput=FALSE`. This means it doesn't pull the actual records, but rather the sites where a given parameter is available. That means we won't be able to filter by the number of records available for a given site, but we can see where sites are located. This example filters to a specific Hydrologic Unit Code (HUC), and makes another leaflet map.
 
-```{r getdataNoCatOut, echo=T, eval=T}
+```{r getdataNoCatOut1, echo=T, eval=FALSE}
 
 # filter for phosporous
 ph_code <- c("00662","00665") # phosphorous
 phCA <- readNWISdata(stateCd="CA", parameterCd=ph_code,
                      service="site", seriesCatalogOutput=FALSE)
+
+```
+
+
+```{r getdataNoCatOut2, echo=T, eval=TRUE}
 
 phCA %>% distinct(huc_cd) %>% tally
 
@@ -167,7 +185,7 @@ mapview(phCA.sf, layer.name="USGS Stations collecting <br> phosphorous data")
 
 Let's now download data for a specific site number and a specific date range. In this case, let's look for flow at a site near Meeks Bay in Lake Tahoe.
 
-```{r siteSpec, eval=T, echo=T}
+```{r getsiteSpec, eval=FALSE, echo=T}
 
 siteNo <- "10336645"# GENERAL C NR MEEKS BAY CA
 pCode <- "00060" # 00060 flow, 
@@ -188,7 +206,7 @@ tahoe <- readNWISuv(siteNumbers = siteNo,
 
 Now we have a nice dataset, but let's tidy it up a bit. There are some built in functions that are part of the `dataRetrieval` library, let's use them to add a Water Year column, and fix up the column names. Then we'll filter to our Meeks Bay site, and plot.
 
-```{r cleansiteData, eval=T, echo=T}
+```{r cleansiteData, eval=FALSE, echo=TRUE}
 
 # add the water year
 tahoe <- addWaterYear(tahoe)
@@ -201,6 +219,9 @@ tahoe$DOWY <- yday(tahoe$dateTime) + ifelse(month(tahoe$dateTime) > 9, -273, 92)
 
 # filter to Meeks site only (we currently have all tahoe)
 phCA.meeks <- filter(phCA, site_no=="10336645")
+```
+
+```{r plotSiteData, eval=FALSE, echo=TRUE}
 
 # plot flow with facets to see different years
 (plot1 <- ggplot() + geom_line(data=tahoe, aes(x=DOWY, y=Flow_Inst), color="dodgerblue") + 
@@ -208,6 +229,13 @@ phCA.meeks <- filter(phCA, site_no=="10336645")
     labs(y="Hourly Flow (cfs)", x= "Day of Water Year", title="Hourly Discharge for General Creek Near Meeks Bay, Tahoe"))
 
 ```
+
+```{r showPlotSiteData, eval=TRUE, echo=FALSE}
+
+plot1
+
+```
+
 
 ## Use Spatial Data: A Watershed
 
@@ -223,17 +251,22 @@ For more info and training see the USGS [page](https://owi.usgs.gov/R/training-c
 
 By default when we read in a shapefile, the `sf` package will print out a bunch of metadata about the projection, dimension, type of data, etc. We can turn that on and off with `quiet=FALSE`. Let's read in a HUC8 for Tahoe, and centroids for every single HUC12 in California.
 
-```{r sf, eval=T, echo=T}
+```{r sftahoe, eval=FALSE, echo=TRUE}
 
 h8_tahoe <- st_read("data/h8_tahoe.shp", quiet=FALSE)
 #mapview(h8_tahoe)
 
 # load huc centroids from a zipped directory! Here we have to wrap things in unzip()
-h12_centroids <- read_sf(unzip("data/huc12_centroids.zip"), quiet = TRUE) %>%
+unzip("data/huc12_centroids.zip", exdir = "data/huc12s")
+h12_centroids <- read_sf("data/huc12s/huc12_centroids.shp", quiet = TRUE) %>%
   st_transform(crs=4326) #%>% 
 
 # then remove raw files since file is added in memory
-file.remove(list.files(pattern = "huc12_centroids*",recursive = F))
+fs::dir_delete(path="data/huc12s/")
+
+```
+
+```{r maph12sf, eval=TRUE, echo=TRUE}
 
 # a map
 mapview(h12_centroids) + mapview(h8_tahoe) 
@@ -250,7 +283,7 @@ That's a lot of points! Sort of a messy map, so let's see if we can crop by a ce
 
 We'll use a great package for working with State and County boundaries, called `USAboundaries`. It defaults to reading in data as `sf` objects (data.frames), which makes it much easier to manipulate and play with the data. First we download a few specific counties. Then we clip our HUC12 centroids by those counties. Note, we could be clipping by any sort of spatial data here, as long as both are using the same projection.
 
-```{r cropBoundary, eval=T, echo=T, warning=FALSE, message=FALSE}
+```{r cropBoundary, eval=FALSE, echo=TRUE, warning=FALSE, message=FALSE}
 
 # set the state and county names of interest
 state_names <- c("california")
@@ -267,6 +300,11 @@ counties_spec <- us_counties(states=state_names) %>% # use list of state(s) here
 # CLIP our centroids by the county boundaries
 h12_clip <- st_intersection(h12_centroids, counties_spec)
 
+```
+
+
+```{r cropBoundaryMap, eval=TRUE, echo=TRUE, warning=FALSE, message=FALSE}
+
 # quick map!
 mapview(counties_spec, legend=FALSE) + mapview(h12_clip, layer.name="HUC12 Centroids", col.regions="orange")
 
@@ -282,13 +320,17 @@ Now that we can find a specific HUC code for a watershed, we can use the functio
 
 Below we'll download data for a single site, and specify a start date. We want the instantaneous data (usually 15 min intervals), so we'll use "`iv`" as a flag.
 
-```{r getDatabyWatershed, echo=T, eval=T}
+```{r getDatabyWatershed, echo=TRUE, eval=FALSE}
 
 sqw_mindailyT <- readNWISdata(huc="16050102", statCd=c("00001", "00002","00003"), parameterCd="00010")
 
 # rename the columns to something easier to understand (i.e., not X00060_00000)
 sqw_mindailyT <- renameNWISColumns(sqw_mindailyT)
 sqw_mindailyT <- addWaterYear(sqw_mindailyT)
+
+```
+
+```{r getDatabyWatershedOut, echo=TRUE, eval=TRUE}
 
 # how many sites total?
 length(unique(sqw_mindailyT$site_no))
@@ -298,7 +340,7 @@ DT::datatable(sqw_mindailyT, options=list(pageLength=6))
 
 Now we can select a specific site of interest and download data for that location and time interval.
 
-```{r downloadsite, echo=T, eval=T}
+```{r downloadsite, echo=TRUE, eval=FALSE}
 
 # Prosser Creek-Truckee Drainage
 # Stats: max (00001), min (00002), and mean (00003).
@@ -308,13 +350,18 @@ sqw10351600 <- readNWISdata(sites="10351600", service="iv",
 
 sqw10351600 <- addWaterYear(sqw10351600)
 sqw10351600 <- renameNWISColumns(sqw10351600)
+
+```
+
+```{r downloadsiteOut, echo=TRUE, eval=TRUE}
+
 summary(sqw10351600)
 
 ```
 
-Notice there are quiet a few NA's in this dataset. Let's filter those data out, and then plot using `ggplot`. Here we'll assign color to water temperature, and the y-axis can be the discharge (`flow_csf`).
+Notice there are quite a few NA's in this dataset. Let's filter those data out, and then plot using `ggplot`. Here we'll assign color to water temperature, and the y-axis can be the discharge (`flow_csf`).
 
-```{r ggplotIV}
+```{r ggplotIV, echo=TRUE, eval=TRUE}
 
 # remove NAs
 sqw10351600 <- filter(sqw10351600, !is.na(Wtemp_Inst), !is.na(Flow_Inst))
@@ -333,7 +380,7 @@ ggplot() +
 
 One of the most common and tedious tasks is having to restructure, summarize, and simplify data. Here we'll show how to use `dplyr` to aggregate our data to monthly timesteps, and then plot that data. One new function we show below is `summarize_all` which means we apply a set of functions (more than one) to all the columns in our dataframe. Since we group by month, we are calculating the mean, min, and max of temperature, flow, and date. The `mutate` function allows us to add new columns, and so we could easily add different time intervals here and then `group_by` those variables, and summarize by a different time interval. 
 
-```{r aggdplyr}
+```{r aggdplyr, eval=FALSE, echo=TRUE}
 
 # make monthly with dplyr
 sqw_mo <- sqw10351600 %>% 
@@ -352,7 +399,7 @@ sqw_mo <- sqw10351600 %>%
 
 And finally, we can plot our data in various ways. A package called `plotly` is handy for this sort of task, because it allows interactivity with the data.
 
-```{r plotly}
+```{r ggplotStatic, eval=TRUE, echo=TRUE}
 
 # a static plot:
 ggplot() + 
@@ -362,8 +409,12 @@ ggplot() +
   theme_bw() +
   labs(x="", y="Water Tempature (C)", title="Truckee River Watershed", subtitle="Avg Monthly Water Temperatures in Squaw Creek")
 
-# an interactive plot
-#library(plotly)
+
+```
+
+```{r ggPlotly, eval=TRUE, echo=TRUE}
+
+# an interactive plot using the plotly library
 
 plotly::ggplotly(ggplot() + 
                    geom_point(data=sqw_mo, aes(x=month, y=temp_C_mean), color="gray20", size=3, shape=2, alpha=0.7) +
@@ -376,3 +427,12 @@ plotly::ggplotly(ggplot() +
 
 
  > **Challenge**: Can you try calculating the *weekly* min, max, mean, using the same code above, and then plot?
+
+
+```{r, eval=FALSE, echo=FALSE}
+
+# save all file for quicker render knit
+save.image(file = "data/vig_dataRetrieval_for_waterdata.rda")
+
+```
+

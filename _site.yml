@@ -1,40 +1,46 @@
 navbar:
   left:
-  - text: Home
+  - text: 
+    icon: fa-home fa-2x
     href: index.html
-  - text: Mapmaking
-    href: mapmaking.html
-    icon: fa-globe-americas fa-1.5x
-  - text: Spatial/Mapping Tools
-    icon: fa-map  fa-1x
+  - text: Vector Data
+    icon: fa-vector-square
     menu:
-    - text: Working with Shapefiles
+    - text: Working with shapefiles
       href: spatial_shapefiles.html
-    - text: Working with kml & ggspatial
+    - text: Working with kml
       href: spatial_kml.html
+  - text: Import/Export
+    icon: fa-database fa-1x
+    menu:
     - text: Data Storage with geopackage
       href: spatial_export_import_gpkg.html
+  - text: Spatial Sorcery 
+    icon: fa-magic fa-1x
+    menu: 
     - text: Spatial Joins
       href: vig_spatial_joins.html
-    - text: Mapview & Leaflet
-      href: maps_mapview_leaflet.html
   - text: Mapping Vignettes
-    icon: fa-tint  fa-1x
+    icon: fa-map-marked-alt fa-1x
     menu:
+    - text: Mapview & Leaflet
+      icon: fa-globe-americas fa-1x
+      href: maps_mapview_leaflet.html
     - text: Making Inset Maps
       href: vig_making_inset_maps.html
-    - text: Workflow in R
-      icon: fa-sitemap  fa-1x
+    - text: Maps with Backgrounds
       href: vig_workflow_in_R_snowdata.html
-    - text: dataRetrieval for Hydro/Water Quality Data 
+    - text: Working with Water Data 
+      icon: fa-tint fa-1x
       href: vig_dataRetrieval_for_waterdata.html
-
+  - text: Map Aesthetics
+    href: mapmaking_aesthetics.html
+    icon: fa-palette fa-1x
   - text: Resources
-    icon: fa-info-circle  fa-1x
     href: resources.html
   right:
-  - text: Contact
-    icon: fa-hand-spock-o
+  - text: 
+    icon: fa-info-circle fa-lg
     href: contact.html
   - icon: fa-github fa-lg
     href: https://github.com/ryanpeek/mapping-in-R-workshop

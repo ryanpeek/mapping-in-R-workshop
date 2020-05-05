@@ -16,14 +16,13 @@ Let's **load the libraries** we're going to need first.
 
 library(here)
 library(dplyr)
-#library(raster)
 library(viridis)
 library(ggplot2)
-library(mapview)
 library(sf)
 library(USAboundaries)
-library(GSODR)
-library(rnaturalearth)
+library(ggspatial)
+
+
 ```
 
 
@@ -35,20 +34,18 @@ suppressPackageStartupMessages({
   library(viridis);
   library(ggplot2);
   library(sf);
-  library(GSODR);
-  library(mapview);
-  library(rnaturalearth);
   library(USAboundaries); # STATES/counties data
-  #library(spData)
+  library(ggspatial) # scale bars/north arrows
 })
 
+load("data/boundaryDat_for_inset_maps.rda")
 ```
 
 ### Grab Some Data!
 
 Let's use some USA boundaries and California county boundaries to make a zoomed map of CA counties, and an inset showing the USA and location of CA. We'll usedata from the `USAboundaries` package.
 
-```{r getBoundaryDat, echo=T, eval=T, purl=FALSE}
+```{r getBoundaryDat, echo=TRUE, eval=FALSE, purl=FALSE}
 
 # get USA states, filter out Puerto Rico, Alaska, and Hawaii for now
 us <- us_boundaries(type="state", resolution = "low") %>% 
@@ -63,19 +60,15 @@ ca_box <- st_make_grid(ca, n = 1)
 # get CA county boundary
 ca_co <- USAboundaries::us_counties(resolution = "high", states = "CA")
 
-# make sure we have all the pieces with a quick test plot
-# plot(us$geometry, axes=T)
-# plot(ca$geometry, add=T, col="gray50", border="maroon")
-# plot(ca_co$geometry, add=T, border="pink", col=NA)
-# plot(ca_box, add=T, border="red3", col=NA, lwd=2)
-
 ```
 
 ### Make the Primary Map
 
-Now we make our primary map, in this case, a map of California with all the counties. Note we use `fill=NA` to make a completely hollow boundary and allow for some more creative use of the `alpha` transparency. 
+Now we make our primary map, in this case, a map of California with all the counties. Note we use `fill=NA` to make a completely hollow boundary and allow for some more creative use of the `alpha` transparency. We'll also add a scale bar and a north arrow with the `{ggspatial}` library.
 
-```{r mainMap, echo=TRUE, eval=TRUE, purl=FALSE}
+```{r mainMap, echo=TRUE, eval=TRUE, purl=FALSE, message=FALSE, warning=FALSE}
+
+library(ggspatial)
 
 # Main map of CA
 p1 <- ggplot() + 
@@ -88,16 +81,21 @@ p1 <- ggplot() +
   coord_sf() + 
   theme(plot.background = element_blank(),
         panel.border = element_blank(),
-        plot.margin = unit(c(0, 0, 0 ,0), "mm"))
+        plot.margin = unit(c(0, 0, 0 ,0), "mm")) + 
+  ggspatial::annotation_north_arrow(location="bl", height = unit(.75, "cm"),
+                                    style = ggspatial::north_arrow_orienteering(text_size = 8),
+                                    width = unit(.5, "cm"), pad_y = unit(0.4, "cm")) +
+  ggspatial::annotation_scale(location="bl", 
+                              pad_x = unit(1, "cm"), text_cex = 0.5, height = unit(0.2, "cm"))
 
 p1
 ```
 
 ### Make the Inset Map
 
-Great, now let's create an inset map, which for this vignette, we'll use a map of the US (lower 48), with a small box around the state of CA to indicate this is our "study area". Let's also add at least some font showing we recognize Hawaii, Alaska, and Puerto Rico count too, but we are going to show these as text for now.
+Great, now let's create an inset map, which for this vignette, we'll use a map of the US (lower 48), with a small box around the state of CA to indicate this is our "study area". Let's also add at least some font showing we recognize Hawaii, Alaska, and Puerto Rico count too, but we are going to show these as text for now. 
 
-```{r insetMap, echo=TRUE, eval=TRUE, purl=FALSE}
+```{r insetMap, echo=TRUE, eval=TRUE, purl=FALSE, message=FALSE, warning=FALSE}
 
 # Inset map: US
 p2 <- ggplot() + 

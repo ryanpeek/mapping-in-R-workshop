@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Resources</title>
 
+<script src="site_libs/header-attrs-2.1/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -74,7 +75,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -223,6 +223,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -235,56 +236,12 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 <style type="text/css">
 .code-folding-btn { margin-bottom: 4px; }
 </style>
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
-});
-</script>
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = false;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -298,6 +255,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -333,8 +296,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -385,44 +346,59 @@ div.tocify {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
-</li>
-<li>
-  <a href="mapmaking.html">
-    <span class="fa fa-globe-americas fa-1.5x"></span>
+  <a href="index.html">
+    <span class="fa fa-home fa-2x"></span>
      
-    Mapmaking
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-map  fa-1x"></span>
+    <span class="fa fa-vector-square"></span>
      
-    Spatial/Mapping Tools
+    Vector Data
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="spatial_shapefiles.html">Working with Shapefiles</a>
+      <a href="spatial_shapefiles.html">Working with shapefiles</a>
     </li>
     <li>
-      <a href="spatial_kml.html">Working with kml &amp; ggspatial</a>
-    </li>
-    <li>
-      <a href="spatial_export_import_gpkg.html">Data Storage with geopackage</a>
-    </li>
-    <li>
-      <a href="vig_spatial_joins.html">Spatial Joins</a>
-    </li>
-    <li>
-      <a href="maps_mapview_leaflet.html">Mapview &amp; Leaflet</a>
+      <a href="spatial_kml.html">Working with kml</a>
     </li>
   </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-tint  fa-1x"></span>
+    <span class="fa fa-database fa-1x"></span>
+     
+    Import/Export
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="spatial_export_import_gpkg.html">Data Storage with geopackage</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-magic fa-1x"></span>
+     
+    Spatial Sorcery
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="vig_spatial_joins.html">Spatial Joins</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-map-marked-alt fa-1x"></span>
      
     Mapping Vignettes
      
@@ -430,34 +406,43 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="vig_making_inset_maps.html">Making Inset Maps</a>
-    </li>
-    <li>
-      <a href="vig_workflow_in_R_snowdata.html">
-        <span class="fa fa-sitemap  fa-1x"></span>
+      <a href="maps_mapview_leaflet.html">
+        <span class="fa fa-globe-americas fa-1x"></span>
          
-        Workflow in R
+        Mapview &amp; Leaflet
       </a>
     </li>
     <li>
-      <a href="vig_dataRetrieval_for_waterdata.html">dataRetrieval for Hydro/Water Quality Data</a>
+      <a href="vig_making_inset_maps.html">Making Inset Maps</a>
+    </li>
+    <li>
+      <a href="vig_workflow_in_R_snowdata.html">Maps with Backgrounds</a>
+    </li>
+    <li>
+      <a href="vig_dataRetrieval_for_waterdata.html">
+        <span class="fa fa-tint fa-1x"></span>
+         
+        Working with Water Data
+      </a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="resources.html">
-    <span class="fa fa-info-circle  fa-1x"></span>
+  <a href="mapmaking_aesthetics.html">
+    <span class="fa fa-palette fa-1x"></span>
      
-    Resources
+    Map Aesthetics
   </a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="contact.html">
-    <span class="fa fa-hand-spock-o"></span>
+    <span class="fa fa-info-circle fa-lg"></span>
      
-    Contact
   </a>
 </li>
 <li>
@@ -531,6 +516,54 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

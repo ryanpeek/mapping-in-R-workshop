@@ -1,5 +1,7 @@
 ---
 pagetitle: "Mapping Workflow in R"
+editor_options: 
+  chunk_output_type: console
 ---
 
 <br>
@@ -28,15 +30,15 @@ suppressPackageStartupMessages({
   library(mapview); # interactive maps
   library(tmap); # good mapping package mostly for static chloropleth style maps
   library(ggspatial); # for adding scale bar/north arrow and basemaps
-  # library(ggmap); # for google basemaps, NOW REQUIRES API registration
   library(ggrepel); # labeling ggplot figures
   library(ggforce); # amazing cool package for labeling and fussing 
-  
   library(tigris); # ROAD/CENSU DATA, see also the "tidycensus" package
   library(USAboundaries); # great package for getting state/county boundaries
   library(sharpshootR);  # CDEC.snow.courses, CDECquery, CDECsnowQuery
   library(cowplot) ## MOOOOOOO!! for plotting
 })
+
+load("data/cdec_snow_courses.rda")
 
 ```
 
@@ -50,7 +52,6 @@ library(measurements) # for converting measurements (DMS to DD or UTM)
 library(mapview) # interactive maps
 library(tmap) # good mapping package mostly for static chloropleth style maps
 library(ggspatial) # for adding scale bar/north arrow and basemaps
-# library(ggmap) # for google basemaps NOW REQUIRES API registration
 library(ggrepel) # labeling ggplot figures
 library(ggforce) # amazing cool package for labeling and fussing 
 library(cowplot) ## MOOOOOOO!! for plotting multiple plots
@@ -67,9 +68,10 @@ library(sharpshootR)  # CDEC.snow.courses, CDECquery, CDECsnowQuery
 
 Next, we want to read the data we'll be using for our project. For this example, we are going to use the `sharpshootR` package in R to load all [CDEC Snow Course](https://cdec.water.ca.gov/snow/) station locations, and plot them on a map.
 
-```{r loaddata}
+```{r loaddata, eval=FALSE, echo=TRUE}
 
-data(CDEC.snow.courses) # data is a base function in R that loads data, in this case from the sharpshootR package
+# load the snow data from sharpshootR package
+data(CDEC.snow.courses) # data is a base function in R that loads data
 
 ```
 
@@ -92,7 +94,7 @@ Lets do a few things (the bolded words are `dplyr` functions)
 
 Let's see how many missing values exist for each column in our data frame.
 
-```{r naniar, eval=T, echo=T}
+```{r naniar, eval=TRUE, echo=TRUE}
 
 # view missingness
 library(naniar) # load the functions in this library
@@ -109,16 +111,14 @@ summary(CDEC.snow.courses) # tabulate each column
 
 Now we can do a few things, including formatting our data/columns to different data types, renaming column names, and filtering/subsetting data.
 
-```{r tidy, echo=T, eval=T}
+```{r tidy, echo=TRUE, eval=TRUE}
 
 # Make into a new dataframe
 snw <- CDEC.snow.courses
 
 # fix data formats...character/factor/numeric
 str(snw)
-snw$course_number <- as.factor(snw$course_number) # switch from numeric to factor for plotting purposes
-
-snw$longitude<-as.numeric(snw$longitude)*-1 # fix longitude, must be negative for northern hemisphere
+snw$course_number <- as.factor(snw$course_number) # switch from numeric to factor for plotting
 
 # rename a col:
 snw <- snw %>% # create a "pipe" with (Ctrl or Cmd + Shift + M). 
@@ -154,11 +154,11 @@ Great, now let's save it out! Good news, we can save/write/read a whole bunch of
 
 We can also download a shapefile or set of zipped files directly from a web URL. See example code below...
 
-```{r saveOut, echo=T, eval=F}
+```{r saveOut, echo=TRUE, eval=FALSE}
 
 # write shapefile out for use later
-st_write(snw_sf, "data_output/all_cdec_snow_stations.shp", delete_dsn = T)
-st_write(snw_sf, "data_output/all_cdec_snow_stations.geojson", delete_dsn = T)
+st_write(snw_sf, "data_output/all_cdec_snow_stations.shp", delete_dsn = TRUE)
+st_write(snw_sf, "data_output/all_cdec_snow_stations.geojson", delete_dsn = TRUE)
 
 # download a file from a url:
 # download.file("https://github.com/ryanpeek/spatial_mapping_demo/blob/master/data/shps/cdec_snow_stations.zip?raw=true", destfile = "data/cdec_snow_stations.zip")
@@ -177,7 +177,7 @@ st_write(snw_sf, "data_output/all_cdec_snow_stations.geojson", delete_dsn = T)
 
 `sf` has it's on base plotting function, but we need to give it the `geometry` column so it knows what to plot. Remember since `sf` are simple data frames, this is easy to do with the `$`. 
 
-```{r sfMap, echo=T, eval=T}
+```{r sfMap, echo=TRUE, eval=TRUE}
 
 # plain sf map
 plot(snw_sf$geometry)
@@ -190,15 +190,16 @@ plot(snw_sf["elev_feet"], graticule = TRUE, axes = TRUE, main="Snow Station Elev
 
 The `tmap` package is great and has some nice plotting options. Check out the [introduction vignette here](https://cran.r-project.org/web/packages/tmap/vignettes/tmap-getstarted.html).
 
-```{r tmap, echo=T, eval=T}
+```{r tmap, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
 
 library(tmap)
+
 tmap_mode("plot")
 tm_shape(snw_sf) + 
   tm_layout(title = "Snow Station Elevations (ft)", frame=TRUE, inner.margin=0.1) +
-  tm_compass(type = "8star", position = c(0.8, 0.8)) +
+  tm_compass(type = "8star", position = c(0.8, 0.8), size = 2) +
   tm_scale_bar(breaks = c(0, 50, 100), position = c("left", "bottom"),
-               size = 0.7)+
+               text.size = 0.7)+
   tm_symbols(col="elev_feet",title.col = "Elev (m)", n = 5, palette = viridis(n=5, direction = -1), size = .7)
 
 ```
@@ -215,7 +216,7 @@ We are pulling county data here from the `USAboundaries` package, and then loadi
 
 Get the county, watershed, rivers, lakes data.
 
-```{r getRivCounty, eval=T, echo=T, message=FALSE, warning=FALSE}
+```{r getRivCounty, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 
 # use library(USAboundaries) to get county data
 counties_spec <- us_counties(resolution = "low", states="CA") %>% 
@@ -233,12 +234,16 @@ Haven't mentioned it much yet, but using the `.gpkg` format is a must! It's awes
 # read layers from a geopackage
 st_layers("data/mapping_in_R_data.gpkg")
 
+# using read_sf here for quiet defaults, but can use st_read as well...
+
 # HUC8 watershed for Tahoe
-h8_tahoe <- st_read("data/mapping_in_R_data.gpkg", layer="h8_tahoe") 
+h8_tahoe <- read_sf("data/mapping_in_R_data.gpkg", layer="h8_tahoe") 
+
 # Lakes for all of CA/OR from HydroSHEDS
-lakes <- st_read("data/mapping_in_R_data.gpkg", layer="lakes_CA_OR_hydroshed")
+lakes <- read_sf("data/mapping_in_R_data.gpkg", layer="lakes_CA_OR_hydroshed")
+
 # Rivers for all of CA/OR from HydroSHEDS
-rivers <- st_read("data/mapping_in_R_data.gpkg", layer="rivs_CA_OR_hydroshed")
+rivers <- read_sf("data/mapping_in_R_data.gpkg", layer="rivs_CA_OR_hydroshed")
 
 ```
 
@@ -246,11 +251,9 @@ rivers <- st_read("data/mapping_in_R_data.gpkg", layer="rivs_CA_OR_hydroshed")
 
 To crop or clip our data, we use `st_intersection` and specify the data we want to crop *first* then the boundary we want to use to crop/clip by *second*. Both should be in the same projection, and note a warning will occur for lon/lat data types, but it will still work.
 
-```{r cropData, eval=T, echo=T, message=FALSE, warning=FALSE}
+```{r cropData, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 
-# CROP
-
-# crop th snow stations
+# crop the snow stations to the counties of interest
 snw_crop <- st_intersection(snw_sf, counties_spec)  # intersect these so we only keep snow stations in these selected counties
 
 # crop rivers and lakes
@@ -263,11 +266,11 @@ lakes_crop <- st_intersection(lakes, counties_spec) # crop to our selected  coun
 
 This is the really fun part...we can quickly and easily plot any spatial data (in sf format) as an interactive map using the `mapview` package. For advanced mapview options, check out this [page](https://environmentalinformatics-marburg.github.io/mapview/advanced/advanced.html).
 
-```{r mapview, eval=T, echo=T}
+```{r mapview, eval=TRUE, echo=TRUE}
  
-mapview::mapview(lakes_crop, legend=FALSE) +
-  mapview(rivers_crop, legend=FALSE) + 
-  mapview(snw_crop, color="red", layer.name="CDEC SNOW STATIONS") # make a map!
+mapview(rivers_crop, color="steelblue", lwd=1.2, legend=FALSE) + 
+  mapview::mapview(lakes_crop, legend=FALSE) +
+  mapview(snw_crop, col.regions="maroon", layer.name="CDEC SNOW STATIONS") # make a map!
 
 ```
 
@@ -323,10 +326,8 @@ library(USAboundaries) # get outline of CA
 
 CA <- us_boundaries(type="state", resolution = "high", states="California")
 
-# plot(CA$geometry) # quick test plot
-
 # make a grid box for where our localities are, use n=1 to make single polygon
-sites_box <- st_make_grid(st_bbox(snw_crop), n = 1) # mapview(sites_box) to verify
+sites_box <- st_make_grid(snw_crop, n = 1) # mapview(sites_box) to verify
 
 # set margins:
 par(mai=c(.1,0.1,0.1,0.1))

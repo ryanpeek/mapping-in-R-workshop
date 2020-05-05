@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>spatialkml</title>
 
+<script src="site_libs/header-attrs-2.1/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -31,26 +32,27 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -59,9 +61,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -116,7 +118,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -174,7 +176,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -323,6 +324,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -335,56 +337,12 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 <style type="text/css">
 .code-folding-btn { margin-bottom: 4px; }
 </style>
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
-});
-</script>
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = false;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -398,6 +356,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -433,8 +397,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -485,44 +447,59 @@ div.tocify {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
-</li>
-<li>
-  <a href="mapmaking.html">
-    <span class="fa fa-globe-americas fa-1.5x"></span>
+  <a href="index.html">
+    <span class="fa fa-home fa-2x"></span>
      
-    Mapmaking
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-map  fa-1x"></span>
+    <span class="fa fa-vector-square"></span>
      
-    Spatial/Mapping Tools
+    Vector Data
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="spatial_shapefiles.html">Working with Shapefiles</a>
+      <a href="spatial_shapefiles.html">Working with shapefiles</a>
     </li>
     <li>
-      <a href="spatial_kml.html">Working with kml &amp; ggspatial</a>
-    </li>
-    <li>
-      <a href="spatial_export_import_gpkg.html">Data Storage with geopackage</a>
-    </li>
-    <li>
-      <a href="vig_spatial_joins.html">Spatial Joins</a>
-    </li>
-    <li>
-      <a href="maps_mapview_leaflet.html">Mapview &amp; Leaflet</a>
+      <a href="spatial_kml.html">Working with kml</a>
     </li>
   </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-tint  fa-1x"></span>
+    <span class="fa fa-database fa-1x"></span>
+     
+    Import/Export
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="spatial_export_import_gpkg.html">Data Storage with geopackage</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-magic fa-1x"></span>
+     
+    Spatial Sorcery
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="vig_spatial_joins.html">Spatial Joins</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-map-marked-alt fa-1x"></span>
      
     Mapping Vignettes
      
@@ -530,34 +507,43 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="vig_making_inset_maps.html">Making Inset Maps</a>
-    </li>
-    <li>
-      <a href="vig_workflow_in_R_snowdata.html">
-        <span class="fa fa-sitemap  fa-1x"></span>
+      <a href="maps_mapview_leaflet.html">
+        <span class="fa fa-globe-americas fa-1x"></span>
          
-        Workflow in R
+        Mapview &amp; Leaflet
       </a>
     </li>
     <li>
-      <a href="vig_dataRetrieval_for_waterdata.html">dataRetrieval for Hydro/Water Quality Data</a>
+      <a href="vig_making_inset_maps.html">Making Inset Maps</a>
+    </li>
+    <li>
+      <a href="vig_workflow_in_R_snowdata.html">Maps with Backgrounds</a>
+    </li>
+    <li>
+      <a href="vig_dataRetrieval_for_waterdata.html">
+        <span class="fa fa-tint fa-1x"></span>
+         
+        Working with Water Data
+      </a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="resources.html">
-    <span class="fa fa-info-circle  fa-1x"></span>
+  <a href="mapmaking_aesthetics.html">
+    <span class="fa fa-palette fa-1x"></span>
      
-    Resources
+    Map Aesthetics
   </a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="contact.html">
-    <span class="fa fa-hand-spock-o"></span>
+    <span class="fa fa-info-circle fa-lg"></span>
      
-    Contact
   </a>
 </li>
 <li>
@@ -591,56 +577,56 @@ div.tocify {
 <div id="working-with-kml-files" class="section level2">
 <h2>Working with <code>kml</code> Files</h2>
 <p>The <code>sf</code> package can read many different file types in, and <code>kml</code> is no exception. The difference is <code>kml</code> files are the unzipped versions of <code>kmz</code> files. You’ll want to unzip with any sort of zip package you have on your computer (Keka, 7zip, etc.). Data used in this example live in the github repo <a href="https://github.com/ryanpeek/mapping-in-R-workshop/blob/master/data/streamgages_06.kml">here</a>. Importantly, <code>kml</code> can contain multiple layers because they use a sort of nested format, so it’s good to check first to see which layer you may want. This example only has a single <em>layer</em> so we don’t need to specify a layer in our <code>st_read</code> function.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">suppressPackageStartupMessages</span>({</a>
-<a class="sourceLine" id="cb1-2" title="2">  <span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb1-3" title="3">  <span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb1-4" title="4">  <span class="kw">library</span>(sf);</a>
-<a class="sourceLine" id="cb1-5" title="5">  <span class="kw">library</span>(stringi)</a>
-<a class="sourceLine" id="cb1-6" title="6">  })</a>
-<a class="sourceLine" id="cb1-7" title="7"></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="co"># https://waterwatch.usgs.gov/?m=stategage</span></a>
-<a class="sourceLine" id="cb1-9" title="9"></a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="co"># check layers first:</span></a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="kw">st_layers</span>(<span class="st">&quot;data/streamgages_06.kml&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">suppressPackageStartupMessages</span>({</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="kw">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="kw">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="kw">library</span>(sf);</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="kw">library</span>(stringi)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  })</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co"># https://waterwatch.usgs.gov/?m=stategage</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># check layers first:</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">st_layers</span>(<span class="st">&quot;data/streamgages_06.kml&quot;</span>)</span></code></pre></div>
 <pre><code>## Driver: KML 
 ## Available layers:
 ##          layer_name geometry_type features fields
 ## 1 USGS streamgages       3D Point     2239      2</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># read in</span></a>
-<a class="sourceLine" id="cb3-2" title="2">gages &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/streamgages_06.kml&quot;</span>) <span class="co"># reads kml but not kmz</span></a></code></pre></div>
-<pre><code>## Reading layer `USGS streamgages &#39; from data source `/Users/ryanpeek/Documents/github/teaching/mapping-in-R-workshop/data/streamgages_06.kml&#39; using driver `KML&#39;
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># read in</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>gages &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/streamgages_06.kml&quot;</span>) <span class="co"># reads kml but not kmz</span></span></code></pre></div>
+<pre><code>## Reading layer `USGS streamgages &#39; from data source `/Users/ryanpeek/Documents/github/WEBSITES/mapping-in-R-workshop/data/streamgages_06.kml&#39; using driver `KML&#39;
 ## Simple feature collection with 2239 features and 2 fields
 ## geometry type:  POINT
 ## dimension:      XYZ
 ## bbox:           xmin: -124.2942 ymin: 32.55172 xmax: -114.1402 ymax: 42.00429
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs</code></pre>
+## z_range:        zmin: 0 zmax: 0
+## CRS:            4326</code></pre>
 <p><br></p>
 <div id="cleaningremoving-html-tags" class="section level3">
 <h3>Cleaning/Removing <code>html</code> tags</h3>
 <p>Once we have the data in, we still need to clean up some of the <code>html</code> bits that we don’t want. We can use some text/string functions to deal with this in R. <code>gsub</code> and <code>substr</code> are great functions for fixing/replacing text.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># pull out relevant info (remove html tags)</span></a>
-<a class="sourceLine" id="cb5-2" title="2">gages<span class="op">$</span>name &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">pattern=</span><span class="st">&quot;&lt;.*?&gt;&quot;</span>, <span class="st">&quot;&quot;</span>, gages<span class="op">$</span>Name)</a>
-<a class="sourceLine" id="cb5-3" title="3">gages<span class="op">$</span>details &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">pattern=</span><span class="st">&quot;&lt;.*?&gt;&quot;</span>, <span class="st">&quot;&quot;</span>, gages<span class="op">$</span>Description)</a>
-<a class="sourceLine" id="cb5-4" title="4">gages<span class="op">$</span>site_no &lt;-<span class="st"> </span><span class="kw">substr</span>(gages<span class="op">$</span>name, <span class="dt">start =</span> <span class="dv">1</span>, <span class="dt">stop =</span> <span class="dv">8</span>)</a>
-<a class="sourceLine" id="cb5-5" title="5">gages<span class="op">$</span>site &lt;-<span class="st"> </span><span class="kw">substr</span>(gages<span class="op">$</span>name, <span class="dt">start =</span> <span class="dv">10</span>, <span class="dt">stop =</span> <span class="kw">nchar</span>(gages<span class="op">$</span>name))</a>
-<a class="sourceLine" id="cb5-6" title="6">gages<span class="op">$</span>date_s &lt;-<span class="st"> </span><span class="kw">substr</span>(gages<span class="op">$</span>details, <span class="dt">start=</span><span class="dv">13</span>, <span class="dt">stop=</span><span class="dv">22</span>)</a>
-<a class="sourceLine" id="cb5-7" title="7">gages<span class="op">$</span>date_e &lt;-<span class="st"> </span><span class="kw">substr</span>(gages<span class="op">$</span>details, <span class="dt">start=</span><span class="dv">32</span>, <span class="dt">stop=</span><span class="kw">nchar</span>(gages<span class="op">$</span>details)<span class="op">-</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb5-8" title="8">gages &lt;-<span class="st"> </span>gages <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(site_no<span class="op">:</span>date_e)</a>
-<a class="sourceLine" id="cb5-9" title="9">gages<span class="op">$</span>gageID &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;T&quot;</span>, gages<span class="op">$</span>site_no)</a>
-<a class="sourceLine" id="cb5-10" title="10"></a>
-<a class="sourceLine" id="cb5-11" title="11"><span class="co"># grep all sites with &quot;AMERICAN&quot;, &quot;DEER&quot; or &quot;BEAR&quot; in site name</span></a>
-<a class="sourceLine" id="cb5-12" title="12">gages_FILTER &lt;-<span class="st"> </span><span class="kw">filter</span>(gages, <span class="kw">grepl</span>(<span class="dt">pattern =</span> <span class="st">&quot;AMERICAN|DEER|BEAR&quot;</span>,site))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># pull out relevant info (remove html tags)</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>gages<span class="op">$</span>name &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">pattern=</span><span class="st">&quot;&lt;.*?&gt;&quot;</span>, <span class="st">&quot;&quot;</span>, gages<span class="op">$</span>Name)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>gages<span class="op">$</span>details &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">pattern=</span><span class="st">&quot;&lt;.*?&gt;&quot;</span>, <span class="st">&quot;&quot;</span>, gages<span class="op">$</span>Description)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>gages<span class="op">$</span>site_no &lt;-<span class="st"> </span><span class="kw">substr</span>(gages<span class="op">$</span>name, <span class="dt">start =</span> <span class="dv">1</span>, <span class="dt">stop =</span> <span class="dv">8</span>)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>gages<span class="op">$</span>site &lt;-<span class="st"> </span><span class="kw">substr</span>(gages<span class="op">$</span>name, <span class="dt">start =</span> <span class="dv">10</span>, <span class="dt">stop =</span> <span class="kw">nchar</span>(gages<span class="op">$</span>name))</span>
+<span id="cb5-6"><a href="#cb5-6"></a>gages<span class="op">$</span>date_s &lt;-<span class="st"> </span><span class="kw">substr</span>(gages<span class="op">$</span>details, <span class="dt">start=</span><span class="dv">13</span>, <span class="dt">stop=</span><span class="dv">22</span>)</span>
+<span id="cb5-7"><a href="#cb5-7"></a>gages<span class="op">$</span>date_e &lt;-<span class="st"> </span><span class="kw">substr</span>(gages<span class="op">$</span>details, <span class="dt">start=</span><span class="dv">32</span>, <span class="dt">stop=</span><span class="kw">nchar</span>(gages<span class="op">$</span>details)<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb5-8"><a href="#cb5-8"></a>gages &lt;-<span class="st"> </span>gages <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(site_no<span class="op">:</span>date_e)</span>
+<span id="cb5-9"><a href="#cb5-9"></a>gages<span class="op">$</span>gageID &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;T&quot;</span>, gages<span class="op">$</span>site_no)</span>
+<span id="cb5-10"><a href="#cb5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co"># grep all sites with &quot;AMERICAN&quot;, &quot;DEER&quot; or &quot;BEAR&quot; in site name</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a>gages_FILTER &lt;-<span class="st"> </span><span class="kw">filter</span>(gages, <span class="kw">grepl</span>(<span class="dt">pattern =</span> <span class="st">&quot;AMERICAN|DEER|BEAR&quot;</span>,site))</span></code></pre></div>
 </div>
 <div id="a-basic-ggplot" class="section level3">
 <h3>A Basic <code>ggplot</code></h3>
 <p>Here we can make a basic <code>ggplot</code> with no specific background to our spatial data. We can still sort of make out an outline of California, but it would be nice to add some more details.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># simple map</span></a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="kw">ggplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Longitude (WGS84)&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>,</a>
-<a class="sourceLine" id="cb6-4" title="4">       <span class="dt">title=</span><span class="st">&quot;USGS Gages in CA&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>gages, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.4</span>, <span class="dt">pch=</span><span class="dv">21</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># simple map</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Longitude (WGS84)&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4"></a>       <span class="dt">title=</span><span class="st">&quot;USGS Gages in CA&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>gages, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.4</span>, <span class="dt">pch=</span><span class="dv">21</span>) <span class="op">+</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="st">  </span><span class="kw">theme_bw</span>()</span></code></pre></div>
 <p><img src="img/usgs_gages_in_ca.png" width="80%" /></p>
 </div>
 <div id="use-ggspatial-for-map-backgrounddetails" class="section level3">
@@ -654,28 +640,28 @@ counties <- us_counties(resolution = "high", states="CA") %>% # list states
   mutate(lon=map_dbl(geometry, ~st_centroid(.x)[[1]]), 
          lat=map_dbl(geometry, ~st_centroid(.x)[[2]]))
 --></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># now with background</span></a>
-<a class="sourceLine" id="cb7-2" title="2"><span class="kw">library</span>(ggspatial)</a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="kw">library</span>(USAboundaries)</a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="kw">library</span>(purrr)</a>
-<a class="sourceLine" id="cb7-5" title="5"></a>
-<a class="sourceLine" id="cb7-6" title="6">counties &lt;-<span class="st"> </span><span class="kw">us_counties</span>(<span class="dt">resolution =</span> <span class="st">&quot;high&quot;</span>, <span class="dt">states=</span><span class="st">&quot;CA&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># now with background</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">library</span>(ggspatial)</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="kw">library</span>(USAboundaries)</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="kw">library</span>(purrr)</span>
+<span id="cb7-5"><a href="#cb7-5"></a></span>
+<span id="cb7-6"><a href="#cb7-6"></a>counties &lt;-<span class="st"> </span><span class="kw">us_counties</span>(<span class="dt">resolution =</span> <span class="st">&quot;high&quot;</span>, <span class="dt">states=</span><span class="st">&quot;CA&quot;</span>)</span></code></pre></div>
 <p>Next we use the <code>ggspatial</code> package to add background (change the <code>zoom=</code> to a different value to change level of detail, but beware higher values take longer to download) using the <code>annotation_map_tile</code> function. Then add <code>annotation_scale</code> and <code>annotation_north_arrow</code> options to make the map look complete!</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co"># water color version </span></a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="kw">ggplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="st">  </span><span class="kw">annotation_map_tile</span>(<span class="dt">zoom =</span> <span class="dv">8</span>) <span class="op">+</span><span class="st"> </span><span class="co"># this can take a few seconds</span></a>
-<a class="sourceLine" id="cb8-4" title="4"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>counties, <span class="dt">fill=</span><span class="ot">NA</span>, <span class="dt">col=</span><span class="st">&quot;gray50&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="st">  </span><span class="kw">scale_color_viridis_d</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-6" title="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Longitude (WGS84)&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>,</a>
-<a class="sourceLine" id="cb8-7" title="7">       <span class="dt">title=</span><span class="st">&quot;Selected USGS Gages with American, Deer, or Bear In Name&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-8" title="8"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>gages_FILTER, <span class="dt">fill=</span><span class="st">&quot;dodgerblue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.9</span>, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-9" title="9"><span class="st">  </span><span class="co"># spatial-aware automagic scale bar</span></a>
-<a class="sourceLine" id="cb8-10" title="10"><span class="st">  </span><span class="kw">annotation_scale</span>(<span class="dt">location =</span> <span class="st">&quot;bl&quot;</span>,<span class="dt">style =</span> <span class="st">&quot;ticks&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-11" title="11"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-12" title="12"><span class="st">  </span><span class="co"># spatial-aware automagic north arrow</span></a>
-<a class="sourceLine" id="cb8-13" title="13"><span class="st">  </span><span class="kw">annotation_north_arrow</span>(<span class="dt">width =</span> <span class="kw">unit</span>(.<span class="dv">3</span>,<span class="st">&quot;in&quot;</span>), </a>
-<a class="sourceLine" id="cb8-14" title="14">                         <span class="dt">pad_y =</span> <span class="kw">unit</span>(.<span class="dv">3</span>, <span class="st">&quot;in&quot;</span>),<span class="dt">location =</span> <span class="st">&quot;bl&quot;</span>, </a>
-<a class="sourceLine" id="cb8-15" title="15">                         <span class="dt">which_north =</span> <span class="st">&quot;true&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># water color version </span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="st">  </span><span class="kw">annotation_map_tile</span>(<span class="dt">zoom =</span> <span class="dv">8</span>) <span class="op">+</span><span class="st"> </span><span class="co"># this can take a few seconds</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>counties, <span class="dt">fill=</span><span class="ot">NA</span>, <span class="dt">col=</span><span class="st">&quot;gray50&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>) <span class="op">+</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="st">  </span><span class="kw">scale_color_viridis_d</span>() <span class="op">+</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Longitude (WGS84)&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>,</span>
+<span id="cb8-7"><a href="#cb8-7"></a>       <span class="dt">title=</span><span class="st">&quot;Selected USGS Gages with American, Deer, or Bear In Name&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>gages_FILTER, <span class="dt">fill=</span><span class="st">&quot;dodgerblue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.9</span>, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="st">  </span><span class="co"># spatial-aware automagic scale bar</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="st">  </span><span class="kw">annotation_scale</span>(<span class="dt">location =</span> <span class="st">&quot;bl&quot;</span>,<span class="dt">style =</span> <span class="st">&quot;ticks&quot;</span>) <span class="op">+</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="st">  </span><span class="co"># spatial-aware automagic north arrow</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="st">  </span><span class="kw">annotation_north_arrow</span>(<span class="dt">width =</span> <span class="kw">unit</span>(.<span class="dv">3</span>,<span class="st">&quot;in&quot;</span>), </span>
+<span id="cb8-14"><a href="#cb8-14"></a>                         <span class="dt">pad_y =</span> <span class="kw">unit</span>(.<span class="dv">3</span>, <span class="st">&quot;in&quot;</span>),<span class="dt">location =</span> <span class="st">&quot;bl&quot;</span>, </span>
+<span id="cb8-15"><a href="#cb8-15"></a>                         <span class="dt">which_north =</span> <span class="st">&quot;true&quot;</span>)</span></code></pre></div>
 <p><img src="img/selected_usgs_gages_w_deer_amer_bear_zoom8.png" width="100%" height="100%" /></p>
 </div>
 </div>
@@ -698,6 +684,54 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
