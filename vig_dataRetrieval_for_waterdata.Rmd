@@ -126,10 +126,10 @@ load(paste0(here::here(),"/data/nitrate_00618_CA_NWIS_2018.rda"))
 ```{r filterniCA, echo=T, eval=T}
 
 # take a look at how many distinct stations are available
-niCA %>% distinct(station_nm) %>% tally # that's a lot!
+niCA %>% dplyr::distinct(station_nm) %>% tally # that's a lot!
 
 # filter to stations with TAHOE in name and number of records > 300
-niCA.Tahoe <- niCA %>% filter(grepl("TAHOE", station_nm), count_nu > 300)
+niCA.Tahoe <- niCA %>% dplyr::filter(grepl("TAHOE", station_nm), count_nu > 300)
 
 # make the data spatial with the sf
 niCA.Tahoe.sf <- st_as_sf(niCA.Tahoe, coords = c("dec_long_va","dec_lat_va"), remove = FALSE, crs=4326)
