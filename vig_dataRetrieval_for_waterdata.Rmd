@@ -165,11 +165,11 @@ phCA <- readNWISdata(stateCd="CA", parameterCd=ph_code,
 
 ```{r getdataNoCatOut2, echo=T, eval=TRUE}
 
-phCA %>% distinct(huc_cd) %>% tally
+phCA %>% dplyr::distinct(huc_cd) %>% tally
 
 # do some tidying!
 phCA.1 <- phCA %>%
-            filter(huc_cd == "16050101") # filter by HUC
+            dplyr::filter(huc_cd == "16050101") # filter by HUC
 
 # make the data spatial with the sf
 phCA.sf <- st_as_sf(phCA.1, coords = c("dec_long_va","dec_lat_va"), remove = FALSE, crs=4326)

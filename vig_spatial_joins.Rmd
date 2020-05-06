@@ -339,7 +339,8 @@ library(nngeo)
 nearest_stations <- st_nn(ca_co_centroid_pts, stations_n2, returnDist = T, k = 1, progress = FALSE)
 
 # add distances and centroid ID and make into a dataframe, get only distinct IDs
-nearest_stations_df <- tibble(dist=nearest_stations$dist, centrID=do.call(rbind, nearest_stations$nn)) %>% distinct(.keep_all = T)
+nearest_stations_df <- tibble(dist=nearest_stations$dist, centrID=do.call(rbind, nearest_stations$nn)) %>%
+  dplyr::distinct(.keep_all = T)
   
 # make a df of stations in counties where n=1
 stations_n1 <- stations_n %>% filter(n==1)
@@ -397,7 +398,7 @@ Finally, we have data, let's summarize and visualize these data. I'll aggregate 
 
 load(paste0(here::here(),"/data/CA_stations_GSOD_19800101-20181231.rda"))
 
-climdata_stations <- distinct(climdata, CALL, .keep_all = TRUE) %>% 
+climdata_stations <- dplyr::distinct(climdata, CALL, .keep_all = TRUE) %>% 
   st_as_sf(coords=c("LON","LAT"), crs=4326, remove = F)
 
 ```
