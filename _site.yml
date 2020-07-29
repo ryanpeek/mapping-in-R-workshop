@@ -8,6 +8,8 @@ navbar:
     menu:
     - text: Working with shapefiles
       href: 01_vector_shapefiles.html
+    - text: Working with gpx
+      href: 01_vector_gpx.html
     - text: Working with kml
       href: 01_vector_kml.html
   - text: Import/Export

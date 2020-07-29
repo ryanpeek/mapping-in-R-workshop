@@ -126,7 +126,7 @@ yose_streams <- read_sf(paste0(here::here(), "/data/yose_nhdplus.gpkg"), "NHDFlo
 load(paste0(here::here(), "/data/yose_flowlines_data.rda"))
 
 # check layers in database:
-st_layers(paste0(here::here(), "/data/yose_nhdplus.gpkg"))
+#st_layers(paste0(here::here(), "/data/yose_nhdplus.gpkg"))
 
 # pull the flowlines back in
 yose_streams <- read_sf(paste0(here::here(), "/data/yose_nhdplus.gpkg"), "NHDFlowline_Network")
@@ -194,7 +194,7 @@ st_layers(paste0(here::here(), "/data/yose_nhdplus.gpkg"))
 
 ```
 
-```{r saveHidden, echo=FALSE, eval=TRUE, hide=TRUE}
+```{r readHidden2, echo=FALSE, eval=TRUE, hide=TRUE}
 
 #save(yose_us_flowlines, yose_ds_flowlines, yose_comid, usgs_point, file = paste0(here::here(), "/data/yose_flowlines_data.rda"))
 
@@ -403,7 +403,7 @@ mapview(segs_filt, zcol="gnis_name")  + mapview(segs, color="blue", lwd=0.3) +
 
 Now we can calculate the distances between each gage. Here we drop a few loose ends (segments on either end of the most upstream/downstream gages), then we calculate the length of each line segment, then arrange by the `hydroseq` (a sequential ID for stream flow), and use that to calculate a cumulative distance from the upstream point to the downstream point! 
 
-```{r addDistances}
+```{r addDistances, echo=TRUE, eval=TRUE}
 
 segs_filt_dist <- segs_filt %>% 
   # drop the "loose ends" on either extent (upstream or downstream) of first/last gage
@@ -499,7 +499,7 @@ ggplot() +
             aes(x=date, y=mean_flow, color=site_no), show.legend = T)+
   ggthemes::scale_color_colorblind("USGS Gage") + 
   labs(y="Flow (cfs)", x="", subtitle="Daily Mean Flow") + 
-  hrbrthemes::theme_ipsum_rc() +
+  hrbrthemes::theme_ipsum_pub() +
   scale_x_date(date_breaks="1 years", date_labels = "%Y") +
   facet_grid(site_no~., scales = "free_y") +
   theme(axis.text.x = element_text(angle=90, vjust = 0.5))
