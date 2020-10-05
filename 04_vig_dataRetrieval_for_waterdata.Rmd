@@ -24,7 +24,7 @@ suppressPackageStartupMessages({
   library(mapview);
   library(USAboundaries) # STATES/counties data
 })
-
+mapviewOptions(fgb = FALSE)
 load("data/vig_dataRetrieval_for_waterdata.rda")
 
 ```

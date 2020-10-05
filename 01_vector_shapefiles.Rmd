@@ -312,6 +312,7 @@ We can add our `sf` data directly into a [*leaflet*](https://rstudio.github.io/l
 ```{r mapview, echo=T, eval=T}
 
 library(mapview)
+mapviewOptions(fgb = FALSE)
 
 m1 <- mapview(counties_spec, fill=NA)
 m2 <- mapview(hucs_sf)

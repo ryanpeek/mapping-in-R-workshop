@@ -18,7 +18,8 @@ library(sf)
 library(dplyr)
 library(lubridate)
 library(mapview)
-
+library(here)
+mapviewOptions(fgb = FALSE)
 ```
 
 ```{r loadlibsOut, eval=TRUE, echo=FALSE, warning=FALSE}
@@ -27,24 +28,25 @@ suppressPackageStartupMessages({
   library(sf);
   library(dplyr);
   library(lubridate);
-  library(mapview)
+  library(mapview);
+  library(here)
   }) 
-
+mapviewOptions(fgb = FALSE)
 ```
 
 ### Read in a Track from `gpx` File
 
-Let's use an example file that lives [here on github](https://raw.githubusercontent.com/ryanpeek/mapping-in-R-workshop/master/data/NFA.GPX) on github. Download the file, and save it into a `data` folder. 
+Let's use an example file that lives [here on github](https://raw.githubusercontent.com/ryanpeek/mapping-in-R-workshop/main/data/NFA.GPX) on github. Download the file, and save it into a `data` folder. 
 
 Now we can read it in! Notice there's lots of additional information in there. However, this is a still a `data.frame` and an `sf` object, which means its easy to work with.
 
 ```{r gpxFile, echo=T, eval=T}
 
 # a locally downloaded gpx file
-file1 <- "data/NFA.GPX"
+file1 <- "NFA.GPX"
 
 # read just the tracks:
-trax <- st_read(file1, layer = "tracks")
+trax <- st_read(here::here("data", file1), layer = "tracks")
 
 # check the names of the tracks:
 ## here these represent dates for individual tracks
@@ -62,7 +64,7 @@ Now let's do the same thing, but let's read in `points` instead, and use a webli
 ```{r gpxURL, echo=TRUE, eval=TRUE}
 
 # read straight from the interwebs
-file1url <- "https://raw.githubusercontent.com/ryanpeek/r_officehours/master/data/NFA.GPX"
+file1url <- "https://raw.githubusercontent.com/ryanpeek/mapping-in-R-workshop/main/data/NFA.GPX"
 
 # read just the tracks:
 pts <- st_read(file1url, layer = "waypoints")
@@ -71,6 +73,7 @@ pts <- st_read(file1url, layer = "waypoints")
 glimpse(pts)
 
 ```
+
 
 Great!
 
@@ -83,11 +86,11 @@ Let's grab a single track, and only pull waypoints from a selected set of locati
 ```{r pullSingleTrack, echo=TRUE, eval=TRUE}
 
 # pull a single track
-trx1 <- trax %>% filter(name=="2017-05-05-NFA")
+trx1 <- trax %>% dplyr::filter(name=="2017-05-05-NFA")
 
 # get points and exclude a site called "NFARRAV"
 
-pts <- st_read(file1, layer="waypoints") %>% 
+pts <- st_read(here("data/",file1), layer="waypoints") %>% 
 	filter(!grepl("NFARRAV", x = name)) %>% 
 	mutate(YYYY = year(time)) %>% 
   filter(YYYY == 2018)

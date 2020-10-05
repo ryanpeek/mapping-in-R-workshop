@@ -25,6 +25,7 @@ suppressPackageStartupMessages({
   library(USAboundaries) # STATES/counties data
 })
 
+mapviewOptions(fgb = FALSE)
 options(scipen=20)
 
 ```

@@ -37,7 +37,7 @@ suppressPackageStartupMessages({
   library(sharpshootR);  # CDEC.snow.courses, CDECquery, CDECsnowQuery
   library(cowplot) ## MOOOOOOO!! for plotting
 })
-
+mapviewOptions(fgb = FALSE)
 load("data/cdec_snow_courses.rda")
 
 ```

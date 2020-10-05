@@ -59,7 +59,7 @@ library(here)
 library(tidyverse)
 library(sf)
 library(mapview)
-
+mapviewOptions(fgb = FALSE)
 ```
 
 If you haven't used the `here` package, check it out...it's very handy in conjunction with RStudio projects, and dealing with pathnames.

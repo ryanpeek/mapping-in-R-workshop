@@ -77,6 +77,9 @@ snw$latitude<-as.numeric(snw$latitude)
 snw$longitude<-as.numeric(snw$longitude)*-1
 snw$apr1avg_in<-snw$april.1.Avg.inches
 snw<-dplyr::select(snw, course_number, id, elev_feet:longitude,apr1avg_in)
+# make longitude negative!
+snw$longitude <- abs(snw$longitude)*-1
+
 str(snw) # check out data
 
 
@@ -90,7 +93,7 @@ The nice thing is a mapview map is very simple to code compared to a leaflet map
 
 library(mapview)
 library(sf)
-
+mapviewOptions(fgb = FALSE)
 # make a sf type object:
 snw_sf <- st_as_sf(snw, coords = c("longitude", "latitude"), crs=4326, remove = FALSE)
 
