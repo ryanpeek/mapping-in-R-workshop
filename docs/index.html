@@ -13,7 +13,7 @@
 
 <title>Making maps in R</title>
 
-<script src="site_libs/header-attrs-2.4/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -36,7 +36,7 @@
   div.column{display: inline-block; vertical-align: top; width: 50%;}
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
-      </style>
+    </style>
 
 
 
@@ -67,6 +67,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 
@@ -356,13 +357,13 @@ div.tocify {
       <ul class="nav navbar-nav">
         <li>
   <a href="index.html">
-    <span class="fa fa-home fa-2x"></span>
+    <span class="fas fa-home fa-2x"></span>
      
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-vector-square"></span>
+    <span class="fas fa-vector-square"></span>
      
     Vector Data
      
@@ -382,7 +383,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-database fa-1x"></span>
+    <span class="fas fa-database fa-1x"></span>
      
     Import/Export
      
@@ -396,7 +397,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-magic fa-1x"></span>
+    <span class="fas fa-magic fa-1x"></span>
      
     Spatial Sorcery
      
@@ -413,7 +414,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-map-marked-alt fa-1x"></span>
+    <span class="fas fa-map-marked-alt fa-1x"></span>
      
     Mapping Vignettes
      
@@ -422,7 +423,7 @@ div.tocify {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="04_vig_mapview_leaflet.html">
-        <span class="fa fa-globe-americas fa-1x"></span>
+        <span class="fas fa-globe-americas fa-1x"></span>
          
         Mapview &amp; Leaflet
       </a>
@@ -435,7 +436,7 @@ div.tocify {
     </li>
     <li>
       <a href="04_vig_dataRetrieval_for_waterdata.html">
-        <span class="fa fa-tint fa-1x"></span>
+        <span class="fas fa-tint fa-1x"></span>
          
         Working with Water Data
       </a>
@@ -444,7 +445,7 @@ div.tocify {
 </li>
 <li>
   <a href="00_mapmaking_aesthetics.html">
-    <span class="fa fa-palette fa-1x"></span>
+    <span class="fas fa-palette fa-1x"></span>
      
     Map Aesthetics
   </a>
@@ -456,13 +457,13 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="00_contact.html">
-    <span class="fa fa-info-circle fa-lg"></span>
+    <span class="fas fa-info-circle fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://github.com/ryanpeek/mapping-in-R-workshop">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -484,7 +485,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Mapping in R</h1>
-<h4 class="date">Updated: 2020-10-05</h4>
+<h4 class="date">Updated: 2021-01-24</h4>
 
 </div>
 
@@ -522,7 +523,7 @@ div.tocify {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

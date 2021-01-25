@@ -13,7 +13,7 @@
 
 <title>spatial joins with sf</title>
 
-<script src="site_libs/header-attrs-2.4/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -36,68 +36,6 @@
   div.column{display: inline-block; vertical-align: top; width: 50%;}
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
-      pre > code.sourceCode { white-space: pre; position: relative; }
-      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-      pre > code.sourceCode > span:empty { height: 1.2em; }
-      code.sourceCode > span { color: inherit; text-decoration: inherit; }
-      div.sourceCode { margin: 1em 0; }
-      pre.sourceCode { margin: 0; }
-      @media screen {
-      div.sourceCode { overflow: auto; }
-      }
-      @media print {
-      pre > code.sourceCode { white-space: pre-wrap; }
-      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-      }
-      pre.numberSource code
-        { counter-reset: source-line 0; }
-      pre.numberSource code > span
-        { position: relative; left: -4em; counter-increment: source-line; }
-      pre.numberSource code > span > a:first-child::before
-        { content: counter(source-line);
-          position: relative; left: -1em; text-align: right; vertical-align: baseline;
-          border: none; display: inline-block;
-          -webkit-touch-callout: none; -webkit-user-select: none;
-          -khtml-user-select: none; -moz-user-select: none;
-          -ms-user-select: none; user-select: none;
-          padding: 0 4px; width: 4em;
-          color: #aaaaaa;
-        }
-      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-      div.sourceCode
-        {   }
-      @media screen {
-      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-      }
-      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-      code span.at { color: #7d9029; } /* Attribute */
-      code span.bn { color: #40a070; } /* BaseN */
-      code span.bu { } /* BuiltIn */
-      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-      code span.ch { color: #4070a0; } /* Char */
-      code span.cn { color: #880000; } /* Constant */
-      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-      code span.dt { color: #902000; } /* DataType */
-      code span.dv { color: #40a070; } /* DecVal */
-      code span.er { color: #ff0000; font-weight: bold; } /* Error */
-      code span.ex { } /* Extension */
-      code span.fl { color: #40a070; } /* Float */
-      code span.fu { color: #06287e; } /* Function */
-      code span.im { } /* Import */
-      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-      code span.op { color: #666666; } /* Operator */
-      code span.ot { color: #007020; } /* Other */
-      code span.pp { color: #bc7a00; } /* Preprocessor */
-      code span.sc { color: #4070a0; } /* SpecialChar */
-      code span.ss { color: #bb6688; } /* SpecialString */
-      code span.st { color: #4070a0; } /* String */
-      code span.va { color: #19177c; } /* Variable */
-      code span.vs { color: #4070a0; } /* VerbatimString */
-      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
     </style>
 
 
@@ -230,6 +168,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 
@@ -519,13 +458,13 @@ div.tocify {
       <ul class="nav navbar-nav">
         <li>
   <a href="index.html">
-    <span class="fa fa-home fa-2x"></span>
+    <span class="fas fa-home fa-2x"></span>
      
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-vector-square"></span>
+    <span class="fas fa-vector-square"></span>
      
     Vector Data
      
@@ -545,7 +484,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-database fa-1x"></span>
+    <span class="fas fa-database fa-1x"></span>
      
     Import/Export
      
@@ -559,7 +498,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-magic fa-1x"></span>
+    <span class="fas fa-magic fa-1x"></span>
      
     Spatial Sorcery
      
@@ -576,7 +515,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-map-marked-alt fa-1x"></span>
+    <span class="fas fa-map-marked-alt fa-1x"></span>
      
     Mapping Vignettes
      
@@ -585,7 +524,7 @@ div.tocify {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="04_vig_mapview_leaflet.html">
-        <span class="fa fa-globe-americas fa-1x"></span>
+        <span class="fas fa-globe-americas fa-1x"></span>
          
         Mapview &amp; Leaflet
       </a>
@@ -598,7 +537,7 @@ div.tocify {
     </li>
     <li>
       <a href="04_vig_dataRetrieval_for_waterdata.html">
-        <span class="fa fa-tint fa-1x"></span>
+        <span class="fas fa-tint fa-1x"></span>
          
         Working with Water Data
       </a>
@@ -607,7 +546,7 @@ div.tocify {
 </li>
 <li>
   <a href="00_mapmaking_aesthetics.html">
-    <span class="fa fa-palette fa-1x"></span>
+    <span class="fas fa-palette fa-1x"></span>
      
     Map Aesthetics
   </a>
@@ -619,13 +558,13 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="00_contact.html">
-    <span class="fa fa-info-circle fa-lg"></span>
+    <span class="fas fa-info-circle fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://github.com/ryanpeek/mapping-in-R-workshop">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -656,69 +595,74 @@ div.tocify {
 <p>Some of the most common and useful geospatial operations are <strong>joins</strong> based on some component of the spatial topology. For example, you want to figure out what attributes of certain points that are associated with or within certain polygons on the landscape…like bus-stops in a county or river gaging stations within a watershed.</p>
 <p>Spatial joins are based on the intersection between two spatial objects, often points and the polygons. There are many ways we can join objects, which may include <a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html">specific options</a> like <em>crosses</em>,<em>near</em>, <em>within</em>, <em>touches</em>, etc. The point being, we can do all this in R! Robin Lovelace et al. have a great online book available: <a href="https://geocompr.robinlovelace.net/spatial-operations.html" class="uri">https://geocompr.robinlovelace.net/spatial-operations.html</a> that covers some of this material. Check it out!</p>
 <p>Let’s <strong>load the libraries</strong> we’re going to need first.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">library</span>(here)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">library</span>(sf)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">library</span>(dplyr)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">library</span>(viridis)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="kw">library</span>(ggplot2)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="kw">library</span>(USAboundaries)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="kw">library</span>(rnaturalearth)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="kw">library</span>(GSODR)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="kw">library</span>(ggrepel)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="kw">library</span>(cowplot)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(USAboundaries)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rnaturalearth)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GSODR)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span></code></pre></div>
 <div id="polygon-data" class="section level3">
 <h3>Polygon Data</h3>
 <p>We’ll be using California and CA counties pulled from the <code>USAboundaries</code> package.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co"># get USA states, filter out Puerto Rico, Alaska, and Hawaii for now</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>us &lt;-<span class="st"> </span><span class="kw">us_boundaries</span>(<span class="dt">type=</span><span class="st">&quot;state&quot;</span>, <span class="dt">resolution =</span> <span class="st">&quot;low&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>state_abbr <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;PR&quot;</span>, <span class="st">&quot;AK&quot;</span>, <span class="st">&quot;HI&quot;</span>))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="co"># get CA boundary with high definition</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>ca &lt;-<span class="st"> </span>USAboundaries<span class="op">::</span><span class="kw">us_states</span>(<span class="dt">resolution =</span> <span class="st">&quot;high&quot;</span>, <span class="dt">states =</span> <span class="st">&quot;CA&quot;</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="co"># make a box around CA (a grid with an n=1) for inset</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>ca_box &lt;-<span class="st"> </span><span class="kw">st_make_grid</span>(ca, <span class="dt">n =</span> <span class="dv">1</span>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="co"># get CA county boundary</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>ca_co &lt;-<span class="st"> </span>USAboundaries<span class="op">::</span><span class="kw">us_counties</span>(<span class="dt">resolution =</span> <span class="st">&quot;high&quot;</span>, <span class="dt">states =</span> <span class="st">&quot;CA&quot;</span>)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a><span class="co"># make sure we have all the pieces with a quick test plot</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a><span class="kw">plot</span>(us<span class="op">$</span>geometry)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="kw">plot</span>(ca<span class="op">$</span>geometry, <span class="dt">add=</span>T, <span class="dt">col=</span><span class="st">&quot;gray50&quot;</span>, <span class="dt">border=</span><span class="st">&quot;maroon&quot;</span>)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a><span class="kw">plot</span>(ca_co<span class="op">$</span>geometry, <span class="dt">add=</span>T, <span class="dt">border=</span><span class="st">&quot;pink&quot;</span>, <span class="dt">col=</span><span class="ot">NA</span>)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="kw">plot</span>(ca_box, <span class="dt">add=</span>T, <span class="dt">border=</span><span class="st">&quot;red3&quot;</span>, <span class="dt">col=</span><span class="ot">NA</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get USA states, filter out Puerto Rico, Alaska, and Hawaii for now</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>us <span class="ot">&lt;-</span> <span class="fu">us_boundaries</span>(<span class="at">type=</span><span class="st">&quot;state&quot;</span>, <span class="at">resolution =</span> <span class="st">&quot;low&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>state_abbr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;PR&quot;</span>, <span class="st">&quot;AK&quot;</span>, <span class="st">&quot;HI&quot;</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># get CA boundary with high definition</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>ca <span class="ot">&lt;-</span> USAboundaries<span class="sc">::</span><span class="fu">us_states</span>(<span class="at">resolution =</span> <span class="st">&quot;high&quot;</span>, <span class="at">states =</span> <span class="st">&quot;CA&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># make a box around CA (a grid with an n=1) for inset</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>ca_box <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(ca, <span class="at">n =</span> <span class="dv">1</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># get CA county boundary</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>ca_co <span class="ot">&lt;-</span> USAboundaries<span class="sc">::</span><span class="fu">us_counties</span>(<span class="at">resolution =</span> <span class="st">&quot;high&quot;</span>, <span class="at">states =</span> <span class="st">&quot;CA&quot;</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># make sure we have all the pieces with a quick test plot</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(us<span class="sc">$</span>geometry)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ca<span class="sc">$</span>geometry, <span class="at">add=</span>T, <span class="at">col=</span><span class="st">&quot;gray50&quot;</span>, <span class="at">border=</span><span class="st">&quot;maroon&quot;</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ca_co<span class="sc">$</span>geometry, <span class="at">add=</span>T, <span class="at">border=</span><span class="st">&quot;pink&quot;</span>, <span class="at">col=</span><span class="cn">NA</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ca_box, <span class="at">add=</span>T, <span class="at">border=</span><span class="st">&quot;red3&quot;</span>, <span class="at">col=</span><span class="cn">NA</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
 <p><img src="03_spatial_joins_files/figure-html/getBoundaryDat-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="point-data" class="section level3">
 <h3>Point Data</h3>
 <p>Now we have some polygon data to work with…let’s add some climate data and practice joining polygons to points and points to polygons! First let’s use the <a href="https://ropensci.github.io/GSODR/"><code>GSODR</code> (Global Surface Summary of the Day) package</a> to get global climate station locations. Then we can join to a few specific states/counties, and plot. First the GSOD data:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="co"># load the station metadata file from GSODR (this loads `isd_history` in your</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="co"># R session)</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="kw">load</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;isd_history.rda&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;GSODR&quot;</span>))</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="co"># make spatial</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>isd_history &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(isd_history) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords=</span><span class="kw">c</span>(<span class="st">&quot;LON&quot;</span>,<span class="st">&quot;LAT&quot;</span>), <span class="dt">crs=</span><span class="dv">4326</span>, <span class="dt">remove=</span><span class="ot">FALSE</span>)  </span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a><span class="co"># filter to US and CA, many sites out in buoys along coast</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>isd_history_ca &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(isd_history, CTRY<span class="op">==</span><span class="st">&quot;US&quot;</span>, STATE<span class="op">==</span><span class="st">&quot;CA&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the station metadata file from GSODR (this loads `isd_history` in your</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># R session)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;isd_history.rda&quot;</span>, <span class="at">package =</span> <span class="st">&quot;GSODR&quot;</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># make spatial</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>isd_history <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(isd_history) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;LON&quot;</span>,<span class="st">&quot;LAT&quot;</span>), <span class="at">crs=</span><span class="dv">4326</span>, <span class="at">remove=</span><span class="cn">FALSE</span>)  </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># filter to US and CA, many sites out in buoys along coast</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>isd_history_ca <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(isd_history, CTRY<span class="sc">==</span><span class="st">&quot;US&quot;</span>, STATE<span class="sc">==</span><span class="st">&quot;CA&quot;</span>)</span></code></pre></div>
 <p>Note, this is a fairly large set of point data, with <code>28,104</code> observations globally. Let’s map this so we can see how dense this dataset actually is. Let’s use a nice set of global maps from the <code>rnaturalearth</code> package. Because the points are so dense, let’s plot those first, then we’ll add a layer of world country outlines.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="co"># view!</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">library</span>(rnaturalearth)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="kw">library</span>(rnaturalearthdata)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>world &lt;-<span class="st"> </span><span class="kw">ne_countries</span>(<span class="dt">scale =</span> <span class="st">&quot;medium&quot;</span>, <span class="dt">returnclass =</span> <span class="st">&quot;sf&quot;</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="kw">plot</span>(isd_history<span class="op">$</span>geometry, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.2</span>, <span class="dt">col=</span><span class="st">&quot;gray50&quot;</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="kw">plot</span>(world<span class="op">$</span>geometry, <span class="dt">add=</span>T)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="kw">title</span>(<span class="st">&quot;GSOD Climate Stations&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># view!</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rnaturalearth)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rnaturalearthdata)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;rnaturalearthdata&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:rnaturalearth&#39;:
+## 
+##     countries110</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> <span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">&quot;medium&quot;</span>, <span class="at">returnclass =</span> <span class="st">&quot;sf&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(isd_history<span class="sc">$</span>geometry, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.2</span>, <span class="at">col=</span><span class="st">&quot;gray50&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(world<span class="sc">$</span>geometry, <span class="at">add=</span>T)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&quot;GSOD Climate Stations&quot;</span>)</span></code></pre></div>
 <p><img src="03_spatial_joins_files/figure-html/plotGSODR-1.png" width="672" /></p>
 <p>That’s a lot of points! Let’s look at just California to make this a little more manageable.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co"># look at CA sites only</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="kw">plot</span>(isd_history_ca<span class="op">$</span>geometry, <span class="dt">cex=</span><span class="fl">0.5</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="kw">plot</span>(ca<span class="op">$</span>geometry, <span class="dt">col=</span><span class="kw">alpha</span>(<span class="st">&quot;gray&quot;</span>, <span class="fl">0.5</span>), <span class="dt">border=</span><span class="st">&quot;#440154FF&quot;</span>, <span class="dt">lwd=</span><span class="fl">1.5</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="kw">plot</span>(isd_history_ca<span class="op">$</span>geometry, <span class="dt">add=</span>T, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">bg=</span><span class="st">&quot;#21908CFF&quot;</span>, <span class="dt">cex=</span><span class="fl">0.7</span>, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="kw">title</span>(<span class="st">&quot;GSOD Climate Stations labeled as CA&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># look at CA sites only</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(isd_history_ca<span class="sc">$</span>geometry, <span class="at">cex=</span><span class="fl">0.5</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ca<span class="sc">$</span>geometry, <span class="at">col=</span><span class="fu">alpha</span>(<span class="st">&quot;gray&quot;</span>, <span class="fl">0.5</span>), <span class="at">border=</span><span class="st">&quot;#440154FF&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(isd_history_ca<span class="sc">$</span>geometry, <span class="at">add=</span>T, <span class="at">pch=</span><span class="dv">21</span>, <span class="at">bg=</span><span class="st">&quot;#21908CFF&quot;</span>, <span class="at">cex=</span><span class="fl">0.7</span>, <span class="at">col=</span><span class="st">&quot;black&quot;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&quot;GSOD Climate Stations labeled as CA&quot;</span>)</span></code></pre></div>
 <p><img src="03_spatial_joins_files/figure-html/tstPlotCAISD-1.png" width="672" /></p>
 <p>Great, now we have a dataframe in our environment that has both global climate station locations, and only stations associated with California, USA. You’ll notice there are a number of stations that fall outside of the CA border, largely those associated with buoys along the coast.</p>
 <hr>
@@ -729,31 +673,31 @@ div.tocify {
 <div id="select-polygons-containing-points" class="section level3">
 <h3>Select <em>POLYGONS</em> containing <em>POINTS</em></h3>
 <p>This first approach only selects polygons that contain points. For demonstration sake, let’s use the larger global point dataset. Note this does not modify the polygon dataframe in any form (i.e., add attributes, update, summarize, etc). It is only selecting or <em>filtering</em> to the polygons that contain points using a spatial join.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="co"># Get CA county POLYGONS only that contain ISD points within county boundaries</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="co"># does not bring attributes from points forward</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>ca_co_isd_poly &lt;-<span class="st"> </span>ca_co[isd_history, ]</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get CA county POLYGONS only that contain ISD points within county boundaries</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># does not bring attributes from points forward</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ca_co_isd_poly <span class="ot">&lt;-</span> ca_co[isd_history, ]</span></code></pre></div>
 <pre><code>## although coordinates are longitude/latitude, st_intersects assumes that they are planar</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">plot</span>(ca_co_isd_poly<span class="op">$</span>geometry, <span class="dt">col=</span><span class="kw">alpha</span>(<span class="st">&quot;blue&quot;</span>,<span class="fl">0.3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ca_co_isd_poly<span class="sc">$</span>geometry, <span class="at">col=</span><span class="fu">alpha</span>(<span class="st">&quot;blue&quot;</span>,<span class="fl">0.3</span>))</span></code></pre></div>
 <p><img src="03_spatial_joins_files/figure-html/polyptJoin-1.png" width="672" /></p>
 </div>
 <div id="anti-join-non-matching-objects" class="section level3">
 <h3>Anti-Join Non-Matching Objects</h3>
 <p>So most counties have at least one point present. What if we specifically wanted to find the counties that <em>don’t</em> have a climate GSOD station in them? We can use something called an “<code>anti_join</code>”, which does precisely that, it identifies the items that don’t have a match. There’s a few possible ways to do this, but the most flexible I’ve found is using the following, because it’s easy to return whatever spatial object you prefer (e.g., points, polygons, lines).</p>
 <p>The key is to use the same subsetting <code>[ ]</code> option, but add the <code>!lengths()</code> function to return a logical vector of all the <em>non-matching</em> objects. We are essentially filtering by this vector, so this doesn’t actually add any data from one layer to the other, it simply filters where there aren’t any overlapping bits.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="co"># Find ISD points DON&#39;T within county boundaries</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>ca_co_poly_anti &lt;-<span class="st"> </span>isd_history_ca[<span class="op">!</span><span class="kw">lengths</span>(<span class="kw">st_intersects</span>(isd_history_ca, ca_co)), ]</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find ISD points DON&#39;T within county boundaries</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ca_co_poly_anti <span class="ot">&lt;-</span> isd_history_ca[<span class="sc">!</span><span class="fu">lengths</span>(<span class="fu">st_intersects</span>(isd_history_ca, ca_co)), ]</span></code></pre></div>
 <pre><code>## although coordinates are longitude/latitude, st_intersects assumes that they are planar
 ## although coordinates are longitude/latitude, st_intersects assumes that they are planar</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="co"># Find Counties that don&#39;t contain ISD points</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>ca_co_poly_anti2 &lt;-<span class="st"> </span>ca_co[<span class="op">!</span><span class="kw">lengths</span>(<span class="kw">st_intersects</span>(ca_co, isd_history_ca)), ]</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find Counties that don&#39;t contain ISD points</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>ca_co_poly_anti2 <span class="ot">&lt;-</span> ca_co[<span class="sc">!</span><span class="fu">lengths</span>(<span class="fu">st_intersects</span>(ca_co, isd_history_ca)), ]</span></code></pre></div>
 <pre><code>## although coordinates are longitude/latitude, st_intersects assumes that they are planar</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="co"># Plot it!</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="kw">plot</span>(ca_co<span class="op">$</span>geometry, <span class="dt">col=</span><span class="kw">alpha</span>(<span class="st">&quot;pink&quot;</span>,<span class="fl">0.3</span>))</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a><span class="kw">plot</span>(ca_co_poly_anti<span class="op">$</span>geometry, <span class="dt">pch=</span><span class="dv">15</span>, <span class="dt">add=</span>T, <span class="dt">col=</span><span class="st">&quot;maroon&quot;</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="kw">plot</span>(ca_co_poly_anti2<span class="op">$</span>geometry, <span class="dt">add=</span>T, <span class="dt">col=</span><span class="st">&quot;darkgreen&quot;</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a><span class="kw">title</span>(<span class="st">&quot;Anti-joins with CA GSOD Climate Stations:</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a><span class="st">Points outside of county boundaries (squares),</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a><span class="st">      Counties with no stations (green)&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot it!</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ca_co<span class="sc">$</span>geometry, <span class="at">col=</span><span class="fu">alpha</span>(<span class="st">&quot;pink&quot;</span>,<span class="fl">0.3</span>))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ca_co_poly_anti<span class="sc">$</span>geometry, <span class="at">pch=</span><span class="dv">15</span>, <span class="at">add=</span>T, <span class="at">col=</span><span class="st">&quot;maroon&quot;</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ca_co_poly_anti2<span class="sc">$</span>geometry, <span class="at">add=</span>T, <span class="at">col=</span><span class="st">&quot;darkgreen&quot;</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&quot;Anti-joins with CA GSOD Climate Stations:</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="st">Points outside of county boundaries (squares),</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="st">      Counties with no stations (green)&quot;</span>)</span></code></pre></div>
 <p><img src="03_spatial_joins_files/figure-html/polyptAntiJoin-1.png" width="672" /></p>
 <p><br></p>
 </div>
@@ -778,12 +722,12 @@ div.tocify {
 ## 6 010017 99999               FRIGG   NO  &lt;NA&gt; ENFR 59.980  2.250   48.0 19880320 20050228 010017-99999              48    POINT (2.25 59.98)</code></pre>
 <p><br></p>
 <p>So to spatially join the county <code>name</code> attribute with the appropriate point locations, let’s use <code>st_join</code>. If we use <code>left=TRUE</code> here, our result will retain <em>all</em> the points in the dataset rather than just the the spatial overlaps (where points fall inside polygons). So <code>left=TRUE</code> is essentially a <code>dplyr::left_join</code>, and <code>left=FALSE</code> is equivalent to a <code>dplyr::inner_join</code>.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="co"># For POINTS that fall within CA_counties, adds ATTRIBUTES, retains ALL pts if left=TRUE, otherwise uses inner_join</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>isd_ca_co_pts &lt;-<span class="st"> </span><span class="kw">st_join</span>(isd_history, <span class="dt">left =</span> <span class="ot">FALSE</span>, ca_co[<span class="st">&quot;name&quot;</span>]) <span class="co"># join points</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a><span class="co"># plot</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a><span class="kw">plot</span>(isd_ca_co_pts<span class="op">$</span>geometry, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">cex=</span><span class="fl">0.7</span>, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">bg=</span><span class="st">&quot;gray80&quot;</span>)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a><span class="kw">plot</span>(ca_co<span class="op">$</span>geometry, <span class="dt">border=</span><span class="st">&quot;gray20&quot;</span>, <span class="dt">col=</span><span class="ot">NA</span>, <span class="dt">add=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For POINTS that fall within CA_counties, adds ATTRIBUTES, retains ALL pts if left=TRUE, otherwise uses inner_join</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>isd_ca_co_pts <span class="ot">&lt;-</span> <span class="fu">st_join</span>(isd_history, <span class="at">left =</span> <span class="cn">FALSE</span>, ca_co[<span class="st">&quot;name&quot;</span>]) <span class="co"># join points</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(isd_ca_co_pts<span class="sc">$</span>geometry, <span class="at">pch=</span><span class="dv">21</span>, <span class="at">cex=</span><span class="fl">0.7</span>, <span class="at">col=</span><span class="st">&quot;purple&quot;</span>, <span class="at">bg=</span><span class="st">&quot;gray80&quot;</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ca_co<span class="sc">$</span>geometry, <span class="at">border=</span><span class="st">&quot;gray20&quot;</span>, <span class="at">col=</span><span class="cn">NA</span>, <span class="at">add=</span>T)</span></code></pre></div>
 <p><img src="03_spatial_joins_files/figure-html/polyJoinAttribs-1.png" width="672" /></p>
 <pre><code>##         USAF  WBAN                     STN_NAME CTRY STATE CALL    LAT      LON ELEV_M    BEGIN      END        STNID ELEV_M_SRTM_90m           name
 ## 13545 690020 93218 JOLON HUNTER LIGGETT MIL RES   US    CA KHGT 36.000 -121.233  317.0 19640715 19970401 690020-93218             325       Monterey
@@ -814,6 +758,17 @@ div.tocify {
 <div id="check-stations-for-data-availability" class="section level3">
 <h3>Check Stations for Data Availability</h3>
 <p>Here we check what stations contain data between a given date range. Some of these stations go back to the 1930’s, but we’ll focus on 1980–2018.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check availability for a date range</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>stations <span class="ot">&lt;-</span> isd_ca_co_pts[isd_ca_co_pts<span class="sc">$</span>BEGIN <span class="sc">&lt;=</span> <span class="dv">19800101</span> <span class="sc">&amp;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                               isd_ca_co_pts<span class="sc">$</span>END <span class="sc">&gt;=</span> <span class="dv">20181231</span>, ]</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot where these stations are?</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>ca, <span class="at">fill=</span><span class="st">&quot;steelblue&quot;</span>, <span class="at">alpha=</span><span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>ca_co, <span class="at">color=</span><span class="st">&quot;gray50&quot;</span>, <span class="at">lwd=</span><span class="fl">0.4</span>, <span class="at">alpha=</span><span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> stations, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">pch=</span><span class="dv">21</span>, <span class="at">color=</span><span class="st">&quot;thistle1&quot;</span>, <span class="at">fill=</span><span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;GSOD Stations with data 1980-2018&quot;</span>)</span></code></pre></div>
 <p><img src="03_spatial_joins_files/figure-html/checkStations-1.png" width="672" /></p>
 <p><br></p>
 </div>
@@ -826,27 +781,27 @@ div.tocify {
 <li>Create a dataset that contains stations that are within a set distance from the centroid of the county</li>
 </ul>
 <p>We’ll mainly use some basic <code>dplyr</code> here, which is possible because as <code>sf</code> objects, these are still simple data frames.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="co">#class(stations) # sf object</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a><span class="co"># calc number per county</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>stations_n &lt;-<span class="st"> </span>stations <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">cnty_name=</span>name) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># make column amore clear</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(cnty_name) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">n=</span><span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true"></a><span class="co">#class(stations_n) # still sf object</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true"></a></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true"></a><span class="co"># join back to county layer with a spatial join, using left=FALSE (same as &quot;inner_join&quot;)</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true"></a>ca_co_stations &lt;-<span class="st"> </span><span class="kw">st_join</span>(ca_co, stations_n, <span class="dt">left =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true"></a></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true"></a><span class="co"># plot!</span></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>ca) <span class="op">+</span></span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>ca_co_stations, <span class="kw">aes</span>(<span class="dt">fill=</span><span class="kw">as.factor</span>(n)), <span class="dt">lwd=</span><span class="fl">0.4</span>, <span class="dt">alpha=</span><span class="fl">0.4</span>) <span class="op">+</span></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true"></a><span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true"></a><span class="st">  </span><span class="kw">scale_fill_viridis_d</span>(<span class="st">&quot;No. of Stations&quot;</span>)<span class="op">+</span></span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Number of GSOD Stations with data 1980-2018 per County&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#class(stations) # sf object</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># calc number per county</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>stations_n <span class="ot">&lt;-</span> stations <span class="sc">%&gt;%</span> </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">cnty_name=</span>name) <span class="sc">%&gt;%</span> <span class="co"># make column amore clear</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cnty_name) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n=</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co">#class(stations_n) # still sf object</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># join back to county layer with a spatial join, using left=FALSE (same as &quot;inner_join&quot;)</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>ca_co_stations <span class="ot">&lt;-</span> <span class="fu">st_join</span>(ca_co, stations_n, <span class="at">left =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="co"># plot!</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>ca) <span class="sc">+</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>ca_co_stations, <span class="fu">aes</span>(<span class="at">fill=</span><span class="fu">as.factor</span>(n)), <span class="at">lwd=</span><span class="fl">0.4</span>, <span class="at">alpha=</span><span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="st">&quot;No. of Stations&quot;</span>)<span class="sc">+</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Number of GSOD Stations with data 1980-2018 per County&quot;</span>)</span></code></pre></div>
 <p><img src="03_spatial_joins_files/figure-html/Calcpercounty-1.png" width="672" /></p>
 <p><br></p>
 </div>
@@ -859,65 +814,65 @@ div.tocify {
 <li>We need to select the station nearest the centroid.</li>
 </ol>
 <p>For <strong>Step 2</strong>, we’re going to use the <code>purrr</code> package to <code>map</code> or <code>apply</code> the <code>st_centroid</code> function over each county in our dataframe. This is the equivalent of a <strong>for-loop</strong>, it just looks very different.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="co"># STEP 1: filter to stations with n&gt;1</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>stations_n2 &lt;-<span class="st"> </span>stations_n <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(n <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a><span class="co"># STEP 2: Use &quot;purrr&quot; package with sf to get Centroid points for our counties with n&gt;1</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a><span class="kw">library</span>(purrr)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true"></a></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true"></a>ca_co_centroid_pts &lt;-<span class="st"> </span>ca_co_stations <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true"></a><span class="st">  </span><span class="kw">filter</span>(n <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true"></a><span class="st">  </span><span class="co"># add centroid values using the geometry column</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cent_lon=</span><span class="kw">map_dbl</span>(geometry, <span class="op">~</span><span class="kw">st_centroid</span>(.x)[[<span class="dv">1</span>]]), </span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true"></a>         <span class="dt">cent_lat=</span><span class="kw">map_dbl</span>(geometry, <span class="op">~</span><span class="kw">st_centroid</span>(.x)[[<span class="dv">2</span>]])) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="co"># convert to simple dataframe</span></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true"></a></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true"></a><span class="co"># make back into an sf object, but only using the centroid X/Ys we just made</span></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true"></a>ca_co_centroid_pts &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(ca_co_centroid_pts, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;cent_lon&quot;</span>,<span class="st">&quot;cent_lat&quot;</span>), <span class="dt">crs=</span><span class="dv">4326</span>, <span class="dt">remove =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true"></a></span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true"></a></span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true"></a><span class="co"># plot!</span></span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>ca_co) <span class="op">+</span></span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>ca_co_centroid_pts, <span class="kw">aes</span>(<span class="dt">fill=</span><span class="kw">as.factor</span>(n)), <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">size=</span><span class="dv">4</span>) <span class="op">+</span></span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true"></a><span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span></span>
-<span id="cb19-25"><a href="#cb19-25" aria-hidden="true"></a><span class="st">  </span><span class="kw">scale_fill_viridis_d</span>(<span class="st">&quot;No. of Stations&quot;</span>) <span class="op">+</span></span>
-<span id="cb19-26"><a href="#cb19-26" aria-hidden="true"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">subtitle =</span> <span class="st">&quot;Centroids for Counties with &gt;1 GSOD Station&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># STEP 1: filter to stations with n&gt;1</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>stations_n2 <span class="ot">&lt;-</span> stations_n <span class="sc">%&gt;%</span> <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">1</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># STEP 2: Use &quot;purrr&quot; package with sf to get Centroid points for our counties with n&gt;1</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>ca_co_centroid_pts <span class="ot">&lt;-</span> ca_co_stations <span class="sc">%&gt;%</span> </span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add centroid values using the geometry column</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cent_lon=</span><span class="fu">map_dbl</span>(geometry, <span class="sc">~</span><span class="fu">st_centroid</span>(.x)[[<span class="dv">1</span>]]), </span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">cent_lat=</span><span class="fu">map_dbl</span>(geometry, <span class="sc">~</span><span class="fu">st_centroid</span>(.x)[[<span class="dv">2</span>]])) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="co"># convert to simple dataframe</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co"># make back into an sf object, but only using the centroid X/Ys we just made</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>ca_co_centroid_pts <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(ca_co_centroid_pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;cent_lon&quot;</span>,<span class="st">&quot;cent_lat&quot;</span>), <span class="at">crs=</span><span class="dv">4326</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="co"># plot!</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>ca_co) <span class="sc">+</span></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>ca_co_centroid_pts, <span class="fu">aes</span>(<span class="at">fill=</span><span class="fu">as.factor</span>(n)), <span class="at">pch=</span><span class="dv">21</span>, <span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="st">&quot;No. of Stations&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">&quot;Centroids for Counties with &gt;1 GSOD Station&quot;</span>)</span></code></pre></div>
 <p><img src="03_spatial_joins_files/figure-html/filterpercounty-1.png" width="672" /></p>
 <blockquote>
 <p><strong>Step 3</strong>: This is the trickiest part…</p>
 </blockquote>
 <p>There are probably a few different ways to do this, but let’s try to use the one that seems simplest and uses the fewest lines of code. A handy package (<code>st_nn</code>) will allows us to nearest neighbors between points/lines/polygons, and can provide distances as well. So let’s get the station nearest our county centroid for all the counties with stations &gt; 1.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="kw">library</span>(nngeo)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a><span class="co"># find the first nearest neighbor GSOD station for each centroid, returns a list</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>nearest_stations &lt;-<span class="st"> </span><span class="kw">st_nn</span>(ca_co_centroid_pts, stations_n2, <span class="dt">returnDist =</span> T, <span class="dt">k =</span> <span class="dv">1</span>, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nngeo)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># find the first nearest neighbor GSOD station for each centroid, returns a list</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>nearest_stations <span class="ot">&lt;-</span> <span class="fu">st_nn</span>(ca_co_centroid_pts, stations_n2, <span class="at">returnDist =</span> T, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## lon-lat points</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="co"># add distances and centroid ID and make into a dataframe, get only distinct IDs</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>nearest_stations_df &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">dist=</span>nearest_stations<span class="op">$</span>dist, <span class="dt">centrID=</span><span class="kw">do.call</span>(rbind, nearest_stations<span class="op">$</span>nn)) <span class="op">%&gt;%</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">distinct</span>(<span class="dt">.keep_all =</span> T)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a>  </span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a><span class="co"># make a df of stations in counties where n=1</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a>stations_n1 &lt;-<span class="st"> </span>stations_n <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(n<span class="op">==</span><span class="dv">1</span>)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true"></a></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true"></a><span class="co"># now select the &quot;nearest to centroid&quot; stations and bind to the n1 dataset</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true"></a>stations_final &lt;-<span class="st"> </span>stations_n2[nearest_stations_df<span class="op">$</span>centrID,] <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true"></a><span class="st">  </span><span class="kw">rbind</span>(stations_n1)</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true"></a></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true"></a><span class="co"># Plot it to be sure</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>ca_co) <span class="op">+</span></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>ca_co_centroid_pts, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>stations_n2, <span class="dt">col=</span><span class="st">&quot;orange&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.9</span>, <span class="dt">pch=</span><span class="dv">17</span>, <span class="dt">size=</span><span class="fl">1.8</span>) <span class="op">+</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>stations_final, <span class="dt">col=</span><span class="st">&quot;blue3&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.9</span>) <span class="op">+</span></span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Lon&quot;</span>,<span class="dt">y=</span><span class="st">&quot;Lat&quot;</span>)<span class="op">+</span></span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_label_repel</span>(<span class="dt">data=</span>stations_final, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">st_coordinates</span>(geometry)[,<span class="dv">1</span>], </span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true"></a>                                            <span class="dt">y=</span><span class="kw">st_coordinates</span>(geometry)[,<span class="dv">2</span>], <span class="dt">label=</span>CALL), <span class="dt">size=</span><span class="fl">2.5</span>) <span class="op">+</span></span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">caption =</span> <span class="st">&quot;County Centroids (open circle), </span></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true"></a><span class="st">Final Stations Selected (blue circle),</span></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true"></a><span class="st">       Stations n&gt;1 (orange)&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add distances and centroid ID and make into a dataframe, get only distinct IDs</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>nearest_stations_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">dist=</span>nearest_stations<span class="sc">$</span>dist, <span class="at">centrID=</span><span class="fu">do.call</span>(rbind, nearest_stations<span class="sc">$</span>nn)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>(<span class="at">.keep_all =</span> T)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># make a df of stations in counties where n=1</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>stations_n1 <span class="ot">&lt;-</span> stations_n <span class="sc">%&gt;%</span> <span class="fu">filter</span>(n<span class="sc">==</span><span class="dv">1</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># now select the &quot;nearest to centroid&quot; stations and bind to the n1 dataset</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>stations_final <span class="ot">&lt;-</span> stations_n2[nearest_stations_df<span class="sc">$</span>centrID,] <span class="sc">%&gt;%</span> </span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(stations_n1)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot it to be sure</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>ca_co) <span class="sc">+</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>ca_co_centroid_pts, <span class="at">pch=</span><span class="dv">21</span>, <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>stations_n2, <span class="at">col=</span><span class="st">&quot;orange&quot;</span>, <span class="at">alpha=</span><span class="fl">0.9</span>, <span class="at">pch=</span><span class="dv">17</span>, <span class="at">size=</span><span class="fl">1.8</span>) <span class="sc">+</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>stations_final, <span class="at">col=</span><span class="st">&quot;blue3&quot;</span>, <span class="at">alpha=</span><span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Lon&quot;</span>,<span class="at">y=</span><span class="st">&quot;Lat&quot;</span>)<span class="sc">+</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label_repel</span>(<span class="at">data=</span>stations_final, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">st_coordinates</span>(geometry)[,<span class="dv">1</span>], </span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">y=</span><span class="fu">st_coordinates</span>(geometry)[,<span class="dv">2</span>], <span class="at">label=</span>CALL), <span class="at">size=</span><span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;County Centroids (open circle), </span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a><span class="st">Final Stations Selected (blue circle),</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a><span class="st">       Stations n&gt;1 (orange)&quot;</span>)</span></code></pre></div>
 <p><img src="03_spatial_joins_files/figure-html/nearestCent-1.png" width="672" /></p>
 <p>That was a lot! But Looks like all works, and now we have a final set of stations we can use to download data. For simplicity in this example, I’m picking three stations, one with the lowest elevation, one with the highest elevation, and one with the greatest latitude.</p>
 <p><br></p>
@@ -925,109 +880,109 @@ div.tocify {
 <div id="download-climate-data" class="section level3">
 <h3>Download Climate Data</h3>
 <p>Now we can use our station list to download daily data for each station for any period of record we want. Note, this code works but took 3-4 minutes to run. To speed things up I’ve saved the file <a href="https://github.com/ryanpeek/mapping-in-R-workshop/raw/master/data/CA_stations_GSOD_19800101-20181231.rda">here</a>, or just grab the summarized data shown in the next section.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="co"># Get highest and lowest elevation Station IDs and the northernmost (highest) latitude:</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>(stationIDs &lt;-<span class="st"> </span>stations_final <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">filter</span>(<span class="kw">min</span>(ELEV_M)<span class="op">==</span>ELEV_M <span class="op">|</span><span class="st"> </span><span class="kw">max</span>(ELEV_M)<span class="op">==</span>ELEV_M <span class="op">|</span><span class="st"> </span>CALL<span class="op">==</span><span class="st">&quot;KCEC&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">select</span>(STNID, CALL, <span class="op">-</span>geometry) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>geometry))</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true"></a></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true"></a><span class="co"># get data:</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true"></a>climdata &lt;-<span class="st"> </span><span class="kw">get_GSOD</span>(<span class="dt">station =</span> stationIDs<span class="op">$</span>STNID, <span class="dt">years =</span> <span class="kw">c</span>(<span class="dv">1980</span><span class="op">:</span><span class="dv">2018</span>))</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true"></a></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true"></a><span class="co"># save it!!</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true"></a><span class="kw">save</span>(climdata, <span class="dt">file =</span> <span class="st">&quot;data/CA_stations_GSOD_19800101-20181231.rda&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get highest and lowest elevation Station IDs and the northernmost (highest) latitude:</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>(stationIDs <span class="ot">&lt;-</span> stations_final <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">min</span>(ELEV_M)<span class="sc">==</span>ELEV_M <span class="sc">|</span> <span class="fu">max</span>(ELEV_M)<span class="sc">==</span>ELEV_M <span class="sc">|</span> CALL<span class="sc">==</span><span class="st">&quot;KCEC&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(STNID, CALL, <span class="sc">-</span>geometry) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>geometry))</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># get data:</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>climdata <span class="ot">&lt;-</span> <span class="fu">get_GSOD</span>(<span class="at">station =</span> stationIDs<span class="sc">$</span>STNID, <span class="at">years =</span> <span class="fu">c</span>(<span class="dv">1980</span><span class="sc">:</span><span class="dv">2018</span>))</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># save it!!</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(climdata, <span class="at">file =</span> <span class="st">&quot;data/CA_stations_GSOD_19800101-20181231.rda&quot;</span>)</span></code></pre></div>
 <hr>
 </div>
 <div id="summarize-and-visualize" class="section level3">
 <h3>Summarize and Visualize!</h3>
 <p>Finally, we have data, let’s summarize and visualize these data. I’ll aggregate these data to monthly means so we can see different timing patterns in precipitation and temperature across the state.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="kw">load</span>(<span class="kw">paste0</span>(here<span class="op">::</span><span class="kw">here</span>(),<span class="st">&quot;/data/CA_stations_GSOD_19800101-20181231.rda&quot;</span>))</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a>climdata_stations &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">distinct</span>(climdata, CALL, <span class="dt">.keep_all =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords=</span><span class="kw">c</span>(<span class="st">&quot;LON&quot;</span>,<span class="st">&quot;LAT&quot;</span>), <span class="dt">crs=</span><span class="dv">4326</span>, <span class="dt">remove =</span> F)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">paste0</span>(here<span class="sc">::</span><span class="fu">here</span>(),<span class="st">&quot;/data/CA_stations_GSOD_19800101-20181231.rda&quot;</span>))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>climdata_stations <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">distinct</span>(climdata, CALL, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;LON&quot;</span>,<span class="st">&quot;LAT&quot;</span>), <span class="at">crs=</span><span class="dv">4326</span>, <span class="at">remove =</span> F)</span></code></pre></div>
 <div id="monthly-average" class="section level4">
 <h4>Monthly Average</h4>
 <p>Let’s calculate averages and then see how these look for these different stations.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="co"># MONTH: filter missing data out:</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>clim_month &lt;-<span class="st"> </span>climdata <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(PRCP)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(CALL, MONTH) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">summarize_at</span>(<span class="dt">.vars=</span><span class="kw">c</span>(<span class="st">&quot;TEMP&quot;</span>,<span class="st">&quot;PRCP&quot;</span>), <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="dt">min=</span>min, <span class="dt">mean=</span>mean, <span class="dt">max=</span>max)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">CALL=</span>forcats<span class="op">::</span><span class="kw">fct_relevel</span>(CALL,<span class="kw">c</span>(<span class="st">&quot;KCEC&quot;</span>,<span class="st">&quot;KBLU&quot;</span>,<span class="st">&quot;KTRM&quot;</span>))) <span class="co"># relevel order</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true"></a></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true"></a><span class="co"># monthly prcp</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true"></a>mPPT &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>(<span class="dt">data=</span>clim_month, <span class="kw">aes</span>(<span class="dt">x=</span>MONTH, <span class="dt">y=</span>PRCP_mean, <span class="dt">fill=</span>PRCP_mean), <span class="dt">show.legend =</span> T)<span class="op">+</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;&quot;</span>, <span class="dt">x=</span><span class="st">&quot;&quot;</span>)<span class="op">+</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.background =</span> <span class="kw">element_blank</span>(),</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true"></a>          <span class="co">#legend.position = &quot;left&quot;,</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true"></a>          <span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.25</span>, <span class="fl">0.55</span>),</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true"></a>          <span class="dt">legend.key.height =</span> <span class="kw">unit</span>(.<span class="dv">15</span>,<span class="dt">units =</span> <span class="st">&quot;in&quot;</span>),</span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true"></a>          <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(.<span class="dv">1</span>, <span class="dt">units =</span> <span class="st">&quot;in&quot;</span>), </span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true"></a>          <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(),</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true"></a>          <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(),</span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true"></a>          <span class="dt">plot.margin =</span> <span class="kw">unit</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span> ,<span class="dv">0</span>), <span class="st">&quot;mm&quot;</span>)) <span class="op">+</span></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="st">&quot;Mean </span><span class="ch">\n</span><span class="st">PPT(in)&quot;</span>) <span class="op">+</span></span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true"></a><span class="st">    </span><span class="kw">coord_polar</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true"></a><span class="st">    </span><span class="kw">facet_wrap</span>(clim_month<span class="op">$</span>CALL<span class="op">~</span>., <span class="dt">nrow =</span> <span class="dv">3</span>)</span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true"></a></span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true"></a><span class="co"># make a map</span></span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true"></a>siteMap &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>ca_co, <span class="dt">fill=</span><span class="st">&quot;sienna&quot;</span>,<span class="dt">alpha=</span><span class="fl">0.3</span>) <span class="op">+</span></span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>climdata_stations, <span class="dt">fill=</span><span class="st">&quot;dodgerblue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.9</span>, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">size=</span><span class="dv">4</span>) <span class="op">+</span></span>
-<span id="cb25-28"><a href="#cb25-28" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_label_repel</span>(<span class="dt">data=</span>climdata_stations, <span class="kw">aes</span>(<span class="dt">x=</span>LON, <span class="dt">y=</span>LAT, <span class="dt">label=</span>CALL), <span class="dt">size=</span><span class="fl">3.7</span>) <span class="op">+</span></span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">panel.border =</span> <span class="kw">element_blank</span>()) <span class="op">+</span></span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true"></a><span class="st">  </span><span class="kw">coord_sf</span>(<span class="dt">datum =</span> <span class="ot">NA</span>)<span class="op">+</span></span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">subtitle=</span><span class="st">&quot;Monthly Precipitation for GSOD Stations, 1980-2018&quot;</span>, <span class="dt">y=</span><span class="st">&quot;&quot;</span>,<span class="dt">x=</span><span class="st">&quot;&quot;</span>,</span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true"></a>       <span class="dt">caption=</span><span class="st">&quot;Polar plots of monthly precip for each station&quot;</span>)</span>
-<span id="cb25-33"><a href="#cb25-33" aria-hidden="true"></a></span>
-<span id="cb25-34"><a href="#cb25-34" aria-hidden="true"></a><span class="co"># Plot it together using cowplot</span></span>
-<span id="cb25-35"><a href="#cb25-35" aria-hidden="true"></a><span class="kw">ggdraw</span>(siteMap) <span class="op">+</span></span>
-<span id="cb25-36"><a href="#cb25-36" aria-hidden="true"></a><span class="st">  </span><span class="kw">draw_plot</span>(mPPT, <span class="dt">width =</span> <span class="fl">0.6</span>, <span class="dt">height =</span> <span class="fl">.53</span>, <span class="dt">x =</span> <span class="fl">0.48</span>, <span class="dt">y =</span> <span class="fl">0.42</span>)</span>
-<span id="cb25-37"><a href="#cb25-37" aria-hidden="true"></a></span>
-<span id="cb25-38"><a href="#cb25-38" aria-hidden="true"></a><span class="kw">ggsave</span>(<span class="st">&quot;img/monthly_ppt_map.png&quot;</span>, <span class="dt">width =</span> <span class="dv">6</span>, <span class="dt">height =</span> <span class="dv">8</span>, <span class="dt">units =</span> <span class="st">&quot;in&quot;</span>, <span class="dt">dpi=</span><span class="dv">300</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MONTH: filter missing data out:</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>clim_month <span class="ot">&lt;-</span> climdata <span class="sc">%&gt;%</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(PRCP)) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CALL, MONTH) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize_at</span>(<span class="at">.vars=</span><span class="fu">c</span>(<span class="st">&quot;TEMP&quot;</span>,<span class="st">&quot;PRCP&quot;</span>), <span class="at">.funs =</span> <span class="fu">list</span>(<span class="at">min=</span>min, <span class="at">mean=</span>mean, <span class="at">max=</span>max)) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">CALL=</span>forcats<span class="sc">::</span><span class="fu">fct_relevel</span>(CALL,<span class="fu">c</span>(<span class="st">&quot;KCEC&quot;</span>,<span class="st">&quot;KBLU&quot;</span>,<span class="st">&quot;KTRM&quot;</span>))) <span class="co"># relevel order</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="co"># monthly prcp</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>mPPT <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_col</span>(<span class="at">data=</span>clim_month, <span class="fu">aes</span>(<span class="at">x=</span>MONTH, <span class="at">y=</span>PRCP_mean, <span class="at">fill=</span>PRCP_mean), <span class="at">show.legend =</span> T)<span class="sc">+</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&quot;&quot;</span>, <span class="at">x=</span><span class="st">&quot;&quot;</span>)<span class="sc">+</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>          <span class="co">#legend.position = &quot;left&quot;,</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.25</span>, <span class="fl">0.55</span>),</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.key.height =</span> <span class="fu">unit</span>(.<span class="dv">15</span>,<span class="at">units =</span> <span class="st">&quot;in&quot;</span>),</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.key.width =</span> <span class="fu">unit</span>(.<span class="dv">1</span>, <span class="at">units =</span> <span class="st">&quot;in&quot;</span>), </span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span> ,<span class="dv">0</span>), <span class="st">&quot;mm&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_c</span>(<span class="st">&quot;Mean </span><span class="sc">\n</span><span class="st">PPT(in)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_polar</span>() <span class="sc">+</span> </span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(clim_month<span class="sc">$</span>CALL<span class="sc">~</span>., <span class="at">nrow =</span> <span class="dv">3</span>)</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a><span class="co"># make a map</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>siteMap <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>ca_co, <span class="at">fill=</span><span class="st">&quot;sienna&quot;</span>,<span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>climdata_stations, <span class="at">fill=</span><span class="st">&quot;dodgerblue&quot;</span>, <span class="at">alpha=</span><span class="fl">0.9</span>, <span class="at">pch=</span><span class="dv">21</span>, <span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label_repel</span>(<span class="at">data=</span>climdata_stations, <span class="fu">aes</span>(<span class="at">x=</span>LON, <span class="at">y=</span>LAT, <span class="at">label=</span>CALL), <span class="at">size=</span><span class="fl">3.7</span>) <span class="sc">+</span></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">panel.border =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">datum =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">subtitle=</span><span class="st">&quot;Monthly Precipitation for GSOD Stations, 1980-2018&quot;</span>, <span class="at">y=</span><span class="st">&quot;&quot;</span>,<span class="at">x=</span><span class="st">&quot;&quot;</span>,</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span><span class="st">&quot;Polar plots of monthly precip for each station&quot;</span>)</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot it together using cowplot</span></span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a><span class="fu">ggdraw</span>(siteMap) <span class="sc">+</span></span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">draw_plot</span>(mPPT, <span class="at">width =</span> <span class="fl">0.6</span>, <span class="at">height =</span> .<span class="dv">53</span>, <span class="at">x =</span> <span class="fl">0.48</span>, <span class="at">y =</span> <span class="fl">0.42</span>)</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;img/monthly_ppt_map.png&quot;</span>, <span class="at">width =</span> <span class="dv">6</span>, <span class="at">height =</span> <span class="dv">8</span>, <span class="at">units =</span> <span class="st">&quot;in&quot;</span>, <span class="at">dpi=</span><span class="dv">300</span>)</span></code></pre></div>
 <p><img src="img/monthly_ppt_map.png" width="100%" height="100%" /></p>
 <p><br></p>
 </div>
 <div id="daily" class="section level4">
 <h4>Daily</h4>
 <p>Let’s do the same thing for temperature!</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="co"># YDAY: filter</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>clim_day &lt;-<span class="st"> </span>climdata <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(PRCP)) <span class="op">%&gt;%</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(CALL, YDAY) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">summarize_at</span>(<span class="dt">.vars=</span><span class="kw">vars</span>(TEMP,PRCP), <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="dt">min=</span>min, <span class="dt">mean=</span>mean, <span class="dt">max=</span>max))</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true"></a></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true"></a><span class="co"># daily mean temp</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true"></a>(dTEMP &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>(<span class="dt">data=</span>clim_day, <span class="kw">aes</span>(<span class="dt">x=</span>YDAY, <span class="dt">y=</span>TEMP_mean, <span class="dt">fill=</span>TEMP_mean), <span class="dt">show.legend =</span> T)<span class="op">+</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;&quot;</span>, <span class="dt">x=</span><span class="st">&quot;&quot;</span>) <span class="op">+</span></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true"></a><span class="st">    </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">90</span>, <span class="dv">180</span>, <span class="dv">270</span>),</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true"></a>                       <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;Jan&quot;</span>,<span class="st">&quot;Apr&quot;</span>,<span class="st">&quot;Jul&quot;</span>,<span class="st">&quot;Oct&quot;</span>)) <span class="op">+</span></span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.background =</span> <span class="kw">element_blank</span>(),</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true"></a>          <span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.25</span>, <span class="fl">0.55</span>),</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true"></a>          <span class="dt">legend.key.height =</span> <span class="kw">unit</span>(.<span class="dv">15</span>,<span class="dt">units =</span> <span class="st">&quot;in&quot;</span>),</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true"></a>          <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(.<span class="dv">1</span>, <span class="dt">units =</span> <span class="st">&quot;in&quot;</span>), </span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true"></a>          <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(),</span>
-<span id="cb26-17"><a href="#cb26-17" aria-hidden="true"></a>          <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(),</span>
-<span id="cb26-18"><a href="#cb26-18" aria-hidden="true"></a>          <span class="dt">plot.margin =</span> <span class="kw">unit</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span> ,<span class="dv">0</span>), <span class="st">&quot;mm&quot;</span>)) <span class="op">+</span></span>
-<span id="cb26-19"><a href="#cb26-19" aria-hidden="true"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="st">&quot;Mean </span><span class="ch">\n</span><span class="st">Temp(C)&quot;</span>) <span class="op">+</span></span>
-<span id="cb26-20"><a href="#cb26-20" aria-hidden="true"></a><span class="st">    </span><span class="kw">coord_polar</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb26-21"><a href="#cb26-21" aria-hidden="true"></a><span class="st">    </span><span class="kw">facet_wrap</span>(CALL<span class="op">~</span>., <span class="dt">nrow =</span> <span class="dv">3</span>))</span>
-<span id="cb26-22"><a href="#cb26-22" aria-hidden="true"></a></span>
-<span id="cb26-23"><a href="#cb26-23" aria-hidden="true"></a>siteMap2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb26-24"><a href="#cb26-24" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>ca_co, <span class="dt">fill=</span><span class="st">&quot;sienna&quot;</span>,<span class="dt">alpha=</span><span class="fl">0.3</span>) <span class="op">+</span></span>
-<span id="cb26-25"><a href="#cb26-25" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>climdata_stations, <span class="dt">fill=</span><span class="st">&quot;dodgerblue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.9</span>, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">size=</span><span class="dv">4</span>) <span class="op">+</span></span>
-<span id="cb26-26"><a href="#cb26-26" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_label_repel</span>(<span class="dt">data=</span>climdata_stations, <span class="kw">aes</span>(<span class="dt">x=</span>LON, <span class="dt">y=</span>LAT, <span class="dt">label=</span>CALL), <span class="dt">size=</span><span class="fl">3.7</span>) <span class="op">+</span></span>
-<span id="cb26-27"><a href="#cb26-27" aria-hidden="true"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">panel.border =</span> <span class="kw">element_blank</span>()) <span class="op">+</span></span>
-<span id="cb26-28"><a href="#cb26-28" aria-hidden="true"></a><span class="st">  </span><span class="kw">coord_sf</span>(<span class="dt">datum =</span> <span class="ot">NA</span>)<span class="op">+</span></span>
-<span id="cb26-29"><a href="#cb26-29" aria-hidden="true"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">subtitle=</span><span class="st">&quot;Daily Mean Temperature for GSOD Stations, 1980-2018&quot;</span>, <span class="dt">y=</span><span class="st">&quot;&quot;</span>,<span class="dt">x=</span><span class="st">&quot;&quot;</span>,</span>
-<span id="cb26-30"><a href="#cb26-30" aria-hidden="true"></a>       <span class="dt">caption=</span><span class="st">&quot;Polar plots of daily temp for each station&quot;</span>)</span>
-<span id="cb26-31"><a href="#cb26-31" aria-hidden="true"></a></span>
-<span id="cb26-32"><a href="#cb26-32" aria-hidden="true"></a><span class="co"># Plot it together using cowplot</span></span>
-<span id="cb26-33"><a href="#cb26-33" aria-hidden="true"></a><span class="kw">ggdraw</span>(siteMap2) <span class="op">+</span></span>
-<span id="cb26-34"><a href="#cb26-34" aria-hidden="true"></a><span class="st">  </span><span class="kw">draw_plot</span>(dTEMP, <span class="dt">width =</span> <span class="fl">0.63</span>, <span class="dt">height =</span> <span class="fl">.53</span>, <span class="dt">x =</span> <span class="fl">0.48</span>, <span class="dt">y =</span> <span class="fl">0.42</span>)</span>
-<span id="cb26-35"><a href="#cb26-35" aria-hidden="true"></a></span>
-<span id="cb26-36"><a href="#cb26-36" aria-hidden="true"></a><span class="kw">ggsave</span>(<span class="st">&quot;img/daily_temp_map.png&quot;</span>, <span class="dt">width =</span> <span class="dv">6</span>, <span class="dt">height =</span> <span class="dv">8</span>, <span class="dt">units =</span> <span class="st">&quot;in&quot;</span>, <span class="dt">dpi=</span><span class="dv">300</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YDAY: filter</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>clim_day <span class="ot">&lt;-</span> climdata <span class="sc">%&gt;%</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(PRCP)) <span class="sc">%&gt;%</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CALL, YDAY) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize_at</span>(<span class="at">.vars=</span><span class="fu">vars</span>(TEMP,PRCP), <span class="at">.funs =</span> <span class="fu">list</span>(<span class="at">min=</span>min, <span class="at">mean=</span>mean, <span class="at">max=</span>max))</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># daily mean temp</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>(dTEMP <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_col</span>(<span class="at">data=</span>clim_day, <span class="fu">aes</span>(<span class="at">x=</span>YDAY, <span class="at">y=</span>TEMP_mean, <span class="at">fill=</span>TEMP_mean), <span class="at">show.legend =</span> T)<span class="sc">+</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&quot;&quot;</span>, <span class="at">x=</span><span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">90</span>, <span class="dv">180</span>, <span class="dv">270</span>),</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&quot;Jan&quot;</span>,<span class="st">&quot;Apr&quot;</span>,<span class="st">&quot;Jul&quot;</span>,<span class="st">&quot;Oct&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.25</span>, <span class="fl">0.55</span>),</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.key.height =</span> <span class="fu">unit</span>(.<span class="dv">15</span>,<span class="at">units =</span> <span class="st">&quot;in&quot;</span>),</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.key.width =</span> <span class="fu">unit</span>(.<span class="dv">1</span>, <span class="at">units =</span> <span class="st">&quot;in&quot;</span>), </span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span> ,<span class="dv">0</span>), <span class="st">&quot;mm&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_c</span>(<span class="st">&quot;Mean </span><span class="sc">\n</span><span class="st">Temp(C)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_polar</span>() <span class="sc">+</span> </span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(CALL<span class="sc">~</span>., <span class="at">nrow =</span> <span class="dv">3</span>))</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>siteMap2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>ca_co, <span class="at">fill=</span><span class="st">&quot;sienna&quot;</span>,<span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>climdata_stations, <span class="at">fill=</span><span class="st">&quot;dodgerblue&quot;</span>, <span class="at">alpha=</span><span class="fl">0.9</span>, <span class="at">pch=</span><span class="dv">21</span>, <span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label_repel</span>(<span class="at">data=</span>climdata_stations, <span class="fu">aes</span>(<span class="at">x=</span>LON, <span class="at">y=</span>LAT, <span class="at">label=</span>CALL), <span class="at">size=</span><span class="fl">3.7</span>) <span class="sc">+</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">panel.border =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">datum =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">subtitle=</span><span class="st">&quot;Daily Mean Temperature for GSOD Stations, 1980-2018&quot;</span>, <span class="at">y=</span><span class="st">&quot;&quot;</span>,<span class="at">x=</span><span class="st">&quot;&quot;</span>,</span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span><span class="st">&quot;Polar plots of daily temp for each station&quot;</span>)</span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot it together using cowplot</span></span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a><span class="fu">ggdraw</span>(siteMap2) <span class="sc">+</span></span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">draw_plot</span>(dTEMP, <span class="at">width =</span> <span class="fl">0.63</span>, <span class="at">height =</span> .<span class="dv">53</span>, <span class="at">x =</span> <span class="fl">0.48</span>, <span class="at">y =</span> <span class="fl">0.42</span>)</span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;img/daily_temp_map.png&quot;</span>, <span class="at">width =</span> <span class="dv">6</span>, <span class="at">height =</span> <span class="dv">8</span>, <span class="at">units =</span> <span class="st">&quot;in&quot;</span>, <span class="at">dpi=</span><span class="dv">300</span>)</span></code></pre></div>
 <p><img src="img/daily_temp_map.png" width="100%" height="100%" /></p>
 </div>
 </div>
@@ -1049,7 +1004,7 @@ div.tocify {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
