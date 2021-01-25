@@ -6,9 +6,9 @@ pagetitle: "spatial joins with sf"
 
 ## Spatial Joins in R with `sf`
 
-Some of the most common and useful geospatial operations are **joins** based on some component of the spatial topology. For example, you want to figure out what attributes of certain points that are associated with or within certain polygons on the landscape...like bus-stops in a county or river gaging stations within a watershed. 
+Some of the most common and useful geospatial operations are **joins** based on some component of the spatial topology. For example, you want to figure out what attributes of certain points that are associated with or within certain polygons on the landscape...like bus-stops in a county or river gaging stations within a watershed.
 
-Spatial joins are based on the intersection between two spatial objects, often points and the polygons. There are many ways we can join objects, which may include [specific options](https://r-spatial.github.io/sf/reference/geos_binary_pred.html) like *crosses*,*near*, *within*, *touches*, etc. The point being, we can do all this in R!  Robin Lovelace et al. have a great online book available: https://geocompr.robinlovelace.net/spatial-operations.html that covers some of this material. Check it out! 
+Spatial joins are based on the intersection between two spatial objects, often points and the polygons. There are many ways we can join objects, which may include [specific options](https://r-spatial.github.io/sf/reference/geos_binary_pred.html) like *crosses*,*near*, *within*, *touches*, etc. The point being, we can do all this in R! Robin Lovelace et al. have a great online book available: <https://geocompr.robinlovelace.net/spatial-operations.html> that covers some of this material. Check it out!
 
 Let's **load the libraries** we're going to need first.
 
@@ -26,7 +26,6 @@ library(ggrepel)
 library(cowplot)
 
 ```
-
 
 ```{r libseval, eval=T, echo=F, message=F, show=FALSE}
 
@@ -95,11 +94,9 @@ isd_history_ca <- dplyr::filter(isd_history, CTRY=="US", STATE=="CA")
 
 Note, this is a fairly large set of point data, with `28,104` observations globally. Let's map this so we can see how dense this dataset actually is. Let's use a nice set of global maps from the `rnaturalearth` package. Because the points are so dense, let's plot those first, then we'll add a layer of world country outlines.
 
-
 ```{r, echo=F, eval=T}
 load(paste0(here::here(),"/data/isd_files.rda"))
 ```
-
 
 ```{r plotGSODR, echo=TRUE, eval=TRUE, purl=FALSE}
 
@@ -134,7 +131,7 @@ Great, now we have a dataframe in our environment that has both global climate s
 
 ### Select *POLYGONS* containing *POINTS*
 
-This first approach only selects polygons that contain points. For demonstration sake, let's use the larger global point dataset. Note this does not modify the polygon dataframe in any form (i.e., add attributes, update, summarize, etc). It is only selecting or *filtering* to the polygons that contain points using a spatial join. 
+This first approach only selects polygons that contain points. For demonstration sake, let's use the larger global point dataset. Note this does not modify the polygon dataframe in any form (i.e., add attributes, update, summarize, etc). It is only selecting or *filtering* to the polygons that contain points using a spatial join.
 
 ```{r polyptJoin, echo=TRUE, eval=TRUE, purl=FALSE, warning=FALSE}
 
@@ -170,7 +167,6 @@ Points outside of county boundaries (squares),
 
 ```
 
-
 <br>
 
 ### Join Attributes: *POINTS* inside *POLYGONS*
@@ -193,7 +189,6 @@ head(as.data.frame(isd_history))
 
 So to spatially join the county `name` attribute with the appropriate point locations, let's use `st_join`. If we use `left=TRUE` here, our result will retain *all* the points in the dataset rather than just the the spatial overlaps (where points fall inside polygons). So `left=TRUE` is essentially a `dplyr::left_join`, and `left=FALSE` is equivalent to a `dplyr::inner_join`.
 
-
 ```{r polyJoinAttribs, echo=TRUE, eval=TRUE, purl=FALSE, warning=FALSE, message=FALSE}
 
 # For POINTS that fall within CA_counties, adds ATTRIBUTES, retains ALL pts if left=TRUE, otherwise uses inner_join
@@ -205,7 +200,6 @@ plot(ca_co$geometry, border="gray20", col=NA, add=T)
 
 ```
 
-
 ```{r headISDpt2, echo=FALSE, eval=TRUE, purl=FALSE, warning=FALSE}
 head(as.data.frame(isd_ca_co_pts))
 
@@ -215,7 +209,7 @@ head(as.data.frame(isd_ca_co_pts))
 
 Now we have only points that fall *inside* of a CA county, **AND** the new data frame now has a new column/attribute called "`name`" (all our climate station points have a named CA county associated with them). We could easily specify additional columns inside our `st_join` function, or if we don't specify any columns, then all columns from the polygon dataframe that spatially joined/matched the points data would be added to the points dataframe.
 
- > `isd_ca_co_pts <- st_join(isd_history, left = FALSE, ca_co) # join all columns`
+> `isd_ca_co_pts <- st_join(isd_history, left = FALSE, ca_co) # join all columns`
 
 <hr>
 
@@ -229,7 +223,7 @@ Hopefully the above was useful...but let's actually practice how we may use this
 
 Here we check what stations contain data between a given date range. Some of these stations go back to the 1930's, but we'll focus on 1980--2018.
 
-```{r checkStations, echo=FALSE, eval=TRUE, purl=FALSE, warning=FALSE}
+```{r checkStations, echo=TRUE, eval=TRUE, purl=FALSE, warning=FALSE}
 
 # check availability for a date range
 stations <- isd_ca_co_pts[isd_ca_co_pts$BEGIN <= 19800101 &
@@ -251,11 +245,11 @@ ggplot() +
 
 Looks like there are 53 stations, and some counties have more than one. Let's apply our spatial join powers to filter this list down a bit. Let's:
 
- - Summarize our station data using the spatial_joined county `name` attribute so we can calculate how many stations we have per county. 
- - Create a dataset that includes only stations from counties with a single station
- - Create a dataset that contains stations that are within a set distance from the centroid of the county
- 
- We'll mainly use some basic `dplyr` here, which is possible because as `sf` objects, these are still simple data frames.
+-   Summarize our station data using the spatial_joined county `name` attribute so we can calculate how many stations we have per county.
+-   Create a dataset that includes only stations from counties with a single station
+-   Create a dataset that contains stations that are within a set distance from the centroid of the county
+
+We'll mainly use some basic `dplyr` here, which is possible because as `sf` objects, these are still simple data frames.
 
 ```{r Calcpercounty, echo=TRUE, eval=TRUE, purl=FALSE, message=FALSE, warning=FALSE}
 
@@ -288,12 +282,12 @@ ggplot() +
 ### Pick Station Nearest the Centroid of County
 
 Well great, what do we do for counties with multiple stations? How about picking the station nearest the centroid of the county. Steps:
- 
- 1. We need to work with just counties with more than one station.
- 2. We need to add the centroid of each of the counties in question.
- 3. We need to select the station nearest the centroid. 
- 
-For **Step 2**, we're going to use the `purrr` package to `map` or `apply` the `st_centroid` function over each county in our dataframe. This is the equivalent of a **for-loop**, it just looks very different.  
+
+1.  We need to work with just counties with more than one station.
+2.  We need to add the centroid of each of the counties in question.
+3.  We need to select the station nearest the centroid.
+
+For **Step 2**, we're going to use the `purrr` package to `map` or `apply` the `st_centroid` function over each county in our dataframe. This is the equivalent of a **for-loop**, it just looks very different.
 
 ```{r filterpercounty, echo=TRUE, eval=TRUE, purl=FALSE, warning=FALSE}
 
@@ -326,10 +320,9 @@ ggplot() +
 
 ```
 
-
 > **Step 3**: This is the trickiest part...
 
-There are probably a few different ways to do this, but let's try to use the one that seems simplest and uses the fewest lines of code. A handy package (`st_nn`) will allows us to nearest neighbors between points/lines/polygons, and can provide  distances as well. So let's get the station nearest our county centroid for all the counties with stations > 1.
+There are probably a few different ways to do this, but let's try to use the one that seems simplest and uses the fewest lines of code. A handy package (`st_nn`) will allows us to nearest neighbors between points/lines/polygons, and can provide distances as well. So let's get the station nearest our county centroid for all the counties with stations \> 1.
 
 ```{r nearestCent, echo=TRUE, eval=TRUE, purl=FALSE, warning=FALSE}
 
@@ -450,17 +443,15 @@ ggsave("img/monthly_ppt_map.png", width = 6, height = 8, units = "in", dpi=300)
 
 ```
 
-
 ```{r ggPPTMapOut, eval=TRUE, echo=FALSE, out.height="100%", out.width="100%", purl=FALSE}
 
 knitr::include_graphics(paste0(here::here(), "/img/monthly_ppt_map.png"))
 
 ```
 
-
 <br>
 
-#### Daily 
+#### Daily
 
 Let's do the same thing for temperature!
 
@@ -505,7 +496,6 @@ ggsave("img/daily_temp_map.png", width = 6, height = 8, units = "in", dpi=300)
 
 ```
 
-
 ```{r ggTEMPMapOut, eval=TRUE, echo=FALSE, out.height="100%", out.width="100%", purl=FALSE}
 
 knitr::include_graphics(paste0(here::here(), "/img/daily_temp_map.png"))
@@ -514,7 +504,6 @@ knitr::include_graphics(paste0(here::here(), "/img/daily_temp_map.png"))
 
 ### Summary
 
-California is an interesting place because we get most of our water during the winter, and typically have a long warm/dry period through the summer (a common Mediterranean climate pattern). It's also striking to see the difference in mean precipitation (over a ~40 year period) across the state. 
+California is an interesting place because we get most of our water during the winter, and typically have a long warm/dry period through the summer (a common Mediterranean climate pattern). It's also striking to see the difference in mean precipitation (over a \~40 year period) across the state.
 
 Hopefully there were some useful tidbits in this lesson/post. Please let me know if you have questions/comments (see the Contact tab).
-
