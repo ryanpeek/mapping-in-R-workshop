@@ -1,5 +1,7 @@
 ---
 pagetitle: "spatial joins with sf"
+editor_options: 
+  chunk_output_type: console
 ---
 
 <br>
@@ -51,7 +53,7 @@ We'll be using California and CA counties pulled from the `USAboundaries` packag
 ```{r getBoundaryDat, echo=T, eval=T, purl=FALSE}
 
 # get USA states, filter out Puerto Rico, Alaska, and Hawaii for now
-us <- us_boundaries(type="state", resolution = "low") %>% 
+us <- us_states(resolution = "low") %>% 
   filter(!state_abbr %in% c("PR", "AK", "HI"))
 
 # get CA boundary with high definition

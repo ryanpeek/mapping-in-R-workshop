@@ -1,18 +1,22 @@
 ---
 pagetitle: "shapefiles"
+editor_options: 
+  chunk_output_type: console
 ---
 
 <br>
 
-## Using Shapefiles with `rgdal` and `sf`
+## Using Shapefiles with `sf`
 
-There are loads of spatial mapping/plotting packages in R. The main two ways to read in spatial data use the `rgdal` package, and the `sf` package. Let's look at how to load/plot line and polygon data.
+There are loads of spatial mapping/plotting packages in R. The primary way to read in spatial data is with the `sf` package. Let's look at how to load/plot line and polygon data.
 
 **Let's load packages first:**
 
 ```{r loadlibsHidden, echo=TRUE, eval=FALSE, warning=FALSE}
 
-library(rgdal); # spatial/shp reading
+library(tmap)
+library(tmaptools)
+library(purrr)
 library(dplyr); # wrangling data/plotting
 library(readr);
 library(viridis); # nice color palette
@@ -26,7 +30,8 @@ library(ggrepel) # for labeling
 ```{r loadlibsOut, eval=TRUE, echo=FALSE, warning=FALSE}
 
 suppressPackageStartupMessages({
-  library(rgdal); # spatial/shp reading
+  library(tmap); # spatial maps
+  library(tmaptools); # mapping tools
   library(dplyr); # wrangling data/plotting
   library(readr);
   library(viridis); # nice color palette
@@ -43,27 +48,11 @@ suppressPackageStartupMessages({
 ## Polyline/Polygons Shapefile Data
 
 I've downloaded some HUC watershed boundaries from the Lake Tahoe area in California, they are [here](https://github.com/ryanpeek/mapping-in-R-workshop/blob/master/data/h8_tahoe.zip) on github. Download the zipped file and unzip it in a `data` folder. We're going to use *`shapefiles`* for the remainder of this example. 
-
-### Load shapefiles with `rgdal`
-
-Let's load a polyline or line shapefile of rivers of California and Oregon. The result is a `SpatialPolygonsDataFrame` in your R environment.
-
-```{r shapesRGDAL, echo=T, eval=T}
-
-# we can use ogrInfo to see CRS, attributes, etc.
-ogrInfo(dsn="./data", layer="h8_tahoe") # see shapefile info
-
-# then read in the shapefile
-hucs_sp<- readOGR(dsn = "./data", layer = "h8_tahoe") # takes a few seconds!
-
-proj4string(hucs_sp) # check projection, should be WGS84
-
-
-```
-
 ### Load shapefiles with `sf`
 
-Here's how to do the same thing using the `sf` package. Notice two important differences, the `sf` package reads things in as a regular dataframe, with the spatial component of the data contained inside a `geometry` **list-column** within the dataframe. That means you can operate on this data as you would any data frame. The other main difference, is that reading shape data in is much faster with `sf`.  
+Here's how to do the same thing using the `sf` package. Notice one important points about `sf`...sticky geometry!
+
+ - the `sf` package reads things in as a regular dataframe, with the spatial component of the data contained inside a `geometry` **list-column** within the dataframe. That means you can operate on this data as you would any data frame, because the `geometry` column will always stick with the data.   
 
 ```{r shapes_sf, echo=T, eval=T}
 
@@ -81,19 +70,19 @@ No different here, process is the same. But let's take a look at a package that 
 
 ### Download State/County Data
 
-A nice package for pulling county/state data is the `USAboundaries` package. Importantly, this package pulls these data in as `sf` features (`dataframes`), not as `rgdal` or `SpatialPolygonDataFrames` data.
+A nice package for pulling county/state data is the `urbnmapr` package. Importantly, this package pulls these data in as `sf` features (`dataframes`), not as `rgdal` or `SpatialPolygonDataFrames` data.
 
 Let's show this in two steps, the first is how to grab a `sf` feature for a given state or states.
 
 ```{r getStateData, echo=T, eval=T}
 
-library(USAboundaries)
+library(urbnmapr)
 
 # Pick a State
-state_names <- c("california")
+state_names <- c("CA")
 
-# Download STATE data and add projection
-CA<-us_states(resolution = "high", states = state_names)
+# warning is ok
+CA <- get_urbn_map(map = "states", sf = TRUE) %>% filter(state_abbv==state_names)
 
 st_crs(CA)
 
@@ -102,18 +91,22 @@ st_crs(CA)
 That was easy...what about counties? We can use the same type of call, but let's add some `dplyr` and `purrr` functionality here to add the X and Y values for the centroid of each polygon (county) we download. In this case we use `map_dbl` because it will take a vector or values (the `geometry` col here), map a function over each row in that vector, and return a vector of values (the centroid points).
 
 ```{r getCountiesData, echo=T, eval=T}
-
 library(purrr)
 
 # Pick some CA counties
-co_names <- c("Butte", "Placer", "El Dorado", "Nevada", "Yuba", "Sierra", "Plumas")
+co_names <- c("Butte County", "Placer County", 
+              "El Dorado County", "Nevada County", 
+              "Yuba County", "Sierra County",
+              "Plumas County")
 
-# get COUNTY data for a given state
-counties_spec <- us_counties(resolution = "low", states=state_names) %>% # use list of state(s) here
-  filter(name %in% co_names) %>% # filter to just the counties we want
-  # add centroid values for labels using the geometry column
-  mutate(lon=map_dbl(geometry, ~st_centroid(.x)[[1]]), 
-         lat=map_dbl(geometry, ~st_centroid(.x)[[2]])) 
+# get counties
+counties_spec <- get_urbn_map(map = "counties", sf=TRUE) %>% 
+  filter(state_abbv==state_names, county_name %in% co_names)
+
+# add centroid for each county using purrr::map_dbl
+counties_spec <- counties_spec %>% 
+  mutate(lon = map_dbl(geometry, ~st_centroid(.x)[[1]]),
+         lat = map_dbl(geometry, ~st_centroid(.x)[[2]]))
 
 ```
 
@@ -188,6 +181,10 @@ Great thing is that `sf` has some really nice tools for this, just as any GIS pr
 
 ```{r crop_sf}
 
+# need to make sure CRS is the same!
+st_crs(hucs_sf)==st_crs(counties_spec)
+counties_spec <- st_transform(counties_spec, st_crs(hucs_sf))
+
 # crop watershed by counties
 hucs_sf_crop <- st_intersection(hucs_sf, counties_spec) # warning is ok
 
@@ -246,7 +243,7 @@ ggplot() + geom_sf(data = CA)
 ggplot() + 
   geom_sf(data=CA, color = "gray30", lwd=2, fill=NA) + # California border
   geom_sf(data=counties_spec, fill = NA, show.legend = FALSE, color="gray50", lwd=0.4) + # counties
-  geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=name)) +
+  geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=county_name)) +
   theme_bw()
 
 ```
@@ -260,7 +257,7 @@ ggplot() +
   geom_sf(data=CA, color = "gray30", lwd=2, fill=NA) +
   geom_sf(data=counties_spec, fill = NA, show.legend = F, color="gray50", lwd=0.4) +
   geom_sf(data=hucs_sf_crop, fill="blue", alpha=0.5, size=0.5)+
-  geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=name)) +
+  geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=county_name)) +
   coord_sf(xlim = mapRange1[c(1,3)], ylim = mapRange1[c(2,4)]) +
   theme_bw(base_family = "Helvetica") + # change to "sans" if this font not available
   labs(title="Selected CA Counties and Tahoe HUC8")+
@@ -269,38 +266,43 @@ ggplot() +
 
 ```
 
-### `ggmap` Background
+### Adding a Background with `tmap` and `tmaptools`
 
-Another option is to use the `ggmap` package...which unforunately also requires you register for an API key...which is a bit longer of a process than I have time to go into. Suffice to say, follow the steps outlined on the [`ggmap` repository](https://github.com/dkahle/ggmap).
+We can use the open source `tmaptools::read_osm()` function to add a background map.
 
-```{r ggmapEx, eval=F, echo=T}
+```{r tmapEx, eval=F, echo=T}
 
-library(ggmap)
-location=c(-121,39.5) # set the center of the map
-# set the background map up
-map1 <- get_map(location=location, crop = F,
-             color="bw",
-             maptype="terrain",
-             source="google",
-             zoom=8)
+library(tmaptools)
+library(stars)
 
+# get extent
+bbox <- st_as_sfc(st_bbox(counties_spec))
 
-ggmap(map1) +
-  geom_sf(data=CA, color = "gray30", lwd=2, fill=NA, inherit.aes = F) +
-  geom_sf(data=counties_spec, fill = NA, show.legend = F, color="gray50", lwd=0.4, inherit.aes = F) +
-  geom_sf(data=hucs_sf_crop, fill="blue", alpha=0.5, size=0.5, inherit.aes = F)+
-  geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=name)) +
-  theme_bw(base_family = "Roboto Condensed") + 
-  labs(title="Selected CA Counties and Tahoe HUC8")
+# use tmaptools to pull base layers (see ?OpenStreetMap::openmap for more options)
+gm_esri <- read_osm(bbox, type = "esri-topo", raster=TRUE) # specify zoom
+gm_osm <- read_osm(bbox, type = "osm", raster=TRUE) # defaults are good too
+gm_hill <- read_osm(bbox, type = "stamen-toner", raster=TRUE)
+
+# reproject
+CA <- st_transform(CA, st_crs(gm_esri))
+
+# tmap
+tm1 <- tm_shape(gm_esri) + tm_rgb() +
+  tm_shape(CA) + tm_polygons(border.col = "gray30", lwd=2, alpha=0) +
+  tm_shape(counties_spec) + 
+  tm_polygons(alpha = 0, border.col="black", lwd=1) +
+  tm_text(text="county_name", shadow = TRUE, print.tiny = TRUE) +
+  tm_shape(hucs_sf_crop) + tm_polygons(col="blue", alpha=0.6, size=0.5) +
+  tm_layout(main.title = "Selected CA Counties and Tahoe HUC8", main.title.size = 1.2)
 
 ```
 
 
 ```{r ggmapPlot, eval=T, echo=F, out.height="100%", out.width="100%"}
 
-# ggsave(filename = "img/ggmap_spatial_poly_example.png", width = 4.5, height = 5, units = "in", dpi = 200)
+#tmap_save(tm1, filename = "img/tmap_spatial_poly_example.png", width = 4.5, height = 5, units = "in", dpi = 200)
 
-include_graphics("img/ggmap_spatial_poly_example.png")
+include_graphics("img/tmap_spatial_poly_example.png")
 
 ```
 

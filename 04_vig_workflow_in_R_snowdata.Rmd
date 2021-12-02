@@ -8,9 +8,9 @@ editor_options:
 
 ## Spatial Data and R
 
-Typically we want to follow a general pipeline for getting data, cleaning it up, summarizing it, and then communicating that data as a story in some way. For more details, the excellent [R for Data Science](http://r4ds.had.co.nz/communicate-intro.html) open source and free-online book by Garrett Grolemund & Hadley Wickham gives a nice run down of the various components of this pipeline.
+Typically we want to follow a general pipeline for getting data, cleaning it up, summarizing it, and then communicating that data as a story in some way. For more details, the excellent [R for Data Science](https://r4ds.had.co.nz/communicate-intro.html) open source and free-online book by Garrett Grolemund & Hadley Wickham gives a nice run down of the various components of this pipeline.
 
-![](http://r4ds.had.co.nz/diagrams/data-science-communicate.png)
+![](https://r4ds.had.co.nz/diagrams/data-science-communicate.png)
 
 <br>
 
@@ -79,7 +79,7 @@ data(CDEC.snow.courses) # data is a base function in R that loads data
 
 ## Tidy & Clean Data
 
-Ok, so we have some data...but it needs some **tidying**. When we talk about "**tidy**" data, we mean one observation per row, and one variable per column (see here for [more info on tidy data](http://r4ds.had.co.nz/tidy-data.html)). Good news, there are some great tools in R we can use, including `dplyr` and `tidyr`. We can also check for missingness in our data using the [`naniar`](http://naniar.njtierney.com/) package.
+Ok, so we have some data...but it needs some **tidying**. When we talk about "**tidy**" data, we mean one observation per row, and one variable per column (see here for [more info on tidy data](https://r4ds.had.co.nz/tidy-data.html)). Good news, there are some great tools in R we can use, including `dplyr` and `tidyr`. We can also check for missingness in our data using the [`naniar`](https://naniar.njtierney.com/) package.
  
 Lets do a few things (the bolded words are `dplyr` functions)
 
@@ -210,7 +210,7 @@ tm_shape(snw_sf) +
 
 Before we make a nice interactive map, let's manipulate the data a bit more. For this example, let's grab some county boundaries and then select snow stations from only those counties, using the `st_intersection` command. For those familiar with ArcMap, this is essentially a clip or crop of an existing shapefile using a different shapefile.
 
-We are pulling county data here from the `USAboundaries` package, and then loading some pre-cleaned/downloaded lake and stream shapefiles from the [HydroSHEDS database](http://hydrosheds.org/page/overview). Finally, we crop these data to our selected counties.
+We are pulling county data here from the `USAboundaries` package, and then loading some pre-cleaned/downloaded lake and stream shapefiles from the [HydroSHEDS database](https://hydrosheds.org/page/overview). Finally, we crop these data to our selected counties.
 
 ### Get Boundaries to Crop By
 
@@ -219,8 +219,13 @@ Get the county, watershed, rivers, lakes data.
 ```{r getRivCounty, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
 
 # use library(USAboundaries) to get county data
-counties_spec <- us_counties(resolution = "low", states="CA") %>% 
-  filter(name=="El Dorado" | name=="Placer") # get counties only named El Dorado and Placer
+counties_spec <- us_counties(states="CA")
+counties_spec <- counties_spec[counties_spec$name %in% c("El Dorado","Placer"),] # get counties only named El Dorado and Placer
+
+# correct geometries
+counties_spec$geometry <- counties_spec$geometry %>%
+  s2::s2_rebuild() %>%
+  sf::st_as_sfc()
 
 ```
 
@@ -242,6 +247,8 @@ h8_tahoe <- read_sf("data/mapping_in_R_data.gpkg", layer="h8_tahoe")
 # Lakes for all of CA/OR from HydroSHEDS
 lakes <- read_sf("data/mapping_in_R_data.gpkg", layer="lakes_CA_OR_hydroshed")
 
+# fix issue with s2 geometry (or specify `sf::sf_use_s2(FALSE)`)
+sf_use_s2(FALSE)
 # Rivers for all of CA/OR from HydroSHEDS
 rivers <- read_sf("data/mapping_in_R_data.gpkg", layer="rivs_CA_OR_hydroshed")
 
@@ -324,7 +331,7 @@ Cool! But what if we want to make publication-ready map? Often maps will need so
 library(USAboundaries) # get outline of CA
 
 
-CA <- us_boundaries(type="state", resolution = "high", states="California")
+CA <- us_states(resolution = "high", states="California")
 
 # make a grid box for where our localities are, use n=1 to make single polygon
 sites_box <- st_make_grid(snw_crop, n = 1) # mapview(sites_box) to verify

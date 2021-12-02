@@ -1,6 +1,8 @@
 ---
 pagetitle: "Snapping Points to Lines & Calculating Streamline Distances"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <br>
@@ -73,9 +75,6 @@ Great, so we can use the **`comid`=`r yose_comid`** to look up and download stre
 
 # first make a list defining the sourcetype and ID
 yose_list <- list(featureSource="comid", featureID=yose_comid)
-
-# what data is available?
-discover_nldi_navigation(yose_list)
 
 ```
 
@@ -245,7 +244,7 @@ measurements::conv_unit(max_gage_dist$dist[[1]], "m", "km")
 
 ```
 
-Measuring the same distance between our most upstream USGS gage (Happy Isles) and the most downstream gage (San Joaquin at Jersey Point), I got a distance of **190.27** km. So all in all, I'd say we are doing well. The difference is likely due to slight differences in the projection of the mapview map as well as any innaccuracies associated with where we clicked on the points on the map. Let's move on and try to do this using the actual river distance (along the flowlines).
+Measuring the same distance between our most upstream USGS gage (Happy Isles) and the most downstream gage (San Joaquin at Jersey Point), I got a distance of **190.7** km. So all in all, I'd say we are doing well. The difference is likely due to slight differences in the projection of the mapview map as well as any innaccuracies associated with where we clicked on the points on the map. Let's move on and try to do this using the actual river distance (along the flowlines).
 
 ## Snap Points to Lines
 
@@ -500,7 +499,7 @@ ggplot() +
             aes(x=date, y=mean_flow, color=site_no), show.legend = T)+
   ggthemes::scale_color_colorblind("USGS Gage") + 
   labs(y="Flow (cfs)", x="", subtitle="Daily Mean Flow") + 
-  hrbrthemes::theme_ipsum_pub() +
+  theme_gray() +
   scale_x_date(date_breaks="1 years", date_labels = "%Y") +
   facet_grid(site_no~., scales = "free_y") +
   theme(axis.text.x = element_text(angle=90, vjust = 0.5))

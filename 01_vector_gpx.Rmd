@@ -70,7 +70,7 @@ file1url <- "https://raw.githubusercontent.com/ryanpeek/mapping-in-R-workshop/ma
 pts <- st_read(file1url, layer = "waypoints")
 
 # check the names of attributes
-glimpse(pts)
+names(pts)
 
 ```
 
@@ -106,7 +106,3 @@ mapview(pts, zcol="ele") + mapview(trx1, color="orange")
 
 
 ```
-
-## Put It All Together
-
- 

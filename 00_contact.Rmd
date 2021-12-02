@@ -13,7 +13,7 @@ subtitle: "Contact Info"
 <a href="https://orcid.org/0000-0002-9577-6885"><i class="ai ai-orcid"></i></a>
 
 
-I’ve been using R since 2011, and became a certified Software/Data Carpentry instructor in 2016 and help teach workshops and classes to a wide variety of folks including grad students, post docs, professors, industry researchers, and government scientists. I help run the [Davis R Users Group (D-RUG)](http://d-rug.github.io/) and spearheaded a more organized effort at UC Davis to train fellow ecologists in data science using the R programming language.
+I’ve been using R since 2011, and became a certified Software/Data Carpentry instructor in 2016 and help teach workshops and classes to a wide variety of folks including grad students, post docs, professors, industry researchers, and government scientists. I help run the [Davis R Users Group (D-RUG)](https://d-rug.github.io/) and spearheaded a more organized effort at UC Davis to train fellow ecologists in data science using the R programming language.
 
 My favorite part of teaching R is seeing folks make their first plot or read in their first dataset, and recognizing that programming can be useful and fun. It is an amazing experience learning from teaching and empowering others to become better scientists and data wranglers.  
 
