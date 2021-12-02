@@ -46,7 +46,7 @@ navbar:
   - text: 
     icon: fa-info-circle fa-lg
     href: 00_contact.html
-  - icon: fa-github fa-lg
+  - icon: fa-github fa-1x
     href: https://github.com/ryanpeek/mapping-in-R-workshop
 output_dir: docs
 output:
